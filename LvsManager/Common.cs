@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Runtime.Serialization;
@@ -20,7 +21,16 @@ namespace Beinet.cn.Tools.LvsManager
                 if (!File.Exists(_configfile))
                     return new List<Site>();
 
-                var ret = Utility.XmlDeserialize<List<Site>>(_configfile);
+                string xmlStr;
+                // 兼容旧版本，需要替换旧版本的命名空间后再反序列化
+                using (var memoryStream = new StreamReader(_configfile, Encoding.UTF8))
+                {
+                    xmlStr = memoryStream.ReadToEnd();
+                }
+                xmlStr = xmlStr.Replace("/Check64dll.", "/Beinet.cn.Tools.");
+                var ret = Utility.XmlDeserializeFromStr<List<Site>>(xmlStr);
+
+                //var ret = Utility.XmlDeserialize<List<Site>>(_configfile);
                 ret.Sort((x, y) => String.Compare(x.name, y.name, StringComparison.Ordinal));
                 return ret;
             }

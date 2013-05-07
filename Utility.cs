@@ -81,6 +81,28 @@ namespace Beinet.cn.Tools
             //    Utility.SetValue(ctl, propName, val);
         }
 
+        #region 序列化和反序列化
+        /// <summary>
+        /// 把Xml字符串反序列化成对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="xml"></param>
+        /// <returns></returns>
+        public static T XmlDeserializeFromStr<T>(string xml)
+        {
+            var xs = new DataContractSerializer(typeof(T));
+            using (var memoryStream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
+            using (var xmlreader = new XmlTextReader(memoryStream))
+            {
+                // [\x0-\x8\x11\x12\x14-\x32]
+                // 默认为true，如果序列化的对象含有比如0x1e之类的非打印字符，反序列化就会出错，因此设置为false http://msdn.microsoft.com/en-us/library/aa302290.aspx
+                xmlreader.Normalization = false;
+                xmlreader.WhitespaceHandling = WhitespaceHandling.Significant;
+                xmlreader.XmlResolver = null;
+                return (T)xs.ReadObject(xmlreader);
+            }
+        }
+
         /// <summary>
         /// 把对象序列化为Xml文件
         /// </summary>
@@ -96,18 +118,31 @@ namespace Beinet.cn.Tools
                 fs.Formatting = Formatting.Indented;
                 formatter.WriteObject(fs, obj);
             }
+
+            //// 让输出的xml可读性好
+            //XmlWriterSettings settings = new XmlWriterSettings
+            //{
+            //    Indent = true,
+            //    Encoding = Encoding.UTF8,
+            //    IndentChars = "    "
+            //};
+            //using (FileStream fs = new FileStream(configPath, FileMode.Create))
+            //using (XmlWriter writer = XmlWriter.Create(fs, settings))
+            //{
+            //    formatter.WriteObject(writer, obj);
+            //}
         }
 
         /// <summary>
         /// 把Xml文件反序列化成对象
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="xml"></param>
+        /// <param name="xmlPath"></param>
         /// <returns></returns>
-        public static T XmlDeserialize<T>(string xml)
+        public static T XmlDeserialize<T>(string xmlPath)
         {
             var xs = new DataContractSerializer(typeof(T));
-            using (var memoryStream = new StreamReader(xml, Encoding.UTF8))
+            using (var memoryStream = new StreamReader(xmlPath, Encoding.UTF8))
             using (var xmlreader = new XmlTextReader(memoryStream))
             {
                 // [\x0-\x8\x11\x12\x14-\x32]
@@ -115,9 +150,11 @@ namespace Beinet.cn.Tools
                 xmlreader.Normalization = false;
                 xmlreader.WhitespaceHandling = WhitespaceHandling.Significant;
                 xmlreader.XmlResolver = null;
-                return (T)xs.ReadObject(xmlreader);
+                return (T) xs.ReadObject(xmlreader);
             }
         }
+        #endregion
+
 
         /// <summary>
         /// 通过反射，设置属性的值

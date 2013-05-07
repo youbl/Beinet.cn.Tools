@@ -103,20 +103,7 @@ namespace Beinet.cn.Tools.DataSync
                     task.TargetConstr = Utility.TripleDES_Encrypt(task.TargetConstr, Encoding.UTF8);
                 task.Encrypted = true;
 
-                // 让输出的xml可读性好
-                XmlWriterSettings settings = new XmlWriterSettings
-                {
-                    Indent = true,
-                    Encoding = Encoding.UTF8,
-                    IndentChars = "    "
-                };
-                using (FileStream fs = new FileStream(configPath, FileMode.Create))
-                using (XmlWriter writer = XmlWriter.Create(fs, settings))
-                {
-                    var formatter = new DataContractSerializer(task.GetType());
-                    formatter.WriteObject(writer, task);
-                    //formatter.WriteObject(fs, task);
-                }
+                Utility.XmlSerialize(task, configPath);
                 var diag = MessageBox.Show("成功保存到配置文件\r\n是否打开文件所在目录？", "打开目录", MessageBoxButtons.YesNo);
                 if(diag == DialogResult.Yes)
                 {
@@ -153,22 +140,20 @@ namespace Beinet.cn.Tools.DataSync
                 SyncTask task;
                 try
                 {
-                    using (var xmlreader = new XmlTextReader(configPath))
+                    string xmlStr;
+                    // 兼容旧版本，需要替换旧版本的命名空间后再反序列化
+                    using (var memoryStream = new StreamReader(configPath, Encoding.UTF8))
                     {
-                        // [\x0-\x8\x11\x12\x14-\x32]
-                        // 默认为true，如果序列化的对象含有比如0x1e之类的非打印字符，反序列化就会出错，因此设置为false http://msdn.microsoft.com/en-us/library/aa302290.aspx
-                        xmlreader.Normalization = false;
-                        xmlreader.WhitespaceHandling = WhitespaceHandling.Significant;
-                        xmlreader.XmlResolver = null;
-                        var formatter = new DataContractSerializer(typeof(SyncTask));
-                        task = formatter.ReadObject(xmlreader) as SyncTask;
-                        if (task != null && task.Encrypted)
-                        {
-                            if (!string.IsNullOrEmpty(task.SourceConstr))
-                                task.SourceConstr = Utility.TripleDES_Decrypt(task.SourceConstr, Encoding.UTF8);
-                            if (!string.IsNullOrEmpty(task.TargetConstr))
-                                task.TargetConstr = Utility.TripleDES_Decrypt(task.TargetConstr, Encoding.UTF8);
-                        }
+                        xmlStr = memoryStream.ReadToEnd();
+                    }
+                    xmlStr = xmlStr.Replace("/Check64dll.", "/Beinet.cn.Tools.");
+                    task = Utility.XmlDeserializeFromStr<SyncTask>(xmlStr);
+                    if (task != null && task.Encrypted)
+                    {
+                        if (!string.IsNullOrEmpty(task.SourceConstr))
+                            task.SourceConstr = Utility.TripleDES_Decrypt(task.SourceConstr, Encoding.UTF8);
+                        if (!string.IsNullOrEmpty(task.TargetConstr))
+                            task.TargetConstr = Utility.TripleDES_Decrypt(task.TargetConstr, Encoding.UTF8);
                     }
                 }
                 catch (Exception exp)
