@@ -1,0 +1,17 @@
+﻿<ArrayOfSite xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Beinet.cn.Tools.LvsManager">
+  <Site>
+    <name>beinet.cn</name>
+    <offlineSecond>10</offlineSecond>
+    <resreshSecond>2</resreshSecond>
+    <url>http://beinet.cn/checkipinfo.aspx</url>
+    <Servers xmlns:d3p1="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+      <d3p1:string>10.1.240.188</d3p1:string>
+      <d3p1:string>10.1.240.199</d3p1:string>
+      <d3p1:string>10.1.240.200</d3p1:string>
+      <d3p1:string>10.1.240.202</d3p1:string>
+      <d3p1:string>10.2.103.42</d3p1:string>
+      <d3p1:string>10.2.105.155</d3p1:string>
+      <d3p1:string>10.1.240.153</d3p1:string>
+    </Servers>
+  </Site>
+</ArrayOfSite>

@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<SyncTask xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/Beinet.cn.Tools.DataSync">
+    <SourceConstr>server=192.168.19.63;database=newre11sourcedb;uid=mobileuser;pwd=mobileuserpws</SourceConstr>
+    <TargetConstr>server=192.168.19.63;database=sitep22v;uid=mobileuser;pwd=mobileuserpws</TargetConstr>
+    <TruncateOld>true</TruncateOld>
+    <UseIdentifier>true</UseIdentifier>
+    <ErrContinue>true</ErrContinue>
+    <Items>
+        <SyncItem>
+            <Source >select 1</Source>
+            <Target>Query_-2127097927</Target>
+            <IsSql>true</IsSql>
+            <trun>true</trun>
+            <iden>true</iden>
+        </SyncItem>
+        <SyncItem>
+            <Source>select top 11 * from softs</Source>
+            <Target>Query_-1280768374</Target>
+            <IsSql>true</IsSql>
+        </SyncItem>
+        <SyncItem>
+            <Source>ADTagLog</Source>
+            <Target>ADTagLo3g</Target>
+        </SyncItem>
+    </Items>
+</SyncTask>
+<!-- 
+SourceConstr  : 源数据库连接串
+TargetConstr  : 目标数据库连接串
+TruncateOld   : 如果目标表存在，是否要先清空它
+UseIdentifier : 是否启用标识插入功能
+ErrContinue   : 同步失败时，是否继续同步后续表
+
+Items-SyncItem: 每个SyncItem表示一条同步记录
+  Source      : 要同步的源数据库的表名
+  Target      : 要同步到目标数据库的表名
+  IsSql       : 源表是表名还是SQL查询
+  trun        : 导入前是否清空目标表数据
+  iden        : 导入时是否插入源表的标识数据，而不是新标识数据
+-->

@@ -1,0 +1,244 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{20BF08E8-E02C-4ABC-BF23-6095E30F0E5F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Beinet.cn.Tools</RootNamespace>
+    <AssemblyName>Beinet.cn.Tools</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>b.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CryptTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CryptTool.Designer.cs">
+      <DependentUpon>CryptTool.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataSync\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataSync\MainForm.designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataSync\Prompt.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataSync\Prompt.designer.cs">
+      <DependentUpon>Prompt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DataSync\SyncForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DataSync\SyncForm.designer.cs">
+      <DependentUpon>SyncForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LvsManager\About.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LvsManager\About.designer.cs">
+      <DependentUpon>About.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LvsManager\Common.cs" />
+    <Compile Include="LvsManager\ConfigSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LvsManager\ConfigSet.designer.cs">
+      <DependentUpon>ConfigSet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LvsManager\LVSControl.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LvsManager\LVSControl.designer.cs">
+      <DependentUpon>LVSControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GzipTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GzipTest.designer.cs">
+      <DependentUpon>GzipTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileHash.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileHash.designer.cs">
+      <DependentUpon>FileHash.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="PromptWin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PromptWin.Designer.cs">
+      <DependentUpon>PromptWin.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ControlExt\FixedRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="RegexTool\MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegexTool\MainForm.designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="RegexTool\OptionSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RegexTool\OptionSelect.designer.cs">
+      <DependentUpon>OptionSelect.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SqlHelper.cs" />
+    <Compile Include="SqlInjectForm\ErrDetail.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlInjectForm\ErrDetail.designer.cs">
+      <DependentUpon>ErrDetail.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlExt\ListViewNF.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="SqlInjectForm\SqlInject.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SqlInjectForm\SqlInject.designer.cs">
+      <DependentUpon>SqlInject.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utility.cs" />
+    <EmbeddedResource Include="CryptTool.resx">
+      <DependentUpon>CryptTool.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataSync\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataSync\Prompt.resx">
+      <DependentUpon>Prompt.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DataSync\SyncForm.resx">
+      <DependentUpon>SyncForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LvsManager\About.resx">
+      <DependentUpon>About.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LvsManager\ConfigSet.resx">
+      <DependentUpon>ConfigSet.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LvsManager\LVSControl.resx">
+      <DependentUpon>LVSControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GzipTest.resx">
+      <DependentUpon>GzipTest.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileHash.resx">
+      <DependentUpon>FileHash.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PromptWin.resx">
+      <DependentUpon>PromptWin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="RegexTool\MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RegexTool\OptionSelect.resx">
+      <DependentUpon>OptionSelect.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlInjectForm\ErrDetail.resx">
+      <DependentUpon>ErrDetail.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SqlInjectForm\SqlInject.resx">
+      <DependentUpon>SqlInject.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="app.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Content Include="b.ico" />
+    <Content Include="DataSync\sync.xml" />
+    <None Include="LvsServer.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="Resources\c0.png" />
+    <EmbeddedResource Include="Resources\c1.png" />
+    <EmbeddedResource Include="Resources\c2.png" />
+    <EmbeddedResource Include="Resources\c3.png" />
+    <EmbeddedResource Include="Resources\c4.png" />
+    <EmbeddedResource Include="Resources\system_search.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
