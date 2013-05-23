@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.IO.Compression;
+using System.Net;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
@@ -66,7 +68,14 @@ namespace Beinet.cn.Tools
             }
             else
             {
-                method();
+                try
+                {
+                    method();
+                }
+                catch(Exception exp)
+                {
+                    MessageBox.Show(frm, exp.ToString());
+                }
             }
         }
 
@@ -593,5 +602,120 @@ namespace Beinet.cn.Tools
         }
     
         #endregion
+
+
+        public static string GetPage(string url, string postData, string proxy)
+        {
+            string result = null;
+            return GetPage(url, postData, "POST", Encoding.UTF8, false, proxy, ref result);
+        }
+
+        public static string GetPage(string url, string param, string HttpMethod,
+            Encoding encoding, bool showHeader, string proxy, ref string result)
+        {
+            // 增加随机数，避免缓存
+            var rnd = Guid.NewGuid().GetHashCode().ToString();
+            if (url.IndexOf('?') > 0)
+                url += "&" + rnd;
+            else
+                url += "?" + rnd;
+            
+            HttpWebResponse response;
+            bool flag = string.IsNullOrEmpty(HttpMethod) || HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase);
+            if (flag && !string.IsNullOrEmpty(param))
+            {
+                url = url + "&" + param;
+            }
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.Referer = url;
+            request.AllowAutoRedirect = false;
+            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1;)";
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+
+            // 必须在写入Post Stream之前设置Proxy
+            if (!string.IsNullOrEmpty(proxy))
+            {
+                #region 设置代理
+                string[] tmp = proxy.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                int port = 80;
+                if (tmp.Length >= 2)
+                {
+                    if (!int.TryParse(tmp[1], out port))
+                    {
+                        port = 80;
+                    }
+                }
+                request.Proxy = new WebProxy(tmp[0], port);
+                #endregion
+            }
+
+            if (flag)
+            {
+                request.Method = "GET";
+                request.ContentType = "text/html";
+            }
+            else
+            {
+                request.Method = "POST";
+                request.ContentType = "application/x-www-form-urlencoded";
+                if (!string.IsNullOrEmpty(param))
+                {
+                    byte[] bytes = encoding.GetBytes(param);
+                    request.ContentLength = bytes.Length;
+                    // 必须先设置ContentLength，才能打开GetRequestStream
+                    using (Stream requestStream = request.GetRequestStream())
+                    {
+                        requestStream.Write(bytes, 0, bytes.Length);
+                        requestStream.Close();
+                    }
+                }
+                else
+                    request.ContentLength = 0;// POST时，必须设置ContentLength属性
+            }
+
+            try
+            {
+                response = (HttpWebResponse)request.GetResponse();
+            }
+            catch (Exception exception)
+            {
+                result = "出错了";
+                return ("返回错误：" + exception);
+            }
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
+                result = "未启用压缩 =======";
+                Stream stream2;
+                using (stream2 = response.GetResponseStream())
+                {
+                    if (response.ContentEncoding.ToLower().Contains("gzip"))
+                    {
+                        result = "已启用压缩 gzip   ";
+                        stream2 = new GZipStream(stream2, CompressionMode.Decompress);
+                    }
+                    else if (response.ContentEncoding.ToLower().Contains("deflate"))
+                    {
+                        result = "已启用压缩 deflate";
+                        stream2 = new DeflateStream(stream2, CompressionMode.Decompress);
+                    }
+                    if (stream2 == null)
+                        return "null stream";
+                    using (StreamReader reader = new StreamReader(stream2, encoding))
+                    {
+                        result = result + DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss_fff");
+                        string str = reader.ReadToEnd();
+                        if (showHeader)
+                        {
+                            str = string.Concat(new object[] { "请求头信息：\r\n", request.Headers, "\r\n\r\n响应头信息：\r\n", response.Headers, "\r\n", str });
+                        }
+                        return str;
+                    }
+                }
+            }
+            result = "其它结果";
+            return string.Concat(new object[] { "远程服务器返回代码不为200,", response.StatusCode, ",", response.StatusDescription });
+        }
+
     }
 }

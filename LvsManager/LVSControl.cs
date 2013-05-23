@@ -255,39 +255,7 @@ namespace Beinet.cn.Tools.LvsManager
 
         private string PostCommand(string url, string proxy)
         {
-            var rnd = Guid.NewGuid().GetHashCode().ToString();
-            if (url.IndexOf('?') > 0)
-                url += "&rnd=" + rnd;
-            else
-                url += "?rnd=" + rnd;
-
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
-            request.Headers.Add(HttpRequestHeader.CacheControl, "no-cache");
-            request.Headers.Add("Accept-Charset", "utf-8");
-            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0;)";
-            request.AllowAutoRedirect = true; //出现301或302之类的转向时，是否要转向
-            request.Timeout = 2000;
-            if (!string.IsNullOrEmpty(proxy))
-            {
-                string[] tmp = proxy.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                int port = 80;
-                if (tmp.Length >= 2)
-                    if (!int.TryParse(tmp[1], out port))
-                        port = 80;
-                request.Proxy = new WebProxy(tmp[0], port);
-            }
-            //request.Method = "POST";
-            //request.ContentType = "application/x-www-form-urlencoded";
-            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-            using (Stream stream = response.GetResponseStream())
-            {
-                if (stream == null)
-                    return string.Empty;
-                using (var sr = new StreamReader(stream, Encoding.UTF8))
-                {
-                    return sr.ReadToEnd();
-                }
-            }
+            return Utility.GetPage(url, null, proxy);
             //WebClient webClient = new WebClient();
             //webClient.Encoding = Encoding.UTF8;
             //webClient.Proxy = new WebProxy(proxy);

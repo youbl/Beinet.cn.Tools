@@ -76,6 +76,12 @@
     <Compile Include="DataSync\SyncForm.designer.cs">
       <DependentUpon>SyncForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GetIpFromBaidu\GetIp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GetIpFromBaidu\GetIp.Designer.cs">
+      <DependentUpon>GetIp.cs</DependentUpon>
+    </Compile>
     <Compile Include="LvsManager\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -107,10 +113,10 @@
     <Compile Include="GzipTest.designer.cs">
       <DependentUpon>GzipTest.cs</DependentUpon>
     </Compile>
-    <Compile Include="FileHash.cs">
+    <Compile Include="FileHash\FileHash.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FileHash.designer.cs">
+    <Compile Include="FileHash\FileHash.designer.cs">
       <DependentUpon>FileHash.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -165,6 +171,9 @@
     <EmbeddedResource Include="DataSync\SyncForm.resx">
       <DependentUpon>SyncForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GetIpFromBaidu\GetIp.resx">
+      <DependentUpon>GetIp.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="LvsManager\About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
@@ -180,7 +189,7 @@
     <EmbeddedResource Include="GzipTest.resx">
       <DependentUpon>GzipTest.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FileHash.resx">
+    <EmbeddedResource Include="FileHash\FileHash.resx">
       <DependentUpon>FileHash.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PromptWin.resx">
@@ -224,8 +233,12 @@
   <ItemGroup>
     <Content Include="b.ico" />
     <Content Include="DataSync\sync.xml" />
+    <None Include="FileHash.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="LvsServer.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <EmbeddedResource Include="Resources\c0.png" />
     <EmbeddedResource Include="Resources\c1.png" />

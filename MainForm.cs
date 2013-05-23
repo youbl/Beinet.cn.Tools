@@ -244,7 +244,7 @@ namespace Beinet.cn.Tools
             }
             else if (tabControl1.SelectedTab == tabMd5File)
             {
-                AddFormControl<FileHash>(page);
+                AddFormControl<FileHash.FileHash>(page);
             }
             else if (tabControl1.SelectedTab == tabSqlInject)
             {

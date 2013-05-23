@@ -1,4 +1,4 @@
-﻿namespace Beinet.cn.Tools
+﻿namespace Beinet.cn.Tools.FileHash
 {
     partial class FileHash
     {
@@ -28,33 +28,20 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.txtRet = new System.Windows.Forms.TextBox();
             this.btnSelectFile = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnCopy = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
-            this.labRet = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.btnLoadConfig = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
-            // 
-            // txtRet
-            // 
-            this.txtRet.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtRet.Location = new System.Drawing.Point(3, 3);
-            this.txtRet.Multiline = true;
-            this.txtRet.Name = "txtRet";
-            this.txtRet.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtRet.Size = new System.Drawing.Size(449, 322);
-            this.txtRet.TabIndex = 0;
-            this.txtRet.Text = "把目录或文件拖到这里";
-            this.txtRet.WordWrap = false;
             // 
             // btnSelectFile
             // 
             this.btnSelectFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectFile.Location = new System.Drawing.Point(27, 331);
+            this.btnSelectFile.Location = new System.Drawing.Point(6, 357);
             this.btnSelectFile.Name = "btnSelectFile";
             this.btnSelectFile.Size = new System.Drawing.Size(75, 23);
             this.btnSelectFile.TabIndex = 1;
@@ -65,89 +52,106 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClear.Location = new System.Drawing.Point(109, 331);
+            this.btnClear.Location = new System.Drawing.Point(88, 357);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 2;
-            this.btnClear.Text = "清空";
+            this.btnClear.Text = "清空结果";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // btnCopy
             // 
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCopy.Location = new System.Drawing.Point(191, 331);
+            this.btnCopy.Location = new System.Drawing.Point(170, 357);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(75, 23);
             this.btnCopy.TabIndex = 3;
-            this.btnCopy.Text = "复制";
+            this.btnCopy.Text = "复制结果";
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
             // 
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(273, 331);
+            this.btnSave.Location = new System.Drawing.Point(252, 357);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 4;
-            this.btnSave.Text = "保存";
+            this.btnSave.Text = "保存结果";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
             // btnStop
             // 
-            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(355, 331);
+            this.btnStop.Location = new System.Drawing.Point(442, 357);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 5;
-            this.btnStop.Text = "停止";
+            this.btnStop.Text = "停止计算";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
-            // labRet
+            // dataGridView1
             // 
-            this.labRet.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.labRet.AutoSize = true;
-            this.labRet.Location = new System.Drawing.Point(3, 365);
-            this.labRet.Name = "labRet";
-            this.labRet.Size = new System.Drawing.Size(41, 12);
-            this.labRet.TabIndex = 6;
-            this.labRet.Text = "label1";
+            this.dataGridView1.AllowUserToAddRows = false;
+            this.dataGridView1.AllowUserToDeleteRows = false;
+            this.dataGridView1.AllowUserToOrderColumns = true;
+            this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView1.Location = new System.Drawing.Point(4, 1);
+            this.dataGridView1.Name = "dataGridView1";
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.RowTemplate.Height = 23;
+            this.dataGridView1.Size = new System.Drawing.Size(523, 350);
+            this.dataGridView1.TabIndex = 7;
+            // 
+            // btnLoadConfig
+            // 
+            this.btnLoadConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnLoadConfig.Location = new System.Drawing.Point(333, 357);
+            this.btnLoadConfig.Name = "btnLoadConfig";
+            this.btnLoadConfig.Size = new System.Drawing.Size(85, 23);
+            this.btnLoadConfig.TabIndex = 8;
+            this.btnLoadConfig.Text = "加载配置文件";
+            this.btnLoadConfig.UseVisualStyleBackColor = true;
+            this.btnLoadConfig.Click += new System.EventHandler(this.btnLoadConfig_Click);
             // 
             // FileHash
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(456, 382);
-            this.Controls.Add(this.labRet);
+            this.ClientSize = new System.Drawing.Size(529, 383);
+            this.Controls.Add(this.btnLoadConfig);
+            this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCopy);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSelectFile);
-            this.Controls.Add(this.txtRet);
             this.Name = "FileHash";
             this.Text = "文件MD5计算器";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
 
-        private System.Windows.Forms.TextBox txtRet;
         private System.Windows.Forms.Button btnSelectFile;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button btnCopy;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnStop;
-        private System.Windows.Forms.Label labRet;
+        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Button btnLoadConfig;
     }
 }
 

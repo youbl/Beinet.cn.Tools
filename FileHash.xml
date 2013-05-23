@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<HashSetting>
+  <Service>
+    <HashUrl><![CDATA[http://a.com/a.aspx]]></HashUrl>
+    <PostData><![CDATA[dir=E:\WwwRoot\a.com\WebRoot\bin]]></PostData>
+    <LocalPath><![CDATA[e:\nd\发布\a.com\bin]]></LocalPath>
+    <Host>10.1.240.188</Host>
+    <Host>10.1.240.199</Host>
+    <Host>10.1.240.200</Host>
+    <Host>10.1.240.202</Host>
+    <Host>10.2.103.42</Host>
+    <Host>10.2.105.155</Host>
+  </Service>
+</HashSetting>
