@@ -12,6 +12,8 @@ namespace Beinet.cn.Tools
 {
     public partial class MainForm : Form
     {
+        Dictionary<TabPage, Type> _tabForms; 
+
         public MainForm()
             : this(-1)
         {
@@ -20,6 +22,19 @@ namespace Beinet.cn.Tools
         public MainForm(int tabIndex)
         {
             InitializeComponent();
+
+            #region 添加TabPage跟窗体类型的对应关系
+            _tabForms = new Dictionary<TabPage, Type>();
+            _tabForms.Add(tabGZip, typeof(GzipTest));
+            _tabForms.Add(tabMd5File, typeof(FileHash.FileHash));
+            _tabForms.Add(tabSqlInject, typeof(SqlInjectForm.SqlInject));
+            _tabForms.Add(tabLvs, typeof(LvsManager.LVSControl));
+            _tabForms.Add(tabEncrypt, typeof(CryptTool));
+            _tabForms.Add(tabRegex, typeof(RegexTool.MainForm));
+            _tabForms.Add(tabDataSync, typeof(DataSync.MainForm));
+            _tabForms.Add(tabDllMerge, typeof(MergeDll.MergeForm));
+
+            #endregion
 
             string netVer = GetNetVersion();
             if(!string.IsNullOrEmpty(netVer))
@@ -234,51 +249,40 @@ namespace Beinet.cn.Tools
         #endregion
 
 
-
         private void tabControl1_SelectedIndexChanged(object sender, EventArgs e)
         {
             TabPage page = tabControl1.SelectedTab;
-            if (page == tabGZip)
+            Type formType;
+            if (_tabForms.TryGetValue(page, out formType))
             {
-                AddFormControl<GzipTest>(page);
+                AddFormControl(page, formType);
             }
-            else if (tabControl1.SelectedTab == tabMd5File)
-            {
-                AddFormControl<FileHash.FileHash>(page);
-            }
-            else if (tabControl1.SelectedTab == tabSqlInject)
-            {
-                AddFormControl<SqlInjectForm.SqlInject>(page);
-            }
-            else if (tabControl1.SelectedTab == tabLvs)
-            {
-                AddFormControl<LvsManager.LVSControl>(page);
-            }
-            else if (tabControl1.SelectedTab == tabEncrypt)
-            {
-                AddFormControl<CryptTool>(page);
-            }
-            else if (tabControl1.SelectedTab == tabRegex)
-            {
-                AddFormControl<RegexTool.MainForm>(page);
-            }
-            else if (tabControl1.SelectedTab == tabDataSync)
-            {
-                AddFormControl<DataSync.MainForm>(page);
-            }
+            //if (tabControl1.SelectedTab == )
+            //{
+            //    AddFormControl<>(page);
+            //}
+            //else if (tabControl1.SelectedTab == )
+            //{
+            //    AddFormControl<>(page);
+            //}
         }
 
-        static void AddFormControl<T>(Control parent) where T : Form, new()
+        //static void AddFormControl<T>(Control parent) where T : Form, new()
+        static void AddFormControl(Control parent, Type formType)
         {
             if (parent.Controls.Count <= 0)
             {
-                T frm = new T();
-                frm.FormBorderStyle = FormBorderStyle.None;
-                frm.Dock = DockStyle.Fill;
-                frm.TopLevel = false;
-                parent.Controls.Clear();
-                parent.Controls.Add(frm);
-                frm.Show();
+                //formType.BaseType
+                Form frm = Activator.CreateInstance(formType) as Form;
+                if (frm != null)
+                {
+                    frm.FormBorderStyle = FormBorderStyle.None;
+                    frm.Dock = DockStyle.Fill;
+                    frm.TopLevel = false;
+                    parent.Controls.Clear();
+                    parent.Controls.Add(frm);
+                    frm.Show();
+                }
             }
         }
 

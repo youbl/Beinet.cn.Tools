@@ -222,7 +222,9 @@ namespace Beinet.cn.Tools.FileHash
         private void btnLoadConfig_Click(object sender, EventArgs e)
         {
             var ofd = new OpenFileDialog();
-            ofd.FileName = AppDomain.CurrentDomain.BaseDirectory;//, "FileHash.xml");
+            ofd.FileName = AppDomain.CurrentDomain.BaseDirectory.TrimEnd('\\');// 不去掉斜框，win2003会出错
+            ofd.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
+
             DialogResult result = ofd.ShowDialog();
             if (result != DialogResult.OK)
             {
@@ -327,9 +329,20 @@ namespace Beinet.cn.Tools.FileHash
             foreach (string host in hosts)
             {
                 string ret = Utility.GetPage(url, postData, host);
-                foreach (string fileItem in ret.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries))
+                if(string.IsNullOrEmpty(ret))
+                {
+                    MessageBox.Show("获取页面数据为空:" + host);
+                    return;
+                }
+                string[] fileArr = ret.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (string fileItem in fileArr)
                 {
                     string[] arrItem = fileItem.Split(',');
+                    if(arrItem.Length != 2)
+                    {
+                        MessageBox.Show("返回数据格式有误，可能aspx不支持MD5对比功能:" + url + " " + host);
+                        return;
+                    }
                     string key = arrItem[0].ToLower();
                     string[] val;
                     if(!result.TryGetValue(key, out val))
@@ -345,7 +358,7 @@ namespace Beinet.cn.Tools.FileHash
             var dgv = dataGridView1;
             foreach (KeyValuePair<string, string[]> pair in result)
             {
-                object[] val = pair.Value;
+                object[] val = pair.Value.Select(item => (object)item).ToArray();
                 val[0] = pair.Key;
                 Utility.InvokeControl(dgv, () =>
                                                {

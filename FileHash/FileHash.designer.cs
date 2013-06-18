@@ -35,13 +35,14 @@
             this.btnStop = new System.Windows.Forms.Button();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.btnLoadConfig = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
             // btnSelectFile
             // 
             this.btnSelectFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectFile.Location = new System.Drawing.Point(6, 357);
+            this.btnSelectFile.Location = new System.Drawing.Point(6, 360);
             this.btnSelectFile.Name = "btnSelectFile";
             this.btnSelectFile.Size = new System.Drawing.Size(75, 23);
             this.btnSelectFile.TabIndex = 1;
@@ -52,7 +53,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClear.Location = new System.Drawing.Point(88, 357);
+            this.btnClear.Location = new System.Drawing.Point(88, 360);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(75, 23);
             this.btnClear.TabIndex = 2;
@@ -63,7 +64,7 @@
             // btnCopy
             // 
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCopy.Location = new System.Drawing.Point(170, 357);
+            this.btnCopy.Location = new System.Drawing.Point(170, 360);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(75, 23);
             this.btnCopy.TabIndex = 3;
@@ -74,7 +75,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(252, 357);
+            this.btnSave.Location = new System.Drawing.Point(252, 360);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(75, 23);
             this.btnSave.TabIndex = 4;
@@ -86,7 +87,7 @@
             // 
             this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(442, 357);
+            this.btnStop.Location = new System.Drawing.Point(598, 360);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 5;
@@ -107,13 +108,13 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowTemplate.Height = 23;
-            this.dataGridView1.Size = new System.Drawing.Size(523, 350);
+            this.dataGridView1.Size = new System.Drawing.Size(679, 353);
             this.dataGridView1.TabIndex = 7;
             // 
             // btnLoadConfig
             // 
             this.btnLoadConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLoadConfig.Location = new System.Drawing.Point(333, 357);
+            this.btnLoadConfig.Location = new System.Drawing.Point(333, 360);
             this.btnLoadConfig.Name = "btnLoadConfig";
             this.btnLoadConfig.Size = new System.Drawing.Size(85, 23);
             this.btnLoadConfig.TabIndex = 8;
@@ -121,12 +122,24 @@
             this.btnLoadConfig.UseVisualStyleBackColor = true;
             this.btnLoadConfig.Click += new System.EventHandler(this.btnLoadConfig_Click);
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(424, 359);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(137, 24);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "此按钮必须把Tools.aspx\r\n发布到相应网站";
+            // 
             // FileHash
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(529, 383);
+            this.ClientSize = new System.Drawing.Size(685, 386);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.btnLoadConfig);
             this.Controls.Add(this.dataGridView1);
             this.Controls.Add(this.btnStop);
@@ -140,6 +153,7 @@
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -152,6 +166,7 @@
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.Button btnLoadConfig;
+        private System.Windows.Forms.Label label1;
     }
 }
 

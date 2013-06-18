@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <HashSetting>
   <Service>
-    <HashUrl><![CDATA[http://a.com/a.aspx]]></HashUrl>
+    <HashUrl><![CDATA[http://a.com/Tools.aspx]]></HashUrl>
     <PostData><![CDATA[dir=E:\WwwRoot\a.com\WebRoot\bin]]></PostData>
     <LocalPath><![CDATA[e:\nd\发布\a.com\bin]]></LocalPath>
     <Host>10.1.240.188</Host>
@@ -12,3 +12,7 @@
     <Host>10.2.105.155</Host>
   </Service>
 </HashSetting>
+<!-- 注意：http://a.sj.91.com/Tools.aspx返回的格式如下：
+子路径/文件,md5
+子路径/文件,md5
+  -->

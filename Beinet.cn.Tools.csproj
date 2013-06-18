@@ -39,6 +39,10 @@
     <ApplicationIcon>b.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ILMerge, Version=2.12.803.0, Culture=neutral, PublicKeyToken=736440c9b414ea16, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\ILMerge.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
@@ -119,6 +123,12 @@
     <Compile Include="FileHash\FileHash.designer.cs">
       <DependentUpon>FileHash.cs</DependentUpon>
     </Compile>
+    <Compile Include="MergeDll\MergeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MergeDll\MergeForm.Designer.cs">
+      <DependentUpon>MergeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="PromptWin.cs">
       <SubType>Form</SubType>
@@ -192,6 +202,9 @@
     <EmbeddedResource Include="FileHash\FileHash.resx">
       <DependentUpon>FileHash.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="MergeDll\MergeForm.resx">
+      <DependentUpon>MergeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PromptWin.resx">
       <DependentUpon>PromptWin.cs</DependentUpon>
     </EmbeddedResource>
@@ -233,6 +246,11 @@
   <ItemGroup>
     <Content Include="b.ico" />
     <Content Include="DataSync\sync.xml" />
+    <None Include="ILMerge.exe" />
+    <None Include="Tools.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="FileHash.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -50,6 +50,7 @@
             this.tabEncrypt = new System.Windows.Forms.TabPage();
             this.tabRegex = new System.Windows.Forms.TabPage();
             this.tabDataSync = new System.Windows.Forms.TabPage();
+            this.tabDllMerge = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabDllAnlyse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -77,6 +78,7 @@
             this.tabControl1.Controls.Add(this.tabEncrypt);
             this.tabControl1.Controls.Add(this.tabRegex);
             this.tabControl1.Controls.Add(this.tabDataSync);
+            this.tabControl1.Controls.Add(this.tabDllMerge);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -328,6 +330,16 @@
             this.tabDataSync.Text = "数据库同步";
             this.tabDataSync.UseVisualStyleBackColor = true;
             // 
+            // tabDllMerge
+            // 
+            this.tabDllMerge.Location = new System.Drawing.Point(4, 22);
+            this.tabDllMerge.Name = "tabDllMerge";
+            this.tabDllMerge.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDllMerge.Size = new System.Drawing.Size(776, 536);
+            this.tabDllMerge.TabIndex = 8;
+            this.tabDllMerge.Text = "DLL合并";
+            this.tabDllMerge.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AllowDrop = true;
@@ -387,6 +399,7 @@
         private System.Windows.Forms.TabPage tabEncrypt;
         private System.Windows.Forms.TabPage tabRegex;
         private System.Windows.Forms.TabPage tabDataSync;
+        private System.Windows.Forms.TabPage tabDllMerge;
 
 
     }
