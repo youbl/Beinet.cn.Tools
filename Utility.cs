@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Compression;
 using System.Net;
+using System.Net.Sockets;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
@@ -715,6 +716,32 @@ namespace Beinet.cn.Tools
             }
             result = "其它结果";
             return string.Concat(new object[] { "远程服务器返回代码不为200,", response.StatusCode, ",", response.StatusDescription });
+        }
+
+
+
+        /// <summary>
+        /// 获取本机所有IPV4地址列表
+        /// </summary>
+        /// <returns>本机所有IPV4地址列表，以分号分隔</returns>
+        public static string GetServerIpList()
+        {
+            try
+            {
+                StringBuilder ips = new StringBuilder();
+                IPHostEntry IpEntry = Dns.GetHostEntry(Dns.GetHostName());
+                foreach (IPAddress ipa in IpEntry.AddressList)
+                {
+                    if (ipa.AddressFamily == AddressFamily.InterNetwork)
+                        ips.AppendFormat("{0};", ipa.ToString());
+                }
+                return ips.ToString();
+            }
+            catch (Exception)
+            {
+                //LogHelper.WriteCustom("获取本地ip错误" + ex, @"zIP\", false);
+                return string.Empty;
+            }
         }
 
     }

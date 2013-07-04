@@ -140,6 +140,13 @@
     <Compile Include="ControlExt\FixedRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="QQWry\IPLocator.cs" />
+    <Compile Include="QQWry\IP_QQWry.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="QQWry\IP_QQWry.Designer.cs">
+      <DependentUpon>IP_QQWry.cs</DependentUpon>
+    </Compile>
     <Compile Include="RegexTool\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -218,6 +225,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="QQWry\IP_QQWry.resx">
+      <DependentUpon>IP_QQWry.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="RegexTool\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

@@ -33,7 +33,7 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabRegex, typeof(RegexTool.MainForm));
             _tabForms.Add(tabDataSync, typeof(DataSync.MainForm));
             _tabForms.Add(tabDllMerge, typeof(MergeDll.MergeForm));
-
+            _tabForms.Add(tabQQWry, typeof(QQWry.IP_QQWry));
             #endregion
 
             string netVer = GetNetVersion();
