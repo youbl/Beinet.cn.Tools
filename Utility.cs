@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -16,7 +18,11 @@ namespace Beinet.cn.Tools
     public static class Utility
     {
         private static readonly string _path = AppDomain.CurrentDomain.BaseDirectory;
-        
+        /// <summary>
+        /// exe的启动目录
+        /// </summary>
+        public static string StartPath { get { return _path; } }
+
         private static readonly object lockobj = new object();
         public static void Log(string msg, string suffix = null)
         {
@@ -605,14 +611,24 @@ namespace Beinet.cn.Tools
         #endregion
 
 
-        public static string GetPage(string url, string postData, string proxy)
+        public static string GetPage(string url, string postData = null, string proxy = null)
         {
-            string result = null;
-            return GetPage(url, postData, "POST", Encoding.UTF8, false, proxy, ref result);
+            string method = string.IsNullOrEmpty(postData) ? "GET" : "POST";
+            return GetPage(url, postData, method, Encoding.UTF8, false, proxy);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="param"></param>
+        /// <param name="HttpMethod"></param>
+        /// <param name="encoding"></param>
+        /// <param name="showHeader"></param>
+        /// <param name="proxy"></param>
+        /// <returns></returns>
         public static string GetPage(string url, string param, string HttpMethod,
-            Encoding encoding, bool showHeader, string proxy, ref string result)
+            Encoding encoding, bool showHeader, string proxy)
         {
             // 增加随机数，避免缓存
             var rnd = Guid.NewGuid().GetHashCode().ToString();
@@ -681,30 +697,26 @@ namespace Beinet.cn.Tools
             }
             catch (Exception exception)
             {
-                result = "出错了";
                 return ("返回错误：" + exception);
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                result = "未启用压缩 =======";
                 Stream stream2;
                 using (stream2 = response.GetResponseStream())
                 {
-                    if (response.ContentEncoding.ToLower().Contains("gzip"))
+                    if (stream2 == null)
+                        return "GetResponseStream is null";
+                    string contentEncoding = response.ContentEncoding.ToLower();
+                    if (contentEncoding.Contains("gzip"))
                     {
-                        result = "已启用压缩 gzip   ";
                         stream2 = new GZipStream(stream2, CompressionMode.Decompress);
                     }
-                    else if (response.ContentEncoding.ToLower().Contains("deflate"))
+                    else if (contentEncoding.Contains("deflate"))
                     {
-                        result = "已启用压缩 deflate";
                         stream2 = new DeflateStream(stream2, CompressionMode.Decompress);
                     }
-                    if (stream2 == null)
-                        return "null stream";
                     using (StreamReader reader = new StreamReader(stream2, encoding))
                     {
-                        result = result + DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss_fff");
                         string str = reader.ReadToEnd();
                         if (showHeader)
                         {
@@ -714,8 +726,7 @@ namespace Beinet.cn.Tools
                     }
                 }
             }
-            result = "其它结果";
-            return string.Concat(new object[] { "远程服务器返回代码不为200,", response.StatusCode, ",", response.StatusDescription });
+            return string.Format("Response.StatusCode:{0}, {1}", response.StatusCode, response.StatusDescription);
         }
 
 
@@ -733,7 +744,7 @@ namespace Beinet.cn.Tools
                 foreach (IPAddress ipa in IpEntry.AddressList)
                 {
                     if (ipa.AddressFamily == AddressFamily.InterNetwork)
-                        ips.AppendFormat("{0};", ipa.ToString());
+                        ips.AppendFormat("{0};", ipa);
                 }
                 return ips.ToString();
             }
@@ -744,5 +755,52 @@ namespace Beinet.cn.Tools
             }
         }
 
+
+        private static HashSet<string> _dirNoProcess;
+        /// <summary>
+        /// Dll分析 或 文件MD5 处理时要跳过的目录列表，以分号分隔
+        /// </summary>
+        public static HashSet<string> DirNoProcess
+        {
+            get
+            {
+                if (_dirNoProcess == null)
+                {
+                    var ret = new HashSet<string>();
+                    string tmp = ConfigurationManager.AppSettings["DirNoProcess"] ?? ".svn;.git";
+                    foreach (string str in tmp.Split(new[] { ';', '|' }, StringSplitOptions.RemoveEmptyEntries))
+                    {
+                        string item = str.Trim();
+                        if (item != string.Empty)
+                            ret.Add(item.ToLower());
+                    }
+
+                    _dirNoProcess = ret;
+                }
+                return _dirNoProcess;
+            }
+        }
+
+
+        /// <summary>
+        /// 通过多线程同步执行多个方法
+        /// </summary>
+        /// <param name="methods"></param>
+        public static void ThreadRun(params ThreadStart[] methods)
+        {
+            List<Thread> arrTh = new List<Thread>();
+            foreach (ThreadStart method in methods)
+            {
+                Thread th = new Thread(method);
+                arrTh.Add(th);
+                th.Start();
+            }
+
+            // 阻塞所有线程，等待结束
+            foreach (Thread thread in arrTh)
+            {
+                thread.Join();
+            }
+        }
     }
 }

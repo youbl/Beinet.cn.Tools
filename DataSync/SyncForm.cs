@@ -193,7 +193,7 @@ namespace Beinet.cn.Tools.DataSync
                 }
             }
             m_finished = true;
-            btnCancel.Enabled = false;
+            Utility.InvokeControl(btnCancel, () => { btnCancel.Enabled = false; });
             //MessageBox.Show("完成");
         }
 

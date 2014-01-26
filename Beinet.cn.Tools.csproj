@@ -62,6 +62,7 @@
     <Compile Include="CryptTool.Designer.cs">
       <DependentUpon>CryptTool.cs</DependentUpon>
     </Compile>
+    <Compile Include="ControlExt\DataGridViewComboEditBoxColumn.cs" />
     <Compile Include="DataSync\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -175,7 +176,14 @@
     <Compile Include="SqlInjectForm\SqlInject.designer.cs">
       <DependentUpon>SqlInject.cs</DependentUpon>
     </Compile>
+    <Compile Include="ThreadScheduler.cs" />
     <Compile Include="Utility.cs" />
+    <Compile Include="WebContentCompare\Compare.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WebContentCompare\Compare.Designer.cs">
+      <DependentUpon>Compare.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="CryptTool.resx">
       <DependentUpon>CryptTool.cs</DependentUpon>
     </EmbeddedResource>
@@ -239,6 +247,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SqlInjectForm\SqlInject.resx">
       <DependentUpon>SqlInject.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebContentCompare\Compare.resx">
+      <DependentUpon>Compare.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">

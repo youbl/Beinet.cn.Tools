@@ -118,8 +118,12 @@ namespace Beinet.cn.Tools.FileHash
                 }
                 else if (Directory.Exists(file))
                 {
-                    cnt += CountDirMd5(Directory.GetFiles(file), root);
-                    cnt += CountDirMd5(Directory.GetDirectories(file), root);
+                    string fname = Path.GetFileName(file.TrimEnd('\\')).ToLower();
+                    if (fname != string.Empty || !Utility.DirNoProcess.Contains(fname))
+                    {
+                        cnt += CountDirMd5(Directory.GetFiles(file), root);
+                        cnt += CountDirMd5(Directory.GetDirectories(file), root);
+                    }
                 }
             }
             return cnt;
@@ -335,14 +339,17 @@ namespace Beinet.cn.Tools.FileHash
                     return;
                 }
                 string[] fileArr = ret.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                int getFiles = 0;
                 foreach (string fileItem in fileArr)
                 {
                     string[] arrItem = fileItem.Split(',');
                     if(arrItem.Length != 2)
                     {
-                        MessageBox.Show("返回数据格式有误，可能aspx不支持MD5对比功能:" + url + " " + host);
-                        return;
+                        continue;
+                        //MessageBox.Show("返回数据格式有误，可能aspx不支持MD5对比功能:" + url + " " + host);
+                        //return;
                     }
+                    getFiles++;
                     string key = arrItem[0].ToLower();
                     string[] val;
                     if(!result.TryGetValue(key, out val))
@@ -351,6 +358,11 @@ namespace Beinet.cn.Tools.FileHash
                         result.Add(key, val);
                     }
                     val[idx] = arrItem[1];
+                }
+                if (getFiles == 0)
+                {
+                    MessageBox.Show("返回数据格式有误，可能aspx不支持MD5对比功能:" + url + " " + host);
+                    return;
                 }
                 idx++;
             }

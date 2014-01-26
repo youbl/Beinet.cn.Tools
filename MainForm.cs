@@ -34,6 +34,7 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabDataSync, typeof(DataSync.MainForm));
             _tabForms.Add(tabDllMerge, typeof(MergeDll.MergeForm));
             _tabForms.Add(tabQQWry, typeof(QQWry.IP_QQWry));
+            _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
             #endregion
 
             string netVer = GetNetVersion();
@@ -137,8 +138,12 @@ namespace Beinet.cn.Tools
                 }
                 else if (Directory.Exists(fileName))
                 {
-                    ShowDirInfo(Directory.GetFiles(fileName), isBit, sb32, sb64, sb0);
-                    ShowDirInfo(Directory.GetDirectories(fileName), isBit, sb32, sb64, sb0);
+                    string fname = Path.GetFileName(fileName.TrimEnd('\\')).ToLower();
+                    if (fname != string.Empty || !Utility.DirNoProcess.Contains(fname))
+                    {
+                        ShowDirInfo(Directory.GetFiles(fileName), isBit, sb32, sb64, sb0);
+                        ShowDirInfo(Directory.GetDirectories(fileName), isBit, sb32, sb64, sb0);
+                    }
                 }
             }
         }
