@@ -32,20 +32,23 @@
             this.txtCompareIp = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.txtPublishServer = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.btnLoad = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
             this.lvUrls = new System.Windows.Forms.DataGridView();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.colUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDel = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colOpenDir = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.txtErr = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.label5 = new System.Windows.Forms.Label();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.lstRet = new System.Windows.Forms.ListView();
+            this.colRetSn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colRetContent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label3 = new System.Windows.Forms.Label();
+            this.txtThreadNum = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.lvUrls)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -87,21 +90,10 @@
             this.txtPublishServer.Size = new System.Drawing.Size(391, 21);
             this.txtPublishServer.TabIndex = 1;
             // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label3.ForeColor = System.Drawing.Color.DarkBlue;
-            this.label3.Location = new System.Drawing.Point(227, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(201, 24);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "对比源的IP只能填写1个\r\n目标服务器IP可以多个，分号分隔";
-            // 
             // btnLoad
             // 
             this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLoad.Location = new System.Drawing.Point(522, 8);
+            this.btnLoad.Location = new System.Drawing.Point(244, 8);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(134, 23);
             this.btnLoad.TabIndex = 3;
@@ -112,7 +104,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(522, 41);
+            this.btnSave.Location = new System.Drawing.Point(384, 8);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(134, 23);
             this.btnSave.TabIndex = 3;
@@ -144,14 +136,40 @@
             this.lvUrls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvUrls.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.lvUrls.Location = new System.Drawing.Point(0, 0);
+            this.lvUrls.MultiSelect = false;
             this.lvUrls.Name = "lvUrls";
+            this.lvUrls.RowHeadersWidth = 60;
             this.lvUrls.RowTemplate.Height = 23;
-            this.lvUrls.Size = new System.Drawing.Size(767, 348);
+            this.lvUrls.Size = new System.Drawing.Size(767, 326);
             this.lvUrls.TabIndex = 5;
             this.lvUrls.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.lvUrls_CellClick);
             this.lvUrls.CurrentCellDirtyStateChanged += new System.EventHandler(this.lvUrls_CurrentCellDirtyStateChanged);
             this.lvUrls.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridView1_RowsAdded);
             this.lvUrls.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridView1_RowsRemoved);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.splitContainer1.Location = new System.Drawing.Point(1, 99);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.lvUrls);
+            this.splitContainer1.Panel1MinSize = 1;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.lstRet);
+            this.splitContainer1.Panel2MinSize = 1;
+            this.splitContainer1.Size = new System.Drawing.Size(767, 449);
+            this.splitContainer1.SplitterDistance = 326;
+            this.splitContainer1.SplitterWidth = 1;
+            this.splitContainer1.TabIndex = 1;
+            this.splitContainer1.TabStop = false;
             // 
             // colUrl
             // 
@@ -179,7 +197,7 @@
             this.colDel.Name = "colDel";
             this.colDel.ReadOnly = true;
             this.colDel.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colDel.Width = 40;
+            this.colDel.Width = 35;
             // 
             // colOpenDir
             // 
@@ -191,28 +209,17 @@
             this.colOpenDir.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colOpenDir.Width = 60;
             // 
-            // txtErr
+            // linkLabel1
             // 
-            this.txtErr.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtErr.ForeColor = System.Drawing.Color.Red;
-            this.txtErr.Location = new System.Drawing.Point(19, 17);
-            this.txtErr.Multiline = true;
-            this.txtErr.Name = "txtErr";
-            this.txtErr.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtErr.Size = new System.Drawing.Size(744, 109);
-            this.txtErr.TabIndex = 6;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label4.Location = new System.Drawing.Point(3, 24);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(18, 48);
-            this.label4.TabIndex = 0;
-            this.label4.Text = "错\r\n误\r\n信\r\n息";
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(606, 8);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(65, 12);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "快捷键说明";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // label5
             // 
@@ -221,37 +228,60 @@
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label5.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.label5.Location = new System.Drawing.Point(11, 2);
+            this.label5.Location = new System.Drawing.Point(6, 67);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(752, 12);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "对比结果OK表示对比完全一致，“不一致ip：121.207.240.199(4,4140)”里的4,4140表示第一个不同点在第4行的第4140个字符";
+            this.label5.Size = new System.Drawing.Size(747, 24);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "注1：对比源的IP只能填写1个；目标服务器IP可以多个，分号分隔\r\n注2：结果OK表示对比完全一致，“不一致ip：121.207.240.199(4,4140)”" +
+    "里的4,4140表示第1个不同点在第4行,第4140个字符";
             // 
-            // splitContainer1
+            // lstRet
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(1, 70);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.lstRet.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colRetSn,
+            this.colRetContent});
+            this.lstRet.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lstRet.FullRowSelect = true;
+            this.lstRet.GridLines = true;
+            this.lstRet.HideSelection = false;
+            this.lstRet.LabelEdit = true;
+            this.lstRet.Location = new System.Drawing.Point(0, 0);
+            this.lstRet.MultiSelect = false;
+            this.lstRet.Name = "lstRet";
+            this.lstRet.Size = new System.Drawing.Size(767, 122);
+            this.lstRet.TabIndex = 0;
+            this.lstRet.UseCompatibleStateImageBehavior = false;
+            this.lstRet.View = System.Windows.Forms.View.Details;
+            this.lstRet.SelectedIndexChanged += new System.EventHandler(this.lstRet_SelectedIndexChanged);
             // 
-            // splitContainer1.Panel1
+            // colRetSn
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.lvUrls);
-            this.splitContainer1.Panel1MinSize = 1;
+            this.colRetSn.Text = "出错行号";
             // 
-            // splitContainer1.Panel2
+            // colRetContent
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.label5);
-            this.splitContainer1.Panel2.Controls.Add(this.txtErr);
-            this.splitContainer1.Panel2.Controls.Add(this.label4);
-            this.splitContainer1.Panel2MinSize = 1;
-            this.splitContainer1.Size = new System.Drawing.Size(767, 478);
-            this.splitContainer1.SplitterDistance = 348;
-            this.splitContainer1.SplitterWidth = 1;
-            this.splitContainer1.TabIndex = 1;
-            this.splitContainer1.TabStop = false;
+            this.colRetContent.Text = "内容描述";
+            this.colRetContent.Width = 1000;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(522, 44);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(95, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "启动检查线程数:";
+            // 
+            // txtThreadNum
+            // 
+            this.txtThreadNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtThreadNum.Location = new System.Drawing.Point(617, 41);
+            this.txtThreadNum.Name = "txtThreadNum";
+            this.txtThreadNum.Size = new System.Drawing.Size(48, 21);
+            this.txtThreadNum.TabIndex = 7;
+            this.txtThreadNum.Text = "5";
+            this.txtThreadNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // Compare
             // 
@@ -259,6 +289,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(770, 550);
+            this.Controls.Add(this.txtThreadNum);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.btnCompare);
             this.Controls.Add(this.btnSave);
@@ -277,7 +310,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.lvUrls)).EndInit();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
-            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -291,19 +323,22 @@
         private System.Windows.Forms.TextBox txtCompareIp;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtPublishServer;
-        private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button btnLoad;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.DataGridView lvUrls;
-        private System.Windows.Forms.TextBox txtErr;
+        private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUrl;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPost;
         private System.Windows.Forms.DataGridViewTextBoxColumn colResult;
         private System.Windows.Forms.DataGridViewLinkColumn colDel;
         private System.Windows.Forms.DataGridViewLinkColumn colOpenDir;
-        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.ListView lstRet;
+        private System.Windows.Forms.ColumnHeader colRetSn;
+        private System.Windows.Forms.ColumnHeader colRetContent;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtThreadNum;
     }
 }
