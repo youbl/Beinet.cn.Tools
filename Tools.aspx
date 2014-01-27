@@ -21,6 +21,13 @@
 
 <!-- 要自定义的变量列表 -->    
 <script language="c#" runat="server">
+    /* 本文件是一个工具页面，支持如下功能：
+     * 1、在线文件管理器（类似于Windows的资源管理器），同时可以配合FileHash工具，进行在线文件MD5对比
+     * 2、在线Telnet，主要用于测试服务器是否具有其它机器的端口权限，比如SQL数据库的1433端口
+     * 3、SQL查询，你可以当作在线的SQL查询分析器
+     * 4、Redis管理，在线输入Redis命令，维护或查看Redis
+     */
+    
     // **********************＝＝＝＝＝重要＝＝＝＝＝***************************
     // 因为需要压缩，bin目录下必须有ICSharpCode.SharpZipLib.Zip.dll
 
@@ -31,6 +38,7 @@
     private string m_ipLst = "127.0.0.1;";
 
     private const string m_tmpdir = @"e:\upload";// 可以写入的目录，用于创建zip文件等临时操作
+
 
 </script>
 <script language="C#" runat="server">
@@ -219,7 +227,8 @@
         }
     }
 
-    </script>    
+
+</script>    
 
 <!-- Telnet配置相关的方法集 -->    
 <script language="c#" runat="server">

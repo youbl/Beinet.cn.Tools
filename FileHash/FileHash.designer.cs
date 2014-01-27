@@ -88,7 +88,7 @@
             // 
             this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(693, 405);
+            this.btnStop.Location = new System.Drawing.Point(703, 405);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 23);
             this.btnStop.TabIndex = 5;
@@ -131,9 +131,9 @@
             this.label1.ForeColor = System.Drawing.Color.Red;
             this.label1.Location = new System.Drawing.Point(365, 402);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(231, 12);
+            this.label1.Size = new System.Drawing.Size(335, 12);
             this.label1.TabIndex = 9;
-            this.label1.Text = "此按钮要把Tools.aspx发布到相应网站";
+            this.label1.Text = "“加载配置文件”点击前要把Tools.aspx发布到相应网站";
             // 
             // label2
             // 
