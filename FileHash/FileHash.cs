@@ -332,7 +332,16 @@ namespace Beinet.cn.Tools.FileHash
             // 获取网络文件MD5
             foreach (string host in hosts)
             {
-                string ret = Utility.GetPage(url, postData, host);
+                string ret = string.Empty;
+                try
+                {
+                    ret = Utility.GetPage(url, postData, host, true);
+                }
+                catch (Exception exp)
+                {
+                    MessageBox.Show(host + "出现异常:" + exp);
+                    return;
+                }
                 if(string.IsNullOrEmpty(ret))
                 {
                     MessageBox.Show("获取页面数据为空:" + host);
@@ -361,7 +370,7 @@ namespace Beinet.cn.Tools.FileHash
                 }
                 if (getFiles == 0)
                 {
-                    MessageBox.Show("返回数据格式有误，可能aspx不支持MD5对比功能:" + url + " " + host);
+                    MessageBox.Show("返回文件个数为0，可能aspx不支持MD5对比功能:" + url + " " + host + "\r\n" + ret);
                     return;
                 }
                 idx++;

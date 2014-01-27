@@ -611,25 +611,22 @@ namespace Beinet.cn.Tools
         #endregion
 
 
-        public static string GetPage(string url, string postData = null, string proxy = null)
-        {
-            string method = string.IsNullOrEmpty(postData) ? "GET" : "POST";
-            return GetPage(url, postData, method, Encoding.UTF8, false, proxy);
-        }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="url"></param>
         /// <param name="param"></param>
-        /// <param name="HttpMethod"></param>
+        /// <param name="isPost"></param>
         /// <param name="encoding"></param>
         /// <param name="showHeader"></param>
         /// <param name="proxy"></param>
         /// <returns></returns>
-        public static string GetPage(string url, string param, string HttpMethod,
-            Encoding encoding, bool showHeader, string proxy)
+        public static string GetPage(string url, string param = null, string proxy = null, bool isPost = false,
+            Encoding encoding = null, bool showHeader = false)
         {
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+
             // 增加随机数，避免缓存
             var rnd = Guid.NewGuid().GetHashCode().ToString();
             if (url.IndexOf('?') > 0)
@@ -637,9 +634,7 @@ namespace Beinet.cn.Tools
             else
                 url += "?" + rnd;
             
-            HttpWebResponse response;
-            bool flag = string.IsNullOrEmpty(HttpMethod) || HttpMethod.Equals("GET", StringComparison.OrdinalIgnoreCase);
-            if (flag && !string.IsNullOrEmpty(param))
+            if (!isPost && !string.IsNullOrEmpty(param))
             {
                 url = url + "&" + param;
             }
@@ -649,6 +644,7 @@ namespace Beinet.cn.Tools
             request.AllowAutoRedirect = false;
             request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1;)";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Timeout = 5000;
 
             // 必须在写入Post Stream之前设置Proxy
             if (!string.IsNullOrEmpty(proxy))
@@ -667,7 +663,7 @@ namespace Beinet.cn.Tools
                 #endregion
             }
 
-            if (flag)
+            if (!isPost)
             {
                 request.Method = "GET";
                 request.ContentType = "text/html";
@@ -691,14 +687,7 @@ namespace Beinet.cn.Tools
                     request.ContentLength = 0;// POST时，必须设置ContentLength属性
             }
 
-            try
-            {
-                response = (HttpWebResponse)request.GetResponse();
-            }
-            catch (Exception exception)
-            {
-                return ("返回错误：" + exception);
-            }
+            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 Stream stream2;
@@ -726,7 +715,8 @@ namespace Beinet.cn.Tools
                     }
                 }
             }
-            return string.Format("Response.StatusCode:{0}, {1}", response.StatusCode, response.StatusDescription);
+            string errMsg = string.Format("Response.StatusCode:{0}, {1}", response.StatusCode, response.StatusDescription);
+            throw new Exception(errMsg);
         }
 
 
@@ -792,6 +782,7 @@ namespace Beinet.cn.Tools
             foreach (ThreadStart method in methods)
             {
                 Thread th = new Thread(method);
+                th.IsBackground = true;
                 arrTh.Add(th);
                 th.Start();
             }

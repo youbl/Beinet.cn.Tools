@@ -390,14 +390,17 @@ namespace Beinet.cn.Tools.WebContentCompare
             return true;
         }
 
+        // 主调程序
         void DoCompare(object state)
         {
-            int taskCnt = 0;
+            int[] taskCnt = { 0 };
             try
             {
+                _scheduler.StartWork(5);
+
                 string compareIp = txtCompareIp.Text;
 
-                string fileDir = Path.Combine(Utility.StartPath, DateTime.Now.ToString("yyyyMMddHHmmssfff"));
+                string fileDir = Path.Combine(Utility.StartPath, "WebCompare\\" + DateTime.Now.ToString("yyyyMMddHHmmssfff"));
 
                 int idx = 0;
                 int rowCnt = lvUrls.RowCount - 1; // 不处理未提交的行(即空白行)
@@ -409,41 +412,71 @@ namespace Beinet.cn.Tools.WebContentCompare
                     idx++;
                     string url = Convert.ToString(row.Cells[COL_URL].Value);
                     string post = Convert.ToString(row.Cells[COL_POST].Value);
+                    row.Cells[COL_RETURN].Value = string.Empty;
+                    bool isPost = !string.IsNullOrEmpty(post);
 
-                    url = AddRndCh(url);
+                    //GetPage方法已经加了随机数
+                    //url = AddRndCh(url);
 
                     int rowIdx = idx;
 
                     // 任务加1
-                    Interlocked.Increment(ref taskCnt);
+                    Interlocked.Increment(ref taskCnt[0]);
 
                     _scheduler.QueueUserWorkItem(obj =>
                     {
                         try
                         {
                             string rowDir = Path.Combine(fileDir, rowIdx.ToString());
-                            string compareHtml = Utility.GetPage(url, post, compareIp);
+                            string compareHtml = Utility.GetPage(url, post, compareIp, isPost) ?? string.Empty;
+                            if (compareHtml.Trim() == string.Empty)
+                            {
+                                // 任务减1
+                                Interlocked.Decrement(ref taskCnt[0]);
+                                string errMsg = string.Format("第{0}行：对比源服务器返回空内容，无法继续对比", rowIdx.ToString());
+                                ShowCompareErr(errMsg);
+                                return;
+                            }
+
                             WriteFile(rowDir, "compare" + compareIp + ".txt", url, post, compareHtml);
+                            // 重新读取文件，因为换行不同
+                            compareHtml = ReadFile(rowDir, "compare" + compareIp + ".txt");
 
                             string ret = string.Empty;
                             string[] serverIps = txtPublishServer.Text.Split(new char[] {';'},
                                 StringSplitOptions.RemoveEmptyEntries);
                             foreach (string ip in serverIps)
                             {
-                                string html = Utility.GetPage(url, post, ip);
+                                string html;
+                                try
+                                {
+                                    html = Utility.GetPage(url, post, ip, isPost);
+                                }
+                                catch (Exception exp)
+                                {
+                                    string errMsg = string.Format("第{0}行：{2}页面出错：{1}", 
+                                        rowIdx.ToString(), exp.Message, ip);
+                                    ShowCompareErr(errMsg);
+                                    ret = string.Format("{0}{1}(出错);", ret, ip);
+                                    continue;
+                                }
                                 WriteFile(rowDir, ip + ".txt", url, post, html);
+                                // 重新读取文件，因为换行不同
+                                html = ReadFile(rowDir, ip + ".txt");
                                 if (html != compareHtml)
-                                    ret += ip + ";";
+                                {
+                                    ret = string.Format("{0}{1}({2});", ret, ip, GetFirstDiff(html, compareHtml));
+                                }
                             }
                             if (ret == string.Empty)
                                 ret = "OK";
                             else
-                                ret = "不一致ip：" + ret;
+                                ret = "不一致:" + ret;
                             //ret += ". 对比结果参考目录" + rowDir;
                             Utility.InvokeControl(lvUrls, () =>
                             {
                                 // 任务减1
-                                Interlocked.Decrement(ref taskCnt);
+                                Interlocked.Decrement(ref taskCnt[0]);
                                 var resultrow = lvUrls.Rows[rowIdx - 1];
                                 resultrow.Cells[COL_RETURN].Value = ret;
 
@@ -459,8 +492,8 @@ namespace Beinet.cn.Tools.WebContentCompare
                         catch (Exception exp)
                         {
                             // 任务减1
-                            Interlocked.Decrement(ref taskCnt);
-                            string errMsg = string.Format("第{0}行对比时出错：\r\n{1}", rowIdx.ToString(), exp);
+                            Interlocked.Decrement(ref taskCnt[0]);
+                            string errMsg = string.Format("第{0}行：对比出错：\r\n{1}", rowIdx.ToString(), exp);
                             ShowCompareErr(errMsg);
                         }
 
@@ -477,8 +510,9 @@ namespace Beinet.cn.Tools.WebContentCompare
             {
                 // 等待所有线程完成
                 //while (_scheduler.QueueLength > 0)
-                while (taskCnt > 0)
+                while (taskCnt[0] > 0)
                     Thread.Sleep(100);
+                _scheduler.StopWork();
                 SetReadOnly(false);
             }
         }
@@ -505,20 +539,59 @@ namespace Beinet.cn.Tools.WebContentCompare
             }
         }
 
-        /// <summary>
-        /// 给url添加随机字符串，避免缓存
-        /// </summary>
-        /// <param name="url"></param>
-        /// <returns></returns>
-        string AddRndCh(string url)
+        string ReadFile(string fileDir, string fileName)
         {
-            string rnd = Guid.NewGuid().GetHashCode().ToString();
-            if (url.IndexOf('?') > 0)
-                url += "&" + rnd;
-            else 
-                url += "?" + rnd;
-            return url;
+            using (var stre = new StreamReader(Path.Combine(fileDir, fileName), Encoding.UTF8))
+            {
+                return stre.ReadToEnd();
+            }
         }
 
+
+        /// <summary>
+        /// 获取2个字符串的第1个不同的字符在第几行第几位 row,column
+        /// </summary>
+        /// <param name="str1"></param>
+        /// <param name="str2"></param>
+        /// <returns></returns>
+        string GetFirstDiff(string str1, string str2)
+        {
+            int len1 = str1.Length;
+            int len2 = str2.Length;
+            int row = 1;
+            int col = 0;
+            int i;
+            for (i = 0; i < len1 && i < len2; i++)
+            {
+                char ch1 = str1[i];
+                char ch2 = str2[i];
+                if (ch1 != ch2)
+                {
+                    break;
+                }
+                if (ch1 == '\r' || ch1 == '\n')
+                {
+                    int next = i + 1;
+                    if (next >= len1 || next >= len2)
+                        break;
+
+                    ch1 = str1[next];
+                    ch2 = str2[next];
+                    if ((ch1 == '\r' || ch1 == '\n') && (ch2 == '\r' || ch2 == '\n'))
+                        i++;
+
+                    row++;
+                    col = 0;
+                }
+                else
+                {
+                    col++;
+                }
+            }
+            if (i < len1 || i < len2)
+                return string.Format("{0},{1}", row.ToString(), col.ToString());
+
+            return "0,0";
+        }
     }
 }

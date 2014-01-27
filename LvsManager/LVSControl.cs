@@ -211,7 +211,7 @@ namespace Beinet.cn.Tools.LvsManager
             {
                 try
                 {
-                    string html = PostCommand(site.url + "?getrealstate=yes&format=robot", serverIP);
+                    string html = Utility.GetPage(site.url + "?getrealstate=yes&format=robot", null, serverIP); 
                     string[] arr = html.Split('|');
                     if (arr.Length > 2)
                     {
@@ -235,10 +235,10 @@ namespace Beinet.cn.Tools.LvsManager
                 catch (Exception ex)
                 {
                     SetListItemState(listItem, serverIP, DateTime.MinValue, null, ex.Message, "");
-                    if (!ex.Message.Contains("操作超时"))
-                    {
-                        Utility.Log("Scan出错：" + site.name + " " + serverIP + Environment.NewLine + ex, "lvs");
-                    }
+                    //if (!ex.Message.Contains("操作超时"))
+                    //{
+                    //    Utility.Log("Scan出错：" + site.name + " " + serverIP + Environment.NewLine + ex, "lvs");
+                    //}
                 }
 
                 Thread.Sleep(TimeSpan.FromSeconds(site.resreshSecond));
@@ -251,15 +251,6 @@ namespace Beinet.cn.Tools.LvsManager
             {
                 e.Cancel = true;
             }
-        }
-
-        private string PostCommand(string url, string proxy)
-        {
-            return Utility.GetPage(url, null, proxy);
-            //WebClient webClient = new WebClient();
-            //webClient.Encoding = Encoding.UTF8;
-            //webClient.Proxy = new WebProxy(proxy);
-            //return webClient.DownloadString(url);
         }
 
         private void PostCommandByMenu(string para)
@@ -283,7 +274,7 @@ namespace Beinet.cn.Tools.LvsManager
                     {
                         //var selectedItem = GetValue(lvServers, "SelectedItems") as
                         //    ListView.SelectedListViewItemCollection;
-                        str = PostCommand(url, serverIP);
+                        str = Utility.GetPage(url, null, serverIP); 
                     }
                     catch (Exception ex)
                     {

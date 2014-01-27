@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Threading;
 
 namespace Beinet.cn.Tools
@@ -14,6 +15,7 @@ namespace Beinet.cn.Tools
         private readonly Action<Exception> _exProc;
         private readonly int _expWaitSecond;
         private DateTime _expWaitToTime = DateTime.MinValue;
+        private bool _startWork;
 
         /// <summary>
         /// 队列中的任务数
@@ -27,21 +29,18 @@ namespace Beinet.cn.Tools
         /// 线程调度
         /// </summary>
         /// <param name="maxQueueLength">队列中的最大任务数</param>
-        /// <param name="workerNum">后台工作进程数</param>
         /// <param name="exProc">异常委托函数</param>
         /// <param name="expWaitSecond">
         /// 出现异常时，等待多久进行下一次消息出队处理，0表示不等待.
         /// 此参数让所有后台工作进程都进入等待，而exProc只能让一个工作进程进入等待
         /// </param>
-        public ThreadScheduler(int maxQueueLength = 10000, int workerNum = 5,
+        public ThreadScheduler(int maxQueueLength = 10000, 
             Action<Exception> exProc = null, int expWaitSecond = 0)
         {
             _maxQueueLength = maxQueueLength;
             _exProc = exProc;
             _queue = new ConcurrentQueue<Tuple<WaitCallback, object>>();
             _expWaitSecond = expWaitSecond;
-
-            BackgroundWorker(workerNum);
         }
 
         /// <summary>
@@ -61,13 +60,14 @@ namespace Beinet.cn.Tools
         /// <summary>
         /// 后台工作
         /// </summary>
-        private void BackgroundWorker(int workerNum)
+        public void StartWork(int workerNum)
         {
+            _startWork = true;
             for (int i = 0; i < workerNum; i++)
             {
                 var thread = new Thread(() =>
                 {
-                    while (true)
+                    while (_startWork)
                     {
                         Sleep();
 
@@ -112,6 +112,11 @@ namespace Beinet.cn.Tools
                 thread.IsBackground = true;
                 thread.Start();
             }
+        }
+
+        public void StopWork()
+        {
+            _startWork = false;
         }
 
         void Sleep()
