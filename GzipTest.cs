@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.IO.Compression;
+using System.Linq;
 using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -98,6 +100,7 @@ namespace Beinet.cn.Tools
         private void button2_Click(object sender, EventArgs e)
         {
             this.txtResult.Text = "IIS 6.0中配置HTTP压缩的步骤如下： \r\n\r\n1、打开Internet信息服务(IIS)管理器，右击 网站->属性，选择 服务。\r\n   在 HTTP压缩 框中选中 压缩应用程序文件 和 压缩静态文件 ，\r\n   按需要设置 临时目录 和 临时目录的最大限制； \r\n2、在Internet信息服务(IIS)管理器，右击 Web服务扩展 -> 增加一个新的Web服务扩展...，\r\n   在 新建Web服务扩展 框中输入扩展名 HTTP Compression ，\r\n   添加 要求的文件 为C:\\WINDOWS\\system32\\inetsrv\\gzip.dll，\r\n   并选中 设置扩展状态为允许\r\n3、使用文本编辑器打开C:\\Windows\\System32\\inetsrv\\MetaBase.xml(建议先备份),\r\n   找到Location =\"/LM/W3SVC/Filters/Compression/gzip\"，\r\n   3.1、如果需要压缩动态文件，则将HcDoDynamicCompression设置为 TRUE，\r\n        并在HcScriptFileExtensions中增加您要压缩的动态文件后缀名，如aspx；\r\n   3.2、如果需要压缩静态文件，则将HcDoStaticCompression和HcDoOnDemandCompression设置为 TRUE，\r\n        并在HcFileExtensions中增加您需要压缩的静态文件后缀名，如xml、css等；\r\n   HcDynamicCompressionLevel和HcOnDemandCompLevel为0~9之间的数字，\r\n   表示需要的压缩率，数字越小压缩率越低，建议设置为9\r\n4、编辑完毕后保存MetaBase.xml文件；如果文件无法保存，则可能IIS正在使用该文件。\r\n   打开 开始->管理工具->服务，停止 IIS Admin Service 后，即可保存； \r\n5、重新启动IIS。\r\n\r\n注：上面Windows系统目录根据您的安装可能有所不同。\r\n     gif、jpg图片，已经是压缩的，所以没必要配置压缩\r\n\r\n配置示例：\r\n<IIsCompressionScheme\tLocation =\"/LM/W3SVC/Filters/Compression/gzip\"\r\n\t\tHcCompressionDll=\"%windir%\\system32\\inetsrv\\gzip.dll\"\r\n\t\tHcCreateFlags=\"1\"\r\n\t\tHcDoDynamicCompression=\"TRUE\"\r\n\t\tHcDoOnDemandCompression=\"TRUE\"\r\n\t\tHcDoStaticCompression=\"TRUE\"\r\n\t\tHcDynamicCompressionLevel=\"9\"\r\n\t\tHcFileExtensions=\"htm\r\n\t\t\thtml\r\n\t\t\txml\r\n\t\t\tcss\r\n\t\t\tjs\r\n\t\t\tbmp\r\n\t\t\ttxt\"\r\n\t\tHcOnDemandCompLevel=\"9\"\r\n\t\tHcPriority=\"1\"\r\n\t\tHcScriptFileExtensions=\"asp\r\n\t\t\tdll\r\n\t\t\taspx\r\n\t\t\texe\r\n\t\t\tasmx\r\n\t\t\tashx\"\r\n\t>\r\n</IIsCompressionScheme>\r\n\r\n附：\r\n1. HTTP压缩概述\r\nHTTP压缩是在Web服务器和浏览器间传输压缩文本内容的方法。HTTP压缩采用通用的压缩算法如gzip等压缩HTML、JavaScript或CSS文件。\r\n\r\n2. HTTP压缩工作原理\r\nWeb服务器处理HTTP压缩的工作原理如下： \r\nWeb服务器接收到浏览器的HTTP请求后，检查浏览器是否支持HTTP压缩； \r\n如果浏览器支持HTTP压缩，Web服务器检查请求文件的后缀名； \r\n如果请求文件是HTML、CSS等静态文件，Web服务器到压缩缓冲目录中检查是否已经存在请求文件的最新压缩文件； \r\n如果请求文件的压缩文件不存在，Web服务器向浏览器返回未压缩的请求文件，并在压缩缓冲目录中存放请求文件的压缩文件； \r\n如果请求文件的最新压缩文件已经存在，则直接返回请求文件的压缩文件； \r\n如果请求文件是ASPX等动态文件，Web服务器动态压缩内容并返回浏览器，压缩内容不存放到压缩缓存目录中。 \r\n\r\n也就是说，对iis启用压缩，并不会影响那么不支持gzip的浏览器访问\r\n";
+            tabControl1.SelectedIndex = 0;
         }
 
 
@@ -169,31 +172,65 @@ namespace Beinet.cn.Tools
             }
             if (response.StatusCode == HttpStatusCode.OK)
             {
-                result = "未启用压缩 =======";
+                result = "未启用压缩 ======= 长度:";
                 Stream stream2;
                 using (stream2 = response.GetResponseStream())
                 {
-                    if (response.ContentEncoding.ToLower().Contains("gzip"))
-                    {
-                        result = "已启用压缩 gzip   ";
-                        stream2 = new GZipStream(stream2, CompressionMode.Decompress);
-                    }
-                    else if (response.ContentEncoding.ToLower().Contains("deflate"))
-                    {
-                        result = "已启用压缩 deflate";
-                        stream2 = new DeflateStream(stream2, CompressionMode.Decompress);
-                    }
                     if (stream2 == null)
-                        return "null stream";
-                    using (StreamReader reader = new StreamReader(stream2, encoding))
                     {
-                        result = result + DateTime.Now.ToString(" yyyy-MM-dd HH:mm:ss_fff");
-                        string str = reader.ReadToEnd();
-                        if (showHeader)
+                        return result + "GetResponseStream为null";
+                    }
+                    //using (BinaryReader s = new BinaryReader(stream2))
+                    //{
+                    //    byte[] buf = s.ReadBytes(1024 * 1024);
+                    //}
+                    List<byte> ret = new List<byte>(10000);
+                    byte[] arr = new byte[10000];
+                    int readcnt;
+                    while ((readcnt = stream2.Read(arr, 0, arr.Length)) > 0)
+                    {
+                        ret.AddRange(arr.Take(readcnt));
+                    }
+                    arr = ret.ToArray();
+                    using (var mem = new MemoryStream(arr))
+                    {
+                        bool isZip = false;
+                        var contentLen = arr.Length; //response.ContentLength; gzip时ContentLength可能为-1
+                        if (response.ContentEncoding.ToLower().Contains("gzip"))
                         {
-                            str = string.Concat(new object[] { "请求头信息：\r\n", request.Headers, "\r\n\r\n响应头信息：\r\n", response.Headers, "\r\n", str });
+                            isZip = true;
+                            result = "已启用压缩 gzip 长度:" + contentLen.ToString("N0") + " ";
+                            stream2 = new GZipStream(mem, CompressionMode.Decompress);
                         }
-                        return str;
+                        else if (response.ContentEncoding.ToLower().Contains("deflate"))
+                        {
+                            isZip = true;
+                            result = "已启用压缩 deflate 长度:" + contentLen.ToString("N0") + " ";
+                            stream2 = new DeflateStream(mem, CompressionMode.Decompress);
+                        }
+                        else
+                        {
+                            result += contentLen.ToString("N0") + " ";
+                            stream2 = mem;
+                        }
+                        using (StreamReader reader = new StreamReader(stream2, encoding))
+                        {
+                            string str = reader.ReadToEnd();
+                            int realLen = str.Length;
+                            result = string.Format("{0} 实际长度:{1} 压缩率:{2} {3}",
+                                result,
+                                realLen.ToString("N0"),
+                                ((realLen - contentLen) * 100.0 / realLen).ToString("N2"),
+                                DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss_fff"));
+
+                            if (showHeader)
+                            {
+                                str =
+                                    string.Concat(new object[]
+                                    {"请求头信息：\r\n", request.Headers, "\r\n\r\n响应头信息：\r\n", response.Headers, "\r\n", str});
+                            }
+                            return str;
+                        }
                     }
                 }
             }

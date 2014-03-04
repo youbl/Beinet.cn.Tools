@@ -72,10 +72,10 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.tabDllAnlyse);
             this.tabControl1.Controls.Add(this.tabLvs);
             this.tabControl1.Controls.Add(this.tabEncrypt);
             this.tabControl1.Controls.Add(this.tabDllMerge);
-            this.tabControl1.Controls.Add(this.tabDllAnlyse);
             this.tabControl1.Controls.Add(this.tabMd5File);
             this.tabControl1.Controls.Add(this.tabWebCompare);
             this.tabControl1.Controls.Add(this.tabSqlInject);
