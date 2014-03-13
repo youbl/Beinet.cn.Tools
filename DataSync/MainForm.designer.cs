@@ -35,6 +35,7 @@ namespace Beinet.cn.Tools.DataSync
             this.label1 = new System.Windows.Forms.Label();
             this.txtDbSource = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.chkWithNolock = new System.Windows.Forms.CheckBox();
             this.chkUseTruncate = new System.Windows.Forms.CheckBox();
             this.chkErrContinue = new System.Windows.Forms.CheckBox();
             this.chkAll = new System.Windows.Forms.CheckBox();
@@ -51,13 +52,15 @@ namespace Beinet.cn.Tools.DataSync
             this.txtDbTarget = new System.Windows.Forms.TextBox();
             this.lstBoolean = new System.Windows.Forms.ComboBox();
             this.lstTarget = new System.Windows.Forms.ComboBox();
-            this.lvTables = new ListViewNF();
+            this.imglstForLvTables = new System.Windows.Forms.ImageList(this.components);
+            this.lvTables = new Beinet.cn.Tools.ControlExt.ListViewNF();
             this.colSource = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTarget = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTruncate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colIdentifier = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.imglstForLvTables = new System.Windows.Forms.ImageList(this.components);
-            this.chkWithNolock = new System.Windows.Forms.CheckBox();
+            this.chkAllClear = new System.Windows.Forms.CheckBox();
+            this.chkAllIdentify = new System.Windows.Forms.CheckBox();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -78,7 +81,7 @@ namespace Beinet.cn.Tools.DataSync
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDbSource.Location = new System.Drawing.Point(72, 9);
             this.txtDbSource.Name = "txtDbSource";
-            this.txtDbSource.Size = new System.Drawing.Size(448, 21);
+            this.txtDbSource.Size = new System.Drawing.Size(577, 21);
             this.txtDbSource.TabIndex = 1;
             this.txtDbSource.Text = "server=127.0.0.1;database=mySourceDb;uid=sa;pwd=xxx";
             this.txtDbSource.TextChanged += new System.EventHandler(this.txtDbSource_TextChanged);
@@ -95,6 +98,8 @@ namespace Beinet.cn.Tools.DataSync
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.chkAllIdentify);
+            this.splitContainer1.Panel1.Controls.Add(this.chkAllClear);
             this.splitContainer1.Panel1.Controls.Add(this.chkWithNolock);
             this.splitContainer1.Panel1.Controls.Add(this.chkUseTruncate);
             this.splitContainer1.Panel1.Controls.Add(this.chkErrContinue);
@@ -120,11 +125,22 @@ namespace Beinet.cn.Tools.DataSync
             this.splitContainer1.Panel2.Controls.Add(this.lstTarget);
             this.splitContainer1.Panel2.Controls.Add(this.lvTables);
             this.splitContainer1.Panel2MinSize = 1;
-            this.splitContainer1.Size = new System.Drawing.Size(659, 452);
+            this.splitContainer1.Size = new System.Drawing.Size(788, 509);
             this.splitContainer1.SplitterDistance = 109;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
+            // 
+            // chkWithNolock
+            // 
+            this.chkWithNolock.AutoSize = true;
+            this.chkWithNolock.Location = new System.Drawing.Point(298, 60);
+            this.chkWithNolock.Name = "chkWithNolock";
+            this.chkWithNolock.Size = new System.Drawing.Size(108, 16);
+            this.chkWithNolock.TabIndex = 5;
+            this.chkWithNolock.Text = "增加NoLock选项";
+            this.chkWithNolock.UseVisualStyleBackColor = true;
+            this.chkWithNolock.CheckedChanged += new System.EventHandler(this.chkWithNolock_CheckedChanged);
             // 
             // chkUseTruncate
             // 
@@ -186,7 +202,7 @@ namespace Beinet.cn.Tools.DataSync
             // btnGetSchma
             // 
             this.btnGetSchma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGetSchma.Location = new System.Drawing.Point(526, 9);
+            this.btnGetSchma.Location = new System.Drawing.Point(655, 9);
             this.btnGetSchma.Name = "btnGetSchma";
             this.btnGetSchma.Size = new System.Drawing.Size(57, 39);
             this.btnGetSchma.TabIndex = 7;
@@ -196,7 +212,8 @@ namespace Beinet.cn.Tools.DataSync
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(572, 56);
+            this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnLoad.Location = new System.Drawing.Point(701, 56);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(84, 22);
             this.btnLoad.TabIndex = 9;
@@ -206,8 +223,9 @@ namespace Beinet.cn.Tools.DataSync
             // 
             // btnSaveConfig
             // 
+            this.btnSaveConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveConfig.Enabled = false;
-            this.btnSaveConfig.Location = new System.Drawing.Point(572, 81);
+            this.btnSaveConfig.Location = new System.Drawing.Point(701, 81);
             this.btnSaveConfig.Name = "btnSaveConfig";
             this.btnSaveConfig.Size = new System.Drawing.Size(84, 22);
             this.btnSaveConfig.TabIndex = 10;
@@ -221,7 +239,7 @@ namespace Beinet.cn.Tools.DataSync
             this.btnSyncBegin.BackColor = System.Drawing.SystemColors.Control;
             this.btnSyncBegin.Enabled = false;
             this.btnSyncBegin.Font = new System.Drawing.Font("宋体", 10.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.btnSyncBegin.Location = new System.Drawing.Point(589, 9);
+            this.btnSyncBegin.Location = new System.Drawing.Point(718, 9);
             this.btnSyncBegin.Name = "btnSyncBegin";
             this.btnSyncBegin.Size = new System.Drawing.Size(67, 39);
             this.btnSyncBegin.TabIndex = 8;
@@ -272,7 +290,7 @@ namespace Beinet.cn.Tools.DataSync
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDbTarget.Location = new System.Drawing.Point(72, 32);
             this.txtDbTarget.Name = "txtDbTarget";
-            this.txtDbTarget.Size = new System.Drawing.Size(448, 21);
+            this.txtDbTarget.Size = new System.Drawing.Size(577, 21);
             this.txtDbTarget.TabIndex = 2;
             this.txtDbTarget.Text = "server=127.0.0.1;database=myTargetDb;uid=sa;pwd=xxx";
             this.txtDbTarget.TextChanged += new System.EventHandler(this.txtDbSource_TextChanged);
@@ -309,6 +327,12 @@ namespace Beinet.cn.Tools.DataSync
             this.lstTarget.SelectedIndexChanged += new System.EventHandler(this.lstChange);
             this.lstTarget.Leave += new System.EventHandler(this.lstLeave);
             // 
+            // imglstForLvTables
+            // 
+            this.imglstForLvTables.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imglstForLvTables.ImageSize = new System.Drawing.Size(1, 20);
+            this.imglstForLvTables.TransparentColor = System.Drawing.Color.Transparent;
+            // 
             // lvTables
             // 
             this.lvTables.CheckBoxes = true;
@@ -326,7 +350,7 @@ namespace Beinet.cn.Tools.DataSync
             this.lvTables.Margin = new System.Windows.Forms.Padding(0);
             this.lvTables.MultiSelect = false;
             this.lvTables.Name = "lvTables";
-            this.lvTables.Size = new System.Drawing.Size(659, 342);
+            this.lvTables.Size = new System.Drawing.Size(788, 399);
             this.lvTables.SmallImageList = this.imglstForLvTables;
             this.lvTables.TabIndex = 0;
             this.lvTables.TabStop = false;
@@ -350,34 +374,40 @@ namespace Beinet.cn.Tools.DataSync
             // colTruncate
             // 
             this.colTruncate.Text = "清空目标表";
-            this.colTruncate.Width = 75;
+            this.colTruncate.Width = 100;
             // 
             // colIdentifier
             // 
             this.colIdentifier.Text = "标识插入";
+            this.colIdentifier.Width = 100;
             // 
-            // imglstForLvTables
+            // chkAllClear
             // 
-            this.imglstForLvTables.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imglstForLvTables.ImageSize = new System.Drawing.Size(1, 20);
-            this.imglstForLvTables.TransparentColor = System.Drawing.Color.Transparent;
+            this.chkAllClear.AutoSize = true;
+            this.chkAllClear.Location = new System.Drawing.Point(508, 86);
+            this.chkAllClear.Name = "chkAllClear";
+            this.chkAllClear.Size = new System.Drawing.Size(48, 16);
+            this.chkAllClear.TabIndex = 14;
+            this.chkAllClear.Text = "全选";
+            this.chkAllClear.UseVisualStyleBackColor = true;
+            this.chkAllClear.CheckedChanged += new System.EventHandler(this.chkAllClear_CheckedChanged);
             // 
-            // chkWithNolock
+            // chkAllIdentify
             // 
-            this.chkWithNolock.AutoSize = true;
-            this.chkWithNolock.Location = new System.Drawing.Point(298, 60);
-            this.chkWithNolock.Name = "chkWithNolock";
-            this.chkWithNolock.Size = new System.Drawing.Size(108, 16);
-            this.chkWithNolock.TabIndex = 5;
-            this.chkWithNolock.Text = "增加NoLock选项";
-            this.chkWithNolock.UseVisualStyleBackColor = true;
-            this.chkWithNolock.CheckedChanged += new System.EventHandler(this.chkWithNolock_CheckedChanged);
+            this.chkAllIdentify.AutoSize = true;
+            this.chkAllIdentify.Location = new System.Drawing.Point(606, 87);
+            this.chkAllIdentify.Name = "chkAllIdentify";
+            this.chkAllIdentify.Size = new System.Drawing.Size(48, 16);
+            this.chkAllIdentify.TabIndex = 15;
+            this.chkAllIdentify.Text = "全选";
+            this.chkAllIdentify.UseVisualStyleBackColor = true;
+            this.chkAllIdentify.CheckedChanged += new System.EventHandler(this.chkAllIdentify_CheckedChanged);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(659, 452);
+            this.ClientSize = new System.Drawing.Size(788, 509);
             this.Controls.Add(this.splitContainer1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
@@ -385,6 +415,7 @@ namespace Beinet.cn.Tools.DataSync
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -418,6 +449,8 @@ namespace Beinet.cn.Tools.DataSync
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtDbTimeout;
         private System.Windows.Forms.CheckBox chkWithNolock;
+        private System.Windows.Forms.CheckBox chkAllClear;
+        private System.Windows.Forms.CheckBox chkAllIdentify;
     }
 }
 

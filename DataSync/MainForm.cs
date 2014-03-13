@@ -342,6 +342,13 @@ namespace Beinet.cn.Tools.DataSync
                 MessageBox.Show("请输入数据源或目标连接字符串");
                 return false;
             }
+            if (sourceConn.Equals(targetConn, StringComparison.OrdinalIgnoreCase))
+            {
+                if (DialogResult.Yes != MessageBox.Show("数据源与目标连接串相同，要继续吗？", "确认", MessageBoxButtons.YesNo))
+                {
+                    return false;
+                }
+            }
             return true;
         }
 
@@ -555,6 +562,36 @@ namespace Beinet.cn.Tools.DataSync
             }
         }
 
+        private void chkAllClear_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckAllCol(sender);
+        }
 
+        private void chkAllIdentify_CheckedChanged(object sender, EventArgs e)
+        {
+            CheckAllCol(sender);
+        }
+
+        private void CheckAllCol(object sender)
+        {
+            int colNum;
+            if (sender == chkAllClear)
+            {
+                colNum = COL_TRUNCATE;
+            }
+            else if (sender == chkAllIdentify)
+            {
+                colNum = COL_IDENTIFIER;
+            }
+            else
+            {
+                return;
+            }
+            string val = ((CheckBox) sender).Checked ? "true" : "false";
+            foreach (ListViewItem item in lvTables.CheckedItems)
+            {
+                item.SubItems[colNum].Text = val;
+            }
+        }
     }
 }
