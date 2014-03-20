@@ -201,17 +201,14 @@ namespace Beinet.cn.Tools
                     arr = ret.ToArray();
                     using (var mem = new MemoryStream(arr))
                     {
-                        bool isZip = false;
                         var contentLen = arr.Length; //response.ContentLength; gzip时ContentLength可能为-1
                         if (response.ContentEncoding.ToLower().Contains("gzip"))
                         {
-                            isZip = true;
                             result = "已启用压缩 gzip 长度:" + contentLen.ToString("N0") + " ";
                             stream2 = new GZipStream(mem, CompressionMode.Decompress);
                         }
                         else if (response.ContentEncoding.ToLower().Contains("deflate"))
                         {
-                            isZip = true;
                             result = "已启用压缩 deflate 长度:" + contentLen.ToString("N0") + " ";
                             stream2 = new DeflateStream(mem, CompressionMode.Decompress);
                         }

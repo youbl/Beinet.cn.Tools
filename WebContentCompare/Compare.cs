@@ -90,6 +90,11 @@ namespace Beinet.cn.Tools.WebContentCompare
             LoadInfoFromFile(ofd.FileName);
         }
 
+        private void btnLoad_StopClick(object sender, EventArgs e)
+        {
+            _stopLoad = true;
+        }
+
         /// <summary>
         /// 保存到配置文件
         /// </summary>
@@ -155,6 +160,37 @@ Ctrl+S: 保存全部到配置文件
 Ctrl+R: 开始检查");
         }
 
+
+        private void btnRemoveOK_Click(object sender, EventArgs e)
+        {
+            btnRemoveOK.Enabled = false;
+            btnCompare.Enabled = false;
+            ThreadPool.UnsafeQueueUserWorkItem(state =>
+            {
+                try
+                {
+                    int rowCnt = lvUrls.RowCount - 1; // 不处理未提交的行(即空白行)
+                    //foreach (DataGridViewRow row in lvUrls.Rows)
+                    for (var i = rowCnt - 1; i >= 0; i--)
+                    {
+                        int i1 = i;
+                        if (Convert.ToString(lvUrls.Rows[i].Cells[COL_RETURN].Value) == "OK")
+                        {
+                            Utility.InvokeControl(lvUrls, () => lvUrls.Rows.RemoveAt(i1));
+                        }
+                    }
+                }
+                catch (Exception exp)
+                {
+                    MessageBox.Show("移除行时出错：\r\n" + exp);
+                }
+                finally
+                {
+                    btnRemoveOK.Enabled = true;
+                    btnCompare.Enabled = true;
+                }
+            }, null);
+        }
         #endregion
 
 
@@ -329,54 +365,125 @@ Ctrl+R: 开始检查");
             });
         }
 
+        private bool _stopLoad = false;
         void LoadInfoFromFile(string file)
         {
             if (!File.Exists(file))
                 return;
 
-            lvUrls.Rows.Clear();
-
-            using (var sr = new StreamReader(file, Encoding.UTF8))
+            int speed;
+            if (!int.TryParse(txtLoadSpeed.Text, out speed))
             {
-                while (!sr.EndOfStream)
-                {
-                    // 读取标记
-                    string line = (sr.ReadLine() ?? "").Trim();
-                    if (sr.EndOfStream)
-                        break;
-
-                    if (line == string.Empty)
-                        continue;
-
-                    // 读取标记值
-                    string value = (sr.ReadLine() ?? "").Trim();
-                    if (value == string.Empty)
-                    {
-                        continue;
-                    }
-
-                    switch (line)
-                    {
-                        case "[beforePublishServerIp]":
-                            txtCompareIp.Text = value;
-                            break;
-                        case "[afterPublishServerIp]":
-                            txtPublishServer.Text = value;
-                            break;
-                        case "[url]":
-                            string url = value;
-                            if (!_regUrl.IsMatch(url))
-                                continue;
-                            string post = (sr.ReadLine() ?? "").Trim();
-                            var row = new object[COL_OPEN + 1];
-                            row[COL_URL] = url;
-                            row[COL_POST] = post;
-                            row[COL_DEL] = "删除";
-                            lvUrls.Rows.Add(row);
-                            break;
-                    }
-                }
+                MessageBox.Show("文件加载速度不是数值");
+                return;
             }
+            if (speed <= 0)
+                speed = 30;
+            lvUrls.Rows.Clear();
+            lstRet.Items.Clear(); // 清空结果集
+            SetBtnEnable(false);
+            ThreadPool.UnsafeQueueUserWorkItem(state =>
+            {
+                int addRowNum = 0;
+                DateTime beginTime = DateTime.Now;
+                try
+                {
+                    List<object[]> arr = new List<object[]>();
+                    using (var sr = new StreamReader(file, Encoding.UTF8))
+                    {
+                        while (!_stopLoad && !sr.EndOfStream)
+                        {
+                            // 读取标记
+                            string line = (sr.ReadLine() ?? "").Trim();
+                            if (sr.EndOfStream)
+                                break;
+
+                            if (line == string.Empty)
+                                continue;
+
+                            // 读取标记值
+                            string value = (sr.ReadLine() ?? "").Trim();
+                            if (value == string.Empty)
+                            {
+                                continue;
+                            }
+
+                            switch (line)
+                            {
+                                case "[beforePublishServerIp]":
+                                    txtCompareIp.Text = value;
+                                    break;
+                                case "[afterPublishServerIp]":
+                                    txtPublishServer.Text = value;
+                                    break;
+                                case "[url]":
+                                    string url = value;
+                                    if (!_regUrl.IsMatch(url))
+                                        continue;
+                                    string post = (sr.ReadLine() ?? "").Trim();
+                                    var row = new object[COL_OPEN + 1];
+                                    row[COL_URL] = url;
+                                    row[COL_POST] = post;
+                                    row[COL_DEL] = "删除";
+                                    arr.Add(row);
+                                    if (arr.Count >= 10)
+                                    {
+                                        Utility.InvokeControl(lvUrls, () =>
+                                        {
+                                            foreach (object[] objects in arr)
+                                            {
+                                                lvUrls.Rows.Add(objects);
+                                            }
+                                            addRowNum += arr.Count;
+                                            lvUrls.FirstDisplayedCell = lvUrls.Rows[lvUrls.Rows.Count - 1].Cells[0];
+                                        });
+                                        arr.Clear();
+                                        Thread.Sleep(speed);
+                                    }
+                                    break;
+                            }
+                        }
+                    }// end using
+                }
+                catch (Exception exp)
+                {
+                    MessageBox.Show("出错了:\r\n" + exp);
+                }
+                finally
+                {
+                    DateTime endTime = DateTime.Now;
+                    string result = string.Format("耗时:{0}ms, 加载行数{1}", 
+                        (endTime - beginTime).TotalMilliseconds.ToString("N0"), addRowNum.ToString("N0"));
+                    ListViewItem item = new ListViewItem(new[] { "", result });
+                    Utility.InvokeControl(lstRet, () => lstRet.Items.Add(item));
+                    SetBtnEnable(true);
+                }
+            }, null);
+        }
+
+        void SetBtnEnable(bool enable)
+        {
+            _stopLoad = false;
+            Utility.InvokeControl(btnCompare, () =>
+            {
+                if (enable)
+                {
+                    btnLoad.Text = "从配置文件加载..";
+                    btnLoad.Click -= btnLoad_StopClick;
+                    btnLoad.Click += btnLoad_Click;
+                }
+                else
+                {
+                    btnLoad.Text = "加载中，点击取消";
+                    btnLoad.Click -= btnLoad_Click;
+                    btnLoad.Click += btnLoad_StopClick;
+                }
+                btnCompare.Enabled = enable;
+                btnSave.Enabled = enable;
+                txtLoadSpeed.Enabled = enable;
+                txtCompareIp.Enabled = enable;
+                txtPublishServer.Enabled = enable;
+            });
         }
 
         bool CheckForm()

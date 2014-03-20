@@ -36,19 +36,23 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnCompare = new System.Windows.Forms.Button();
             this.lvUrls = new System.Windows.Forms.DataGridView();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.colUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDel = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colOpenDir = new System.Windows.Forms.DataGridViewLinkColumn();
-            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.label5 = new System.Windows.Forms.Label();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lstRet = new System.Windows.Forms.ListView();
             this.colRetSn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colRetContent = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.label5 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.txtThreadNum = new System.Windows.Forms.TextBox();
+            this.txtLoadSpeed = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.btnRemoveOK = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.lvUrls)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -59,7 +63,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 13);
+            this.label1.Location = new System.Drawing.Point(14, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(95, 12);
             this.label1.TabIndex = 0;
@@ -67,7 +71,7 @@
             // 
             // txtCompareIp
             // 
-            this.txtCompareIp.Location = new System.Drawing.Point(126, 10);
+            this.txtCompareIp.Location = new System.Drawing.Point(110, 6);
             this.txtCompareIp.Name = "txtCompareIp";
             this.txtCompareIp.Size = new System.Drawing.Size(95, 21);
             this.txtCompareIp.TabIndex = 1;
@@ -75,7 +79,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 44);
+            this.label2.Location = new System.Drawing.Point(2, 36);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(107, 12);
             this.label2.TabIndex = 0;
@@ -85,7 +89,7 @@
             // 
             this.txtPublishServer.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPublishServer.Location = new System.Drawing.Point(125, 41);
+            this.txtPublishServer.Location = new System.Drawing.Point(109, 33);
             this.txtPublishServer.Name = "txtPublishServer";
             this.txtPublishServer.Size = new System.Drawing.Size(391, 21);
             this.txtPublishServer.TabIndex = 1;
@@ -93,7 +97,8 @@
             // btnLoad
             // 
             this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLoad.Location = new System.Drawing.Point(244, 8);
+            this.btnLoad.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnLoad.Location = new System.Drawing.Point(359, 4);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(134, 23);
             this.btnLoad.TabIndex = 3;
@@ -104,7 +109,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSave.Location = new System.Drawing.Point(384, 8);
+            this.btnSave.Location = new System.Drawing.Point(211, 4);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(134, 23);
             this.btnSave.TabIndex = 3;
@@ -115,9 +120,9 @@
             // btnCompare
             // 
             this.btnCompare.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnCompare.Location = new System.Drawing.Point(677, 9);
+            this.btnCompare.Location = new System.Drawing.Point(699, 9);
             this.btnCompare.Name = "btnCompare";
-            this.btnCompare.Size = new System.Drawing.Size(91, 53);
+            this.btnCompare.Size = new System.Drawing.Size(69, 53);
             this.btnCompare.TabIndex = 4;
             this.btnCompare.Text = "开始检查";
             this.btnCompare.UseVisualStyleBackColor = true;
@@ -140,36 +145,12 @@
             this.lvUrls.Name = "lvUrls";
             this.lvUrls.RowHeadersWidth = 60;
             this.lvUrls.RowTemplate.Height = 23;
-            this.lvUrls.Size = new System.Drawing.Size(767, 326);
+            this.lvUrls.Size = new System.Drawing.Size(767, 313);
             this.lvUrls.TabIndex = 5;
             this.lvUrls.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.lvUrls_CellClick);
             this.lvUrls.CurrentCellDirtyStateChanged += new System.EventHandler(this.lvUrls_CurrentCellDirtyStateChanged);
             this.lvUrls.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.dataGridView1_RowsAdded);
             this.lvUrls.RowsRemoved += new System.Windows.Forms.DataGridViewRowsRemovedEventHandler(this.dataGridView1_RowsRemoved);
-            // 
-            // splitContainer1
-            // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(1, 99);
-            this.splitContainer1.Name = "splitContainer1";
-            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer1.Panel1
-            // 
-            this.splitContainer1.Panel1.Controls.Add(this.lvUrls);
-            this.splitContainer1.Panel1MinSize = 1;
-            // 
-            // splitContainer1.Panel2
-            // 
-            this.splitContainer1.Panel2.Controls.Add(this.lstRet);
-            this.splitContainer1.Panel2MinSize = 1;
-            this.splitContainer1.Size = new System.Drawing.Size(767, 449);
-            this.splitContainer1.SplitterDistance = 326;
-            this.splitContainer1.SplitterWidth = 1;
-            this.splitContainer1.TabIndex = 1;
-            this.splitContainer1.TabStop = false;
             // 
             // colUrl
             // 
@@ -209,31 +190,29 @@
             this.colOpenDir.Resizable = System.Windows.Forms.DataGridViewTriState.False;
             this.colOpenDir.Width = 60;
             // 
-            // linkLabel1
+            // splitContainer1
             // 
-            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(606, 8);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(65, 12);
-            this.linkLabel1.TabIndex = 5;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "快捷键说明";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
-            // 
-            // label5
-            // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label5.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.label5.Location = new System.Drawing.Point(6, 67);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(747, 24);
-            this.label5.TabIndex = 6;
-            this.label5.Text = "注1：对比源的IP只能填写1个；目标服务器IP可以多个，分号分隔\r\n注2：结果OK表示对比完全一致，“不一致ip：121.207.240.199(4,4140)”" +
-    "里的4,4140表示第1个不同点在第4行,第4140个字符";
+            this.splitContainer1.Location = new System.Drawing.Point(1, 116);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.lvUrls);
+            this.splitContainer1.Panel1MinSize = 1;
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.lstRet);
+            this.splitContainer1.Panel2MinSize = 1;
+            this.splitContainer1.Size = new System.Drawing.Size(767, 432);
+            this.splitContainer1.SplitterDistance = 313;
+            this.splitContainer1.SplitterWidth = 1;
+            this.splitContainer1.TabIndex = 1;
+            this.splitContainer1.TabStop = false;
             // 
             // lstRet
             // 
@@ -248,7 +227,7 @@
             this.lstRet.Location = new System.Drawing.Point(0, 0);
             this.lstRet.MultiSelect = false;
             this.lstRet.Name = "lstRet";
-            this.lstRet.Size = new System.Drawing.Size(767, 122);
+            this.lstRet.Size = new System.Drawing.Size(767, 118);
             this.lstRet.TabIndex = 0;
             this.lstRet.UseCompatibleStateImageBehavior = false;
             this.lstRet.View = System.Windows.Forms.View.Details;
@@ -263,11 +242,37 @@
             this.colRetContent.Text = "内容描述";
             this.colRetContent.Width = 1000;
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(628, 9);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(65, 12);
+            this.linkLabel1.TabIndex = 5;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "快捷键说明";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label5.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label5.Location = new System.Drawing.Point(6, 59);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(747, 24);
+            this.label5.TabIndex = 6;
+            this.label5.Text = "注1：对比源的IP只能填写1个；目标服务器IP可以多个，分号分隔\r\n注2：结果OK表示对比完全一致，“不一致ip：121.207.240.199(4,4140)”" +
+    "里的4,4140表示第1个不同点在第4行,第4140个字符";
+            // 
             // label3
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(522, 44);
+            this.label3.Location = new System.Drawing.Point(522, 36);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(95, 12);
             this.label3.TabIndex = 0;
@@ -276,12 +281,52 @@
             // txtThreadNum
             // 
             this.txtThreadNum.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtThreadNum.Location = new System.Drawing.Point(617, 41);
+            this.txtThreadNum.Location = new System.Drawing.Point(617, 33);
             this.txtThreadNum.Name = "txtThreadNum";
             this.txtThreadNum.Size = new System.Drawing.Size(48, 21);
             this.txtThreadNum.TabIndex = 7;
             this.txtThreadNum.Text = "5";
             this.txtThreadNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // txtLoadSpeed
+            // 
+            this.txtLoadSpeed.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLoadSpeed.Location = new System.Drawing.Point(557, 6);
+            this.txtLoadSpeed.Name = "txtLoadSpeed";
+            this.txtLoadSpeed.Size = new System.Drawing.Size(32, 21);
+            this.txtLoadSpeed.TabIndex = 7;
+            this.txtLoadSpeed.Text = "30";
+            this.txtLoadSpeed.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(498, 9);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(59, 12);
+            this.label4.TabIndex = 0;
+            this.label4.Text = "加载速度:";
+            // 
+            // label6
+            // 
+            this.label6.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(589, 9);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(29, 12);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "毫秒";
+            // 
+            // btnRemoveOK
+            // 
+            this.btnRemoveOK.Location = new System.Drawing.Point(16, 89);
+            this.btnRemoveOK.Name = "btnRemoveOK";
+            this.btnRemoveOK.Size = new System.Drawing.Size(153, 23);
+            this.btnRemoveOK.TabIndex = 3;
+            this.btnRemoveOK.Text = "移除对比结果OK的所有行";
+            this.btnRemoveOK.UseVisualStyleBackColor = true;
+            this.btnRemoveOK.Click += new System.EventHandler(this.btnRemoveOK_Click);
             // 
             // Compare
             // 
@@ -289,16 +334,20 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(770, 550);
+            this.Controls.Add(this.btnCompare);
+            this.Controls.Add(this.txtLoadSpeed);
+            this.Controls.Add(this.txtPublishServer);
+            this.Controls.Add(this.txtCompareIp);
             this.Controls.Add(this.txtThreadNum);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.splitContainer1);
-            this.Controls.Add(this.btnCompare);
+            this.Controls.Add(this.btnRemoveOK);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnLoad);
-            this.Controls.Add(this.txtPublishServer);
-            this.Controls.Add(this.txtCompareIp);
             this.Controls.Add(this.label2);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.KeyPreview = true;
@@ -340,5 +389,9 @@
         private System.Windows.Forms.ColumnHeader colRetContent;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtThreadNum;
+        private System.Windows.Forms.TextBox txtLoadSpeed;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Button btnRemoveOK;
     }
 }
