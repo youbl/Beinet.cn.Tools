@@ -37,6 +37,9 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
             #endregion
 
+            // 暂时隐藏合并dll功能，有bug
+            tabDllMerge.Visible = false;
+
             string netVer = GetNetVersion();
             if(!string.IsNullOrEmpty(netVer))
             {

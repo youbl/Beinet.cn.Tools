@@ -12,8 +12,9 @@ namespace Beinet.cn.Tools
             InitializeComponent();
 
             string pwd = ConfigurationManager.AppSettings["cryptPwd"] ?? "";
+            string pwd2 = ConfigurationManager.AppSettings["cryptPwd2"] ?? pwd;
             txtPwd1.Text = pwd;
-            txtPwd2.Text = pwd;
+            txtPwd2.Text = pwd2;
         }
 
         private string _pwd;
