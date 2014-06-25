@@ -12,6 +12,11 @@ namespace Beinet.cn.Tools
 {
     public partial class MainForm : Form
     {
+        /// <summary>
+        /// 指定哪个TabPage要显示什么工具窗体.
+        /// 1、在主界面添加一个tab，并修改name，假设是tabNewTool；
+        /// 2、在MainForm的构造函数里，添加一个对应关系，完成
+        /// </summary>
         Dictionary<TabPage, Type> _tabForms; 
 
         public MainForm()
@@ -35,6 +40,7 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabDllMerge, typeof(MergeDll.MergeForm));
             _tabForms.Add(tabQQWry, typeof(QQWry.IP_QQWry));
             _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
+            _tabForms.Add(tabOtherTools, typeof(Others.OtherTools));
             #endregion
 
             // 暂时隐藏合并dll功能，有bug
@@ -263,7 +269,8 @@ namespace Beinet.cn.Tools
             Type formType;
             if (_tabForms.TryGetValue(page, out formType))
             {
-                AddFormControl(page, formType);
+                if (page.Controls.Count <= 0)
+                    AddFormControl(page, formType);
             }
             //if (tabControl1.SelectedTab == )
             //{
@@ -276,21 +283,18 @@ namespace Beinet.cn.Tools
         }
 
         //static void AddFormControl<T>(Control parent) where T : Form, new()
-        static void AddFormControl(Control parent, Type formType)
+        private static void AddFormControl(Control parent, Type formType)
         {
-            if (parent.Controls.Count <= 0)
+            //formType.BaseType
+            Form frm = Activator.CreateInstance(formType) as Form;
+            if (frm != null)
             {
-                //formType.BaseType
-                Form frm = Activator.CreateInstance(formType) as Form;
-                if (frm != null)
-                {
-                    frm.FormBorderStyle = FormBorderStyle.None;
-                    frm.Dock = DockStyle.Fill;
-                    frm.TopLevel = false;
-                    parent.Controls.Clear();
-                    parent.Controls.Add(frm);
-                    frm.Show();
-                }
+                frm.FormBorderStyle = FormBorderStyle.None;
+                frm.Dock = DockStyle.Fill;
+                frm.TopLevel = false;
+                parent.Controls.Clear();
+                parent.Controls.Add(frm);
+                frm.Show();
             }
         }
 

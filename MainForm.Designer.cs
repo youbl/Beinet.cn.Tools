@@ -43,16 +43,17 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.tabGZip = new System.Windows.Forms.TabPage();
-            this.tabMd5File = new System.Windows.Forms.TabPage();
-            this.tabSqlInject = new System.Windows.Forms.TabPage();
             this.tabLvs = new System.Windows.Forms.TabPage();
             this.tabEncrypt = new System.Windows.Forms.TabPage();
+            this.tabDllMerge = new System.Windows.Forms.TabPage();
+            this.tabMd5File = new System.Windows.Forms.TabPage();
+            this.tabWebCompare = new System.Windows.Forms.TabPage();
+            this.tabSqlInject = new System.Windows.Forms.TabPage();
             this.tabRegex = new System.Windows.Forms.TabPage();
             this.tabDataSync = new System.Windows.Forms.TabPage();
-            this.tabDllMerge = new System.Windows.Forms.TabPage();
             this.tabQQWry = new System.Windows.Forms.TabPage();
-            this.tabWebCompare = new System.Windows.Forms.TabPage();
+            this.tabGZip = new System.Windows.Forms.TabPage();
+            this.tabOtherTools = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabDllAnlyse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -83,6 +84,7 @@
             this.tabControl1.Controls.Add(this.tabDataSync);
             this.tabControl1.Controls.Add(this.tabQQWry);
             this.tabControl1.Controls.Add(this.tabGZip);
+            this.tabControl1.Controls.Add(this.tabOtherTools);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -264,36 +266,6 @@
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // tabGZip
-            // 
-            this.tabGZip.Location = new System.Drawing.Point(4, 22);
-            this.tabGZip.Name = "tabGZip";
-            this.tabGZip.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGZip.Size = new System.Drawing.Size(776, 536);
-            this.tabGZip.TabIndex = 1;
-            this.tabGZip.Text = "GZip测试";
-            this.tabGZip.UseVisualStyleBackColor = true;
-            // 
-            // tabMd5File
-            // 
-            this.tabMd5File.Location = new System.Drawing.Point(4, 22);
-            this.tabMd5File.Name = "tabMd5File";
-            this.tabMd5File.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMd5File.Size = new System.Drawing.Size(776, 536);
-            this.tabMd5File.TabIndex = 2;
-            this.tabMd5File.Text = "文件MD5";
-            this.tabMd5File.UseVisualStyleBackColor = true;
-            // 
-            // tabSqlInject
-            // 
-            this.tabSqlInject.Location = new System.Drawing.Point(4, 22);
-            this.tabSqlInject.Name = "tabSqlInject";
-            this.tabSqlInject.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSqlInject.Size = new System.Drawing.Size(776, 536);
-            this.tabSqlInject.TabIndex = 3;
-            this.tabSqlInject.Text = "SQL拼接检查";
-            this.tabSqlInject.UseVisualStyleBackColor = true;
-            // 
             // tabLvs
             // 
             this.tabLvs.Location = new System.Drawing.Point(4, 22);
@@ -313,6 +285,46 @@
             this.tabEncrypt.TabIndex = 5;
             this.tabEncrypt.Text = "加解密";
             this.tabEncrypt.UseVisualStyleBackColor = true;
+            // 
+            // tabDllMerge
+            // 
+            this.tabDllMerge.Location = new System.Drawing.Point(4, 22);
+            this.tabDllMerge.Name = "tabDllMerge";
+            this.tabDllMerge.Padding = new System.Windows.Forms.Padding(3);
+            this.tabDllMerge.Size = new System.Drawing.Size(776, 536);
+            this.tabDllMerge.TabIndex = 8;
+            this.tabDllMerge.Text = "DLL合并";
+            this.tabDllMerge.UseVisualStyleBackColor = true;
+            // 
+            // tabMd5File
+            // 
+            this.tabMd5File.Location = new System.Drawing.Point(4, 22);
+            this.tabMd5File.Name = "tabMd5File";
+            this.tabMd5File.Padding = new System.Windows.Forms.Padding(3);
+            this.tabMd5File.Size = new System.Drawing.Size(776, 536);
+            this.tabMd5File.TabIndex = 2;
+            this.tabMd5File.Text = "文件MD5";
+            this.tabMd5File.UseVisualStyleBackColor = true;
+            // 
+            // tabWebCompare
+            // 
+            this.tabWebCompare.Location = new System.Drawing.Point(4, 22);
+            this.tabWebCompare.Name = "tabWebCompare";
+            this.tabWebCompare.Padding = new System.Windows.Forms.Padding(3);
+            this.tabWebCompare.Size = new System.Drawing.Size(776, 536);
+            this.tabWebCompare.TabIndex = 10;
+            this.tabWebCompare.Text = "Web内容对比";
+            this.tabWebCompare.UseVisualStyleBackColor = true;
+            // 
+            // tabSqlInject
+            // 
+            this.tabSqlInject.Location = new System.Drawing.Point(4, 22);
+            this.tabSqlInject.Name = "tabSqlInject";
+            this.tabSqlInject.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSqlInject.Size = new System.Drawing.Size(776, 536);
+            this.tabSqlInject.TabIndex = 3;
+            this.tabSqlInject.Text = "SQL拼接检查";
+            this.tabSqlInject.UseVisualStyleBackColor = true;
             // 
             // tabRegex
             // 
@@ -334,16 +346,6 @@
             this.tabDataSync.Text = "数据库同步";
             this.tabDataSync.UseVisualStyleBackColor = true;
             // 
-            // tabDllMerge
-            // 
-            this.tabDllMerge.Location = new System.Drawing.Point(4, 22);
-            this.tabDllMerge.Name = "tabDllMerge";
-            this.tabDllMerge.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDllMerge.Size = new System.Drawing.Size(776, 536);
-            this.tabDllMerge.TabIndex = 8;
-            this.tabDllMerge.Text = "DLL合并";
-            this.tabDllMerge.UseVisualStyleBackColor = true;
-            // 
             // tabQQWry
             // 
             this.tabQQWry.Location = new System.Drawing.Point(4, 22);
@@ -354,15 +356,25 @@
             this.tabQQWry.Text = "IP纯真库";
             this.tabQQWry.UseVisualStyleBackColor = true;
             // 
-            // tabWebCompare
+            // tabGZip
             // 
-            this.tabWebCompare.Location = new System.Drawing.Point(4, 22);
-            this.tabWebCompare.Name = "tabWebCompare";
-            this.tabWebCompare.Padding = new System.Windows.Forms.Padding(3);
-            this.tabWebCompare.Size = new System.Drawing.Size(776, 536);
-            this.tabWebCompare.TabIndex = 10;
-            this.tabWebCompare.Text = "Web内容对比";
-            this.tabWebCompare.UseVisualStyleBackColor = true;
+            this.tabGZip.Location = new System.Drawing.Point(4, 22);
+            this.tabGZip.Name = "tabGZip";
+            this.tabGZip.Padding = new System.Windows.Forms.Padding(3);
+            this.tabGZip.Size = new System.Drawing.Size(776, 536);
+            this.tabGZip.TabIndex = 1;
+            this.tabGZip.Text = "GZip测试";
+            this.tabGZip.UseVisualStyleBackColor = true;
+            // 
+            // tabOtherTools
+            // 
+            this.tabOtherTools.Location = new System.Drawing.Point(4, 22);
+            this.tabOtherTools.Name = "tabOtherTools";
+            this.tabOtherTools.Padding = new System.Windows.Forms.Padding(3);
+            this.tabOtherTools.Size = new System.Drawing.Size(776, 536);
+            this.tabOtherTools.TabIndex = 11;
+            this.tabOtherTools.Text = "其它小工具";
+            this.tabOtherTools.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -426,6 +438,7 @@
         private System.Windows.Forms.TabPage tabDllMerge;
         private System.Windows.Forms.TabPage tabQQWry;
         private System.Windows.Forms.TabPage tabWebCompare;
+        private System.Windows.Forms.TabPage tabOtherTools;
 
 
     }

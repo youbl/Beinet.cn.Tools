@@ -38,6 +38,7 @@
             this.lvUrls = new System.Windows.Forms.DataGridView();
             this.colUrl = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colPost = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colReg = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDel = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colOpenDir = new System.Windows.Forms.DataGridViewLinkColumn();
@@ -53,6 +54,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.btnRemoveOK = new System.Windows.Forms.Button();
+            this.lnkReg = new System.Windows.Forms.LinkLabel();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.lvUrls)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -135,6 +138,7 @@
             this.lvUrls.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colUrl,
             this.colPost,
+            this.colReg,
             this.colResult,
             this.colDel,
             this.colOpenDir});
@@ -145,7 +149,7 @@
             this.lvUrls.Name = "lvUrls";
             this.lvUrls.RowHeadersWidth = 60;
             this.lvUrls.RowTemplate.Height = 23;
-            this.lvUrls.Size = new System.Drawing.Size(767, 313);
+            this.lvUrls.Size = new System.Drawing.Size(767, 300);
             this.lvUrls.TabIndex = 5;
             this.lvUrls.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.lvUrls_CellClick);
             this.lvUrls.CurrentCellDirtyStateChanged += new System.EventHandler(this.lvUrls_CurrentCellDirtyStateChanged);
@@ -154,19 +158,25 @@
             // 
             // colUrl
             // 
-            this.colUrl.FillWeight = 50F;
+            this.colUrl.FillWeight = 88.23532F;
             this.colUrl.HeaderText = "Url";
             this.colUrl.Name = "colUrl";
             // 
             // colPost
             // 
-            this.colPost.FillWeight = 20F;
+            this.colPost.FillWeight = 64.3811F;
             this.colPost.HeaderText = "Post数据";
             this.colPost.Name = "colPost";
             // 
+            // colReg
+            // 
+            this.colReg.FillWeight = 22F;
+            this.colReg.HeaderText = "结果替换";
+            this.colReg.Name = "colReg";
+            // 
             // colResult
             // 
-            this.colResult.FillWeight = 30F;
+            this.colResult.FillWeight = 35.53344F;
             this.colResult.HeaderText = "对比结果";
             this.colResult.Name = "colResult";
             // 
@@ -195,7 +205,7 @@
             this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(1, 116);
+            this.splitContainer1.Location = new System.Drawing.Point(1, 133);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -208,8 +218,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.lstRet);
             this.splitContainer1.Panel2MinSize = 1;
-            this.splitContainer1.Size = new System.Drawing.Size(767, 432);
-            this.splitContainer1.SplitterDistance = 313;
+            this.splitContainer1.Size = new System.Drawing.Size(767, 415);
+            this.splitContainer1.SplitterDistance = 300;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 1;
             this.splitContainer1.TabStop = false;
@@ -227,7 +237,7 @@
             this.lstRet.Location = new System.Drawing.Point(0, 0);
             this.lstRet.MultiSelect = false;
             this.lstRet.Name = "lstRet";
-            this.lstRet.Size = new System.Drawing.Size(767, 118);
+            this.lstRet.Size = new System.Drawing.Size(767, 114);
             this.lstRet.TabIndex = 0;
             this.lstRet.UseCompatibleStateImageBehavior = false;
             this.lstRet.View = System.Windows.Forms.View.Details;
@@ -320,7 +330,7 @@
             // 
             // btnRemoveOK
             // 
-            this.btnRemoveOK.Location = new System.Drawing.Point(16, 89);
+            this.btnRemoveOK.Location = new System.Drawing.Point(16, 107);
             this.btnRemoveOK.Name = "btnRemoveOK";
             this.btnRemoveOK.Size = new System.Drawing.Size(153, 23);
             this.btnRemoveOK.TabIndex = 3;
@@ -328,17 +338,43 @@
             this.btnRemoveOK.UseVisualStyleBackColor = true;
             this.btnRemoveOK.Click += new System.EventHandler(this.btnRemoveOK_Click);
             // 
+            // lnkReg
+            // 
+            this.lnkReg.AutoSize = true;
+            this.lnkReg.Location = new System.Drawing.Point(498, 112);
+            this.lnkReg.Name = "lnkReg";
+            this.lnkReg.Size = new System.Drawing.Size(77, 12);
+            this.lnkReg.TabIndex = 8;
+            this.lnkReg.TabStop = true;
+            this.lnkReg.Text = "全局正则替换";
+            this.lnkReg.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkReg_LinkClicked);
+            // 
+            // label7
+            // 
+            this.label7.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label7.ForeColor = System.Drawing.SystemColors.ActiveCaption;
+            this.label7.Location = new System.Drawing.Point(6, 90);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(720, 12);
+            this.label7.TabIndex = 6;
+            this.label7.Text = "注3：\"全局正则替换\":用于把所有URL返回结果中，影响对比的数据进行清除，比如时间数据；\"结果替换\":只替换当前行URL";
+            // 
             // Compare
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(770, 550);
+            this.Controls.Add(this.lnkReg);
             this.Controls.Add(this.btnCompare);
             this.Controls.Add(this.txtLoadSpeed);
             this.Controls.Add(this.txtPublishServer);
             this.Controls.Add(this.txtCompareIp);
             this.Controls.Add(this.txtThreadNum);
+            this.Controls.Add(this.label7);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.splitContainer1);
@@ -377,11 +413,6 @@
         private System.Windows.Forms.Button btnCompare;
         private System.Windows.Forms.DataGridView lvUrls;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colUrl;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colPost;
-        private System.Windows.Forms.DataGridViewTextBoxColumn colResult;
-        private System.Windows.Forms.DataGridViewLinkColumn colDel;
-        private System.Windows.Forms.DataGridViewLinkColumn colOpenDir;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.ListView lstRet;
@@ -393,5 +424,13 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnRemoveOK;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colUrl;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colPost;
+        private System.Windows.Forms.DataGridViewLinkColumn colReg;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colResult;
+        private System.Windows.Forms.DataGridViewLinkColumn colDel;
+        private System.Windows.Forms.DataGridViewLinkColumn colOpenDir;
+        private System.Windows.Forms.LinkLabel lnkReg;
+        private System.Windows.Forms.Label label7;
     }
 }

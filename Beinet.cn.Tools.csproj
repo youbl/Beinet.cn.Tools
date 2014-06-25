@@ -130,6 +130,12 @@
     <Compile Include="MergeDll\MergeForm.Designer.cs">
       <DependentUpon>MergeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Others\OtherTools.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Others\OtherTools.Designer.cs">
+      <DependentUpon>OtherTools.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="PromptWin.cs">
       <SubType>Form</SubType>
@@ -184,6 +190,12 @@
     <Compile Include="WebContentCompare\Compare.Designer.cs">
       <DependentUpon>Compare.cs</DependentUpon>
     </Compile>
+    <Compile Include="WebContentCompare\CompareRegEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WebContentCompare\CompareRegEdit.Designer.cs">
+      <DependentUpon>CompareRegEdit.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="CryptTool.resx">
       <DependentUpon>CryptTool.cs</DependentUpon>
     </EmbeddedResource>
@@ -220,6 +232,9 @@
     <EmbeddedResource Include="MergeDll\MergeForm.resx">
       <DependentUpon>MergeForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Others\OtherTools.resx">
+      <DependentUpon>OtherTools.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="PromptWin.resx">
       <DependentUpon>PromptWin.cs</DependentUpon>
     </EmbeddedResource>
@@ -250,6 +265,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="WebContentCompare\Compare.resx">
       <DependentUpon>Compare.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WebContentCompare\CompareRegEdit.resx">
+      <DependentUpon>CompareRegEdit.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
