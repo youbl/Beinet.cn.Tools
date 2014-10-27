@@ -28,6 +28,8 @@ namespace Beinet.cn.Tools
         {
             InitializeComponent();
 
+            // 暂时不处理合并dll功能，有bug
+
             #region 添加TabPage跟窗体类型的对应关系
             _tabForms = new Dictionary<TabPage, Type>();
             _tabForms.Add(tabGZip, typeof(GzipTest));
@@ -37,20 +39,37 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabEncrypt, typeof(CryptTool));
             _tabForms.Add(tabRegex, typeof(RegexTool.MainForm));
             _tabForms.Add(tabDataSync, typeof(DataSync.MainForm));
-            _tabForms.Add(tabDllMerge, typeof(MergeDll.MergeForm));
+            _tabForms.Add(tabCopyTool, typeof(MergeDll.MergeForm));
             _tabForms.Add(tabQQWry, typeof(QQWry.IP_QQWry));
             _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
             _tabForms.Add(tabOtherTools, typeof(Others.OtherTools));
             #endregion
 
-            // 暂时隐藏合并dll功能，有bug
-            tabDllMerge.Visible = false;
+            
 
             string netVer = GetNetVersion();
             if(!string.IsNullOrEmpty(netVer))
             {
                 textBox1.Text = "本机安装的.Net FrameWork版本清单：\r\n" + netVer;
             }
+
+            // 隐藏不显示的窗体
+            string strHide = ConfigurationManager.AppSettings["HideIndex"];
+            if (!string.IsNullOrEmpty(strHide))
+            {
+                foreach (string item in strHide.Split(',', ';', ' '))
+                {
+                    string strIdx = item.Trim();
+                    if (strIdx.Length <= 0)
+                        continue;
+                    int hideIdx;
+                    if (int.TryParse(item.Trim(), out hideIdx))
+                    {
+                        tabControl1.TabPages[hideIdx].Visible = false;
+                    }
+                }
+            }
+
 
             // 设置默认显示标签页
             int idx = tabIndex;
@@ -64,6 +83,7 @@ namespace Beinet.cn.Tools
             }
             if (idx < tabControl1.TabPages.Count && idx >= 0)
             {
+
                 tabControl1.SelectedIndex = idx;
                 tabControl1_SelectedIndexChanged(tabControl1, null);
             }

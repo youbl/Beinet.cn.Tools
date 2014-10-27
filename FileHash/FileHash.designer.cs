@@ -43,29 +43,29 @@
             // btnSelectFile
             // 
             this.btnSelectFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSelectFile.Location = new System.Drawing.Point(6, 405);
+            this.btnSelectFile.Location = new System.Drawing.Point(3, 405);
             this.btnSelectFile.Name = "btnSelectFile";
             this.btnSelectFile.Size = new System.Drawing.Size(58, 23);
             this.btnSelectFile.TabIndex = 1;
-            this.btnSelectFile.Text = "浏览...";
+            this.btnSelectFile.Text = "浏览..";
             this.btnSelectFile.UseVisualStyleBackColor = true;
             this.btnSelectFile.Click += new System.EventHandler(this.btnSelectFile_Click);
             // 
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClear.Location = new System.Drawing.Point(70, 405);
+            this.btnClear.Location = new System.Drawing.Point(67, 405);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(64, 23);
+            this.btnClear.Size = new System.Drawing.Size(49, 23);
             this.btnClear.TabIndex = 2;
-            this.btnClear.Text = "清空结果";
+            this.btnClear.Text = "清空";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // btnCopy
             // 
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCopy.Location = new System.Drawing.Point(140, 405);
+            this.btnCopy.Location = new System.Drawing.Point(122, 405);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(61, 23);
             this.btnCopy.TabIndex = 3;
@@ -76,7 +76,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(207, 405);
+            this.btnSave.Location = new System.Drawing.Point(189, 405);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(61, 23);
             this.btnSave.TabIndex = 4;
@@ -115,11 +115,11 @@
             // btnLoadConfig
             // 
             this.btnLoadConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLoadConfig.Location = new System.Drawing.Point(274, 405);
+            this.btnLoadConfig.Location = new System.Drawing.Point(256, 405);
             this.btnLoadConfig.Name = "btnLoadConfig";
-            this.btnLoadConfig.Size = new System.Drawing.Size(85, 23);
+            this.btnLoadConfig.Size = new System.Drawing.Size(75, 23);
             this.btnLoadConfig.TabIndex = 8;
-            this.btnLoadConfig.Text = "加载配置文件";
+            this.btnLoadConfig.Text = "网站比对..";
             this.btnLoadConfig.UseVisualStyleBackColor = true;
             this.btnLoadConfig.Click += new System.EventHandler(this.btnLoadConfig_Click);
             // 
@@ -129,18 +129,18 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(365, 402);
+            this.label1.Location = new System.Drawing.Point(337, 401);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(335, 12);
+            this.label1.Size = new System.Drawing.Size(303, 12);
             this.label1.TabIndex = 9;
-            this.label1.Text = "“加载配置文件”点击前要把Tools.aspx发布到相应网站";
+            this.label1.Text = "“网站比对”功能要把FileMD.aspx发布到相应网站";
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.label2.Location = new System.Drawing.Point(365, 419);
+            this.label2.Location = new System.Drawing.Point(337, 418);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(305, 12);
             this.label2.TabIndex = 9;

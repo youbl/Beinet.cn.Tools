@@ -45,7 +45,7 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabLvs = new System.Windows.Forms.TabPage();
             this.tabEncrypt = new System.Windows.Forms.TabPage();
-            this.tabDllMerge = new System.Windows.Forms.TabPage();
+            this.tabCopyTool = new System.Windows.Forms.TabPage();
             this.tabMd5File = new System.Windows.Forms.TabPage();
             this.tabWebCompare = new System.Windows.Forms.TabPage();
             this.tabSqlInject = new System.Windows.Forms.TabPage();
@@ -76,7 +76,7 @@
             this.tabControl1.Controls.Add(this.tabDllAnlyse);
             this.tabControl1.Controls.Add(this.tabLvs);
             this.tabControl1.Controls.Add(this.tabEncrypt);
-            this.tabControl1.Controls.Add(this.tabDllMerge);
+            this.tabControl1.Controls.Add(this.tabCopyTool);
             this.tabControl1.Controls.Add(this.tabMd5File);
             this.tabControl1.Controls.Add(this.tabWebCompare);
             this.tabControl1.Controls.Add(this.tabSqlInject);
@@ -286,15 +286,15 @@
             this.tabEncrypt.Text = "加解密";
             this.tabEncrypt.UseVisualStyleBackColor = true;
             // 
-            // tabDllMerge
+            // tabCopyTool
             // 
-            this.tabDllMerge.Location = new System.Drawing.Point(4, 22);
-            this.tabDllMerge.Name = "tabDllMerge";
-            this.tabDllMerge.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDllMerge.Size = new System.Drawing.Size(776, 536);
-            this.tabDllMerge.TabIndex = 8;
-            this.tabDllMerge.Text = "DLL合并";
-            this.tabDllMerge.UseVisualStyleBackColor = true;
+            this.tabCopyTool.Location = new System.Drawing.Point(4, 22);
+            this.tabCopyTool.Name = "tabCopyTool";
+            this.tabCopyTool.Padding = new System.Windows.Forms.Padding(3);
+            this.tabCopyTool.Size = new System.Drawing.Size(776, 536);
+            this.tabCopyTool.TabIndex = 8;
+            this.tabCopyTool.Text = "目录同步";
+            this.tabCopyTool.UseVisualStyleBackColor = true;
             // 
             // tabMd5File
             // 
@@ -435,7 +435,7 @@
         private System.Windows.Forms.TabPage tabEncrypt;
         private System.Windows.Forms.TabPage tabRegex;
         private System.Windows.Forms.TabPage tabDataSync;
-        private System.Windows.Forms.TabPage tabDllMerge;
+        private System.Windows.Forms.TabPage tabCopyTool;
         private System.Windows.Forms.TabPage tabQQWry;
         private System.Windows.Forms.TabPage tabWebCompare;
         private System.Windows.Forms.TabPage tabOtherTools;

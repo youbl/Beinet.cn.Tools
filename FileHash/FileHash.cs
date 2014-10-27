@@ -270,7 +270,7 @@ namespace Beinet.cn.Tools.FileHash
                 }
                 var postNode = node.SelectSingleNode("PostData");
                 string url = urlAtt.InnerText;
-                string localPath = localAtt.InnerText;
+                string localPath = localAtt.InnerText.TrimEnd('\\', '/');
                 string post = postNode == null ? null : postNode.InnerText;
                 string[] hosts = new string[hostNodes.Count];
                 for (int i = 0; i < hostNodes.Count; i++)
@@ -360,6 +360,8 @@ namespace Beinet.cn.Tools.FileHash
                     }
                     getFiles++;
                     string key = arrItem[0].ToLower();
+                    if (key[0] != '\\')
+                        key = '\\' + key;
                     string[] val;
                     if(!result.TryGetValue(key, out val))
                     {

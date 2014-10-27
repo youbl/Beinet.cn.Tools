@@ -30,7 +30,9 @@ namespace Beinet.cn.Tools.WebContentCompare
         private const int COL_RETURN = 3;
         private const int COL_REG = 2;
         private const int COL_DEL = 4;
-        private const int COL_OPEN = 5;
+        private const int COL_RECOMPARE = 5;
+        private const int COL_OPEN = 6;
+        private const string COLRECOMPARE_TXT = "执行";
         private const string COLDEL_TXT = "删除";
         public const string COLREG_TXT = "正则编辑";
 
@@ -261,6 +263,7 @@ Ctrl+R: 开始检查");
             // 如果是新行，给最后一格添加删除字样
             if (dgv.CurrentRow.Cells[COL_DEL].Value == null)
             {
+                dgv.CurrentRow.Cells[COL_RECOMPARE].Value = COLRECOMPARE_TXT;
                 dgv.CurrentRow.Cells[COL_DEL].Value = COLDEL_TXT;
                 dgv.CurrentRow.Cells[COL_REG].Value = COLREG_TXT;
             }
@@ -280,6 +283,7 @@ Ctrl+R: 开始检查");
             {
                 dgv.Rows.RemoveAt(e.RowIndex);
                 dgv.ClearSelection();
+                return;
             }
             #endregion
 
@@ -293,7 +297,20 @@ Ctrl+R: 开始检查");
             }
             #endregion
 
-            #region 点击目录按钮
+            #region 点击重比按钮
+            if (e.RowIndex < dgv.RowCount - 1 && e.ColumnIndex == COL_RECOMPARE)//Rows.Count - 1是不让点击未提交的新行
+            {
+                if (!CheckForm())
+                    return;
+                SetReadOnly();
+                lstRet.Items.Clear(); // 清空结果集
+
+                ThreadPool.UnsafeQueueUserWorkItem(DoCompare, e.RowIndex);
+                return;
+            }
+            #endregion
+
+            #region 点击结果按钮
             if (e.RowIndex < dgv.RowCount - 1 && e.ColumnIndex == COL_OPEN)//Rows.Count - 1是不让点击未提交的新行
             {
                 string dir = Convert.ToString(dgvRow.Cells[COL_OPEN].Tag);
@@ -390,7 +407,7 @@ Ctrl+R: 开始检查");
             });
         }
 
-        private bool _stopLoad = false;
+        private bool _stopLoad;
         void LoadInfoFromFile(string file)
         {
             if (!File.Exists(file))
@@ -416,15 +433,23 @@ Ctrl+R: 开始检查");
                     var arr = new Dictionary<object[], object>();
                     using (var sr = new StreamReader(file, Encoding.UTF8))
                     {
+                        bool needReadTagUrl = true;
                         while (!_stopLoad && !sr.EndOfStream)
                         {
                             // 读取标记
-                            string line = (sr.ReadLine() ?? "").Trim();
-                            if (sr.EndOfStream)
-                                break;
-
-                            if (line == string.Empty)
-                                continue;
+                            string line;
+                            if (needReadTagUrl)
+                            {
+                                line = (sr.ReadLine() ?? "").Trim();
+                                if (sr.EndOfStream)
+                                    break;
+                                if (line == string.Empty)
+                                    continue;
+                            }
+                            else
+                            {
+                                line = "[url]";
+                            }
 
                             // 读取标记值
                             string value = (sr.ReadLine() ?? "").Trim();
@@ -448,13 +473,30 @@ Ctrl+R: 开始检查");
                                     string url = value;
                                     if (!_regUrl.IsMatch(url))
                                         continue;
-                                    string post = (sr.ReadLine() ?? "").Trim();
-                                    List<string[]> strRegs = GetRegexArr((sr.ReadLine() ?? ""));
+                                    string post = sr.EndOfStream ? string.Empty : (sr.ReadLine() ?? "").Trim();
+                                    List<string[]> strRegs = null;
+                                    if (post != "[url]")
+                                    {
+                                        string tmpReg = sr.EndOfStream ? string.Empty : sr.ReadLine() ?? "";
+
+                                        needReadTagUrl = tmpReg != "[url]";
+                                        if (!needReadTagUrl)
+                                            tmpReg = string.Empty;
+
+                                        strRegs = GetRegexArr(tmpReg);
+                                    }
+                                    else
+                                    {
+                                        needReadTagUrl = false;
+                                        post = string.Empty;
+                                    }
+                                    
                                     var row = new object[COL_OPEN + 1];
                                     row[COL_URL] = url;
                                     row[COL_POST] = post;
                                     row[COL_REG] = COLREG_TXT;
                                     row[COL_DEL] = COLDEL_TXT;
+                                    row[COL_RECOMPARE] = COLRECOMPARE_TXT;
                                     arr.Add(row, strRegs);
                                     if (arr.Count >= 10)
                                     {
@@ -582,7 +624,7 @@ Ctrl+R: 开始检查");
                 return false;
             }
             var servers = new StringBuilder();
-            foreach (string item in txtPublishServer.Text.Split(';'))
+            foreach (string item in txtPublishServer.Text.Split(new char[] { ';', ',', '|', ' ' }))
             {
                 string ip = item.Trim();
                 if (ip == string.Empty)
@@ -639,154 +681,25 @@ Ctrl+R: 开始检查");
 
                 int idx = 0;
                 int rowCnt = lvUrls.RowCount - 1; // 不处理未提交的行(即空白行)
-                foreach (DataGridViewRow row in lvUrls.Rows)
+                if (state != null)
                 {
-                    if (row.Index >= rowCnt)
-                        break;
-
-                    idx++;
-                    string url = Convert.ToString(row.Cells[COL_URL].Value);
-                    string post = Convert.ToString(row.Cells[COL_POST].Value);
-                    row.Cells[COL_RETURN].Value = string.Empty;
-                    bool isPost = !string.IsNullOrEmpty(post);
-                    object regs = row.Cells[COL_REG].Tag;
-
-                    //GetPage方法已经加了随机数
-                    //url = AddRndCh(url);
-
-                    int rowIdx = idx;
-
-                    // 任务加1
-                    Interlocked.Increment(ref taskCnt[0]);
-
-                    // 任务加入队列去执行
-                    _scheduler.QueueUserWorkItem(obj =>
-                    {
-                        try
-                        {
-                            string rowDir = Path.Combine(fileDir, rowIdx.ToString());
-                            string compareHtml = Utility.GetPage(url, post, compareIp, isPost) ?? string.Empty;
-                            if (compareHtml.Trim() == string.Empty)
-                            {
-                                // 任务减1
-                                Interlocked.Decrement(ref taskCnt[0]);
-
-                                // 错误数加1
-                                Interlocked.Increment(ref taskCnt[1]);
-                                string errMsg = "对比源服务器返回空内容，无法继续对比";
-                                ShowCompareErr(rowIdx.ToString(), errMsg);
-                                return;
-                            }
-
-                            string compareFile = "compare" + compareIp + ".txt";
-                            WriteFile(rowDir, compareFile, url, post, compareHtml);
-                            // 重新读取文件，因为写入文件前换行符有所不同
-                            compareHtml = ReadFile(rowDir, compareFile);
-                            compareHtml = ReplaceWithRegex(ReplaceWithRegex(compareHtml, regs), globalRegs);
-                            // 替换后的内容也写入文件
-                            WriteFile(rowDir, "compare" + compareIp + "replace.txt", url, post, compareHtml);
-
-                            if (compareHtml.Trim() == string.Empty)
-                            {
-                                // 任务减1
-                                Interlocked.Decrement(ref taskCnt[0]);
-
-                                // 错误数加1
-                                Interlocked.Increment(ref taskCnt[1]);
-                                string errMsg = "对比源服务器返回内容替换后为空，无法继续对比";
-                                ShowCompareErr(rowIdx.ToString(), errMsg);
-                                return;
-                            }
-
-                            string[] serverIps = txtPublishServer.Text.Split(new char[] {';'},
-                                StringSplitOptions.RemoveEmptyEntries);
-
-                            string[] arrRet = new string[serverIps.Length];
-                            int idxIp = 0;
-                            bool hasDiff = false;
-                            foreach (string ipItem in serverIps)
-                            {
-                                int idxUse = idxIp;
-                                idxIp++;
-
-                                ThreadPool.UnsafeQueueUserWorkItem(thArg =>
-                                {
-                                    string ip = Convert.ToString(thArg);
-                                    string html;
-                                    try
-                                    {
-                                        html = Utility.GetPage(url, post, ip, isPost);
-
-                                        WriteFile(rowDir, ip + ".txt", url, post, html);
-                                        // 重新读取文件，因为换行不同
-                                        html = ReadFile(rowDir, ip + ".txt");
-                                        html = ReplaceWithRegex(ReplaceWithRegex(html, regs), globalRegs);
-                                        // 替换后的内容也写入文件
-                                        WriteFile(rowDir, ip + "replace.txt", url, post, compareHtml);
-                                    }
-                                    catch (Exception exp)
-                                    {
-                                        arrRet[idxUse] = string.Format("{0}(出错);", ip);
-                                        hasDiff = true;
-
-                                        string errMsg = string.Format("{0} 获取页面出错：{1}",
-                                             ip, exp.Message);
-                                        ShowCompareErr(rowIdx.ToString(), errMsg);
-                                        return;
-                                    }
-                                    if (html != compareHtml)
-                                    {
-                                        hasDiff = true; 
-                                        arrRet[idxUse] = string.Format("{0}({1});", ip, GetFirstDiff(html, compareHtml));
-                                    }
-                                    else
-                                    {
-                                        arrRet[idxUse] = string.Empty;
-                                    }
-                                }, ipItem);
-                            }
-
-                            // 等待线程全部完成
-                            while (arrRet.Contains(null))
-                                Thread.Sleep(10);
-
-                            string ret;
-                            if (!hasDiff)
-                                ret = "OK";
-                            else
-                            {
-                                ret = arrRet.Aggregate("不一致:", (current, strRet) => current + strRet);
-                                ShowCompareErr(rowIdx.ToString(), ret);
-                                // 错误数加1
-                                Interlocked.Increment(ref taskCnt[1]);
-                            }
-                            //ret += ". 对比结果参考目录" + rowDir;
-                            Utility.InvokeControl(lvUrls, () =>
-                            {
-                                // 任务减1
-                                Interlocked.Decrement(ref taskCnt[0]);
-                                var resultrow = lvUrls.Rows[rowIdx - 1];
-                                resultrow.Cells[COL_RETURN].Value = ret;
-
-                                var resultcell = resultrow.Cells[COL_OPEN];
-                                resultcell.Value = "结果目录";
-                                resultcell.Tag = rowDir;
-                                //if (ret != "OK")
-                                //{
-                                //    cell.Style.BackColor 
-                                //}
-                            });
-                        }
-                        catch (Exception exp)
-                        {
-                            // 任务减1
-                            Interlocked.Decrement(ref taskCnt[0]);
-                            ShowCompareErr(rowIdx.ToString(), exp.ToString());
-                        }
-
-                    }, null);
+                    int rowIdx = (int) state;
+                    if (rowIdx < 0 || rowIdx >= rowCnt)
+                        return;
+                    DataGridViewRow row = lvUrls.Rows[(int) state];
+                    CompareRow(row, rowIdx + 1, compareIp, fileDir, globalRegs, taskCnt);
                 }
+                else
+                {
+                    foreach (DataGridViewRow row in lvUrls.Rows)
+                    {
+                        if (row.Index >= rowCnt)
+                            break;
 
+                        idx++;
+                        CompareRow(row, idx, compareIp, fileDir, globalRegs, taskCnt);
+                    }
+                }
             }
             catch (Exception exp)
             {
@@ -809,6 +722,155 @@ Ctrl+R: 开始检查");
             }
         }
 
+        void CompareRow(DataGridViewRow row, int rowIdx, string compareIp, string fileDir, object globalRegs,
+             int[] taskCnt)
+        {
+            string url = Convert.ToString(row.Cells[COL_URL].Value);
+            string post = Convert.ToString(row.Cells[COL_POST].Value);
+            row.Cells[COL_RETURN].Value = string.Empty;
+            bool isPost = !string.IsNullOrEmpty(post);
+            object regs = row.Cells[COL_REG].Tag;
+
+            //GetPage方法已经加了随机数
+            //url = AddRndCh(url);
+
+            // 任务加1
+            Interlocked.Increment(ref taskCnt[0]);
+
+            // 任务加入队列去执行
+            _scheduler.QueueUserWorkItem(obj =>
+            {
+                try
+                {
+                    string rowDir = Path.Combine(fileDir, rowIdx.ToString());
+                    string compareHtml = Utility.GetPage(url, post, compareIp, isPost) ?? string.Empty;
+                    if (compareHtml.Trim() == string.Empty)
+                    {
+                        // 任务减1
+                        Interlocked.Decrement(ref taskCnt[0]);
+
+                        // 错误数加1
+                        Interlocked.Increment(ref taskCnt[1]);
+                        string errMsg = "对比源服务器返回空内容，无法继续对比";
+                        ShowCompareErr(rowIdx.ToString(), errMsg);
+                        return;
+                    }
+
+                    string compareFile = "compare" + compareIp + ".txt";
+                    WriteFile(rowDir, compareFile, url, post, compareHtml);
+                    // 重新读取文件，因为写入文件前换行符有所不同
+                    compareHtml = ReadFile(rowDir, compareFile);
+
+                    // 替换后的内容也写入文件
+                    compareHtml = ReplaceWithRegex(ReplaceWithRegex(compareHtml, regs), globalRegs);
+                    string replaceFile = "compare" + compareIp + "replace.txt";
+                    WriteFile(rowDir, replaceFile, "", "", compareHtml);
+                    compareHtml = ReadFile(rowDir, replaceFile);
+
+                    if (compareHtml.Trim() == string.Empty)
+                    {
+                        // 任务减1
+                        Interlocked.Decrement(ref taskCnt[0]);
+
+                        // 错误数加1
+                        Interlocked.Increment(ref taskCnt[1]);
+                        string errMsg = "对比源服务器返回内容替换后为空，无法继续对比";
+                        ShowCompareErr(rowIdx.ToString(), errMsg);
+                        return;
+                    }
+
+                    string[] serverIps = txtPublishServer.Text.Split(new char[] { ';', ',', '|' },
+                        StringSplitOptions.RemoveEmptyEntries);
+
+                    string[] arrRet = new string[serverIps.Length];
+                    int idxIp = 0;
+                    bool hasDiff = false;
+                    foreach (string ipItem in serverIps)
+                    {
+                        int idxUse = idxIp;
+                        idxIp++;
+
+                        ThreadPool.UnsafeQueueUserWorkItem(thArg =>
+                        {
+                            string ip = Convert.ToString(thArg);
+                            string html;
+                            try
+                            {
+                                html = Utility.GetPage(url, post, ip, isPost);
+
+                                WriteFile(rowDir, ip + ".txt", url, post, html);
+                                // 重新读取文件，因为换行不同
+                                html = ReadFile(rowDir, ip + ".txt");
+
+
+                                // 替换后的内容也写入文件
+                                html = ReplaceWithRegex(ReplaceWithRegex(html, regs), globalRegs);
+                                WriteFile(rowDir, ip + "replace.txt", "", "", html);
+                                html = ReadFile(rowDir, ip + "replace.txt");
+                            }
+                            catch (Exception exp)
+                            {
+                                arrRet[idxUse] = string.Format("{0}(出错);", ip);
+                                hasDiff = true;
+
+                                string errMsg = string.Format("{0} 获取页面出错：{1}",
+                                     ip, exp.Message);
+                                ShowCompareErr(rowIdx.ToString(), errMsg);
+                                return;
+                            }
+                            if (html != compareHtml)
+                            {
+                                hasDiff = true;
+                                arrRet[idxUse] = string.Format("{0}({1});", ip, GetFirstDiff(html, compareHtml));
+                            }
+                            else
+                            {
+                                arrRet[idxUse] = string.Empty;
+                            }
+                        }, ipItem);
+                    }
+
+                    // 等待线程全部完成
+                    while (arrRet.Contains(null))
+                        Thread.Sleep(10);
+
+                    string ret;
+                    if (!hasDiff)
+                        ret = "OK";
+                    else
+                    {
+                        ret = arrRet.Aggregate("不一致:", (current, strRet) => current + strRet);
+                        ShowCompareErr(rowIdx.ToString(), ret);
+                        // 错误数加1
+                        Interlocked.Increment(ref taskCnt[1]);
+                    }
+                    //ret += ". 对比结果参考目录" + rowDir;
+                    Utility.InvokeControl(lvUrls, () =>
+                    {
+                        // 任务减1
+                        Interlocked.Decrement(ref taskCnt[0]);
+                        var resultrow = lvUrls.Rows[rowIdx - 1];
+                        resultrow.Cells[COL_RETURN].Value = ret;
+
+                        var resultcell = resultrow.Cells[COL_OPEN];
+                        resultcell.Value = "结果";
+                        resultcell.Tag = rowDir;
+                        //if (ret != "OK")
+                        //{
+                        //    cell.Style.BackColor 
+                        //}
+                    });
+                }
+                catch (Exception exp)
+                {
+                    // 任务减1
+                    Interlocked.Decrement(ref taskCnt[0]);
+                    ShowCompareErr(rowIdx.ToString(), exp.ToString());
+                }
+
+            }, null);
+        }
+
         void ShowCompareErr(string rowIdx, string msg)
         {
             var lv = lstRet;
@@ -827,9 +889,12 @@ Ctrl+R: 开始检查");
                 Directory.CreateDirectory(fileDir);
             using (var sw = new StreamWriter(Path.Combine(fileDir, fileName), false, Encoding.UTF8))
             {
-                sw.WriteLine(url);
-                sw.WriteLine(post);
-                sw.WriteLine();
+                if (!string.IsNullOrEmpty(url))
+                {
+                    sw.WriteLine(url);
+                    sw.WriteLine(post);
+                    sw.WriteLine();
+                }
                 sw.Write(content);
             }
         }
@@ -908,7 +973,8 @@ Ctrl+R: 开始检查");
                     continue;
                 try
                 {
-                    html = Regex.Replace(html, item[0], item[1]);
+                    string str = item[1].Replace(@"\r\n", "\r\n");
+                    html = Regex.Replace(html, item[0], str);
                 }
                 // ReSharper disable once EmptyGeneralCatchClause
                 catch{}
@@ -993,6 +1059,44 @@ Ctrl+R: 开始检查");
         private void lnkReg_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             new CompareRegEdit(lnkReg).ShowDialog(this);
+        }
+
+        /// <summary>
+        /// 移除重复的行
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void btnRemoveLike_Click(object sender, EventArgs e)
+        {
+            bool compareUrlAndData = sender == btnRemoveAllLike;
+            var allUrl = new HashSet<string>();
+            var allData = new HashSet<string>();
+
+            int rowCnt = lvUrls.RowCount - 1; // 不处理未提交的行(即空白行)
+            int removeNum = 0;
+            for (int i = 0; i < rowCnt; i++)
+            {
+                DataGridViewRow row = lvUrls.Rows[i];
+                string url = Convert.ToString(row.Cells[COL_URL].Value);
+                string post = Convert.ToString(row.Cells[COL_POST].Value);
+                bool isNewUrl = allUrl.Add(url);
+                bool isNewData = allData.Add(post);
+
+                if (isNewUrl)
+                {
+                    continue;
+                }
+                if (compareUrlAndData && isNewData)
+                {
+                    continue;
+                }
+                lvUrls.Rows.RemoveAt(i);
+                rowCnt--;
+                i--;
+                removeNum++;
+            }
+            lstRet.Items.Clear(); // 清空结果集
+            ShowCompareErr("", "移除行数：" + removeNum.ToString());
         }
     }
 }

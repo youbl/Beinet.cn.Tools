@@ -42,6 +42,7 @@
             this.colResult = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDel = new System.Windows.Forms.DataGridViewLinkColumn();
             this.colOpenDir = new System.Windows.Forms.DataGridViewLinkColumn();
+            this.colReCompare = new System.Windows.Forms.DataGridViewLinkColumn();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.lstRet = new System.Windows.Forms.ListView();
             this.colRetSn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -56,6 +57,8 @@
             this.btnRemoveOK = new System.Windows.Forms.Button();
             this.lnkReg = new System.Windows.Forms.LinkLabel();
             this.label7 = new System.Windows.Forms.Label();
+            this.btnRemoveUrlLike = new System.Windows.Forms.Button();
+            this.btnRemoveAllLike = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.lvUrls)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -141,7 +144,8 @@
             this.colReg,
             this.colResult,
             this.colDel,
-            this.colOpenDir});
+            this.colOpenDir,
+            this.colReCompare});
             this.lvUrls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvUrls.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.lvUrls.Location = new System.Drawing.Point(0, 0);
@@ -198,7 +202,17 @@
             this.colOpenDir.Name = "colOpenDir";
             this.colOpenDir.ReadOnly = true;
             this.colOpenDir.Resizable = System.Windows.Forms.DataGridViewTriState.False;
-            this.colOpenDir.Width = 60;
+            this.colOpenDir.Width = 35;
+            // 
+            // colReCompare
+            // 
+            this.colReCompare.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.None;
+            this.colReCompare.FillWeight = 1F;
+            this.colReCompare.HeaderText = "";
+            this.colReCompare.Name = "colReCompare";
+            this.colReCompare.ReadOnly = true;
+            this.colReCompare.Resizable = System.Windows.Forms.DataGridViewTriState.False;
+            this.colReCompare.Width = 35;
             // 
             // splitContainer1
             // 
@@ -275,8 +289,8 @@
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(747, 24);
             this.label5.TabIndex = 6;
-            this.label5.Text = "注1：对比源的IP只能填写1个；目标服务器IP可以多个，分号分隔\r\n注2：结果OK表示对比完全一致，“不一致ip：121.207.240.199(4,4140)”" +
-    "里的4,4140表示第1个不同点在第4行,第4140个字符";
+            this.label5.Text = "注1：源服务器IP只允许1个IP；目标服务器IP允许多个IP，使用半角分号或逗号分隔\r\n注2：结果里的OK表示对比一致，“不一致ip：121.207.240.19" +
+    "9(4,4140)”里的4,4140表示第1个不同点在第4行,第4140个字符";
             // 
             // label3
             // 
@@ -330,7 +344,7 @@
             // 
             // btnRemoveOK
             // 
-            this.btnRemoveOK.Location = new System.Drawing.Point(16, 107);
+            this.btnRemoveOK.Location = new System.Drawing.Point(305, 107);
             this.btnRemoveOK.Name = "btnRemoveOK";
             this.btnRemoveOK.Size = new System.Drawing.Size(153, 23);
             this.btnRemoveOK.TabIndex = 3;
@@ -362,6 +376,26 @@
             this.label7.TabIndex = 6;
             this.label7.Text = "注3：\"全局正则替换\":用于把所有URL返回结果中，影响对比的数据进行清除，比如时间数据；\"结果替换\":只替换当前行URL";
             // 
+            // btnRemoveUrlLike
+            // 
+            this.btnRemoveUrlLike.Location = new System.Drawing.Point(4, 107);
+            this.btnRemoveUrlLike.Name = "btnRemoveUrlLike";
+            this.btnRemoveUrlLike.Size = new System.Drawing.Size(115, 23);
+            this.btnRemoveUrlLike.TabIndex = 3;
+            this.btnRemoveUrlLike.Text = "移除Url重复的行";
+            this.btnRemoveUrlLike.UseVisualStyleBackColor = true;
+            this.btnRemoveUrlLike.Click += new System.EventHandler(this.btnRemoveLike_Click);
+            // 
+            // btnRemoveAllLike
+            // 
+            this.btnRemoveAllLike.Location = new System.Drawing.Point(125, 107);
+            this.btnRemoveAllLike.Name = "btnRemoveAllLike";
+            this.btnRemoveAllLike.Size = new System.Drawing.Size(170, 23);
+            this.btnRemoveAllLike.TabIndex = 3;
+            this.btnRemoveAllLike.Text = "移除Url和数据同时重复的行";
+            this.btnRemoveAllLike.UseVisualStyleBackColor = true;
+            this.btnRemoveAllLike.Click += new System.EventHandler(this.btnRemoveLike_Click);
+            // 
             // Compare
             // 
             this.AllowDrop = true;
@@ -378,6 +412,8 @@
             this.Controls.Add(this.label5);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.btnRemoveAllLike);
+            this.Controls.Add(this.btnRemoveUrlLike);
             this.Controls.Add(this.btnRemoveOK);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnLoad);
@@ -424,13 +460,16 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button btnRemoveOK;
+        private System.Windows.Forms.LinkLabel lnkReg;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Button btnRemoveUrlLike;
+        private System.Windows.Forms.Button btnRemoveAllLike;
         private System.Windows.Forms.DataGridViewTextBoxColumn colUrl;
         private System.Windows.Forms.DataGridViewTextBoxColumn colPost;
         private System.Windows.Forms.DataGridViewLinkColumn colReg;
         private System.Windows.Forms.DataGridViewTextBoxColumn colResult;
         private System.Windows.Forms.DataGridViewLinkColumn colDel;
         private System.Windows.Forms.DataGridViewLinkColumn colOpenDir;
-        private System.Windows.Forms.LinkLabel lnkReg;
-        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.DataGridViewLinkColumn colReCompare;
     }
 }

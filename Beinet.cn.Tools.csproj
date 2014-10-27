@@ -281,12 +281,14 @@
     </Compile>
     <None Include="README.md" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="CopyTool\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="b.ico" />
     <Content Include="DataSync\sync.xml" />
     <None Include="ILMerge.exe" />
-    <None Include="Tools.aspx">
+    <None Include="FileMD.aspx">
       <SubType>ASPXCodeBehind</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
