@@ -171,7 +171,7 @@ namespace Beinet.cn.Tools.FileHash
 
             btnClear_Click(null, null);
 
-            string path = Path.GetDirectoryName(dirsOrFiles.First());
+            string path;
             if (dirsOrFiles.Length == 1 && Directory.Exists(dirsOrFiles[0]))
             {
                 path = dirsOrFiles[0];
@@ -262,20 +262,57 @@ namespace Beinet.cn.Tools.FileHash
                     MessageBox.Show("Service结点没有LocalPath子结点");
                     return;
                 }
+
+                // 服务器列表
+                string[] hosts;
                 var hostNodes = node.SelectNodes("Host");
                 if (hostNodes == null || hostNodes.Count == 0)
                 {
-                    MessageBox.Show("Service结点没有Host子结点");
+                    hosts = new string[1];
+                    hosts[0] = "";
+                }
+                else
+                {
+                    hosts = new string[hostNodes.Count];
+                    for (int i = 0; i < hostNodes.Count; i++)
+                    {
+                        hosts[i] = hostNodes[i].InnerText.Trim();
+                    }
+                }
+                string url = urlAtt.InnerText.Trim();
+                if (url == string.Empty)
+                {
+                    MessageBox.Show("没有设置HashUrl的值");
                     return;
                 }
-                var postNode = node.SelectSingleNode("PostData");
-                string url = urlAtt.InnerText;
-                string localPath = localAtt.InnerText.TrimEnd('\\', '/');
-                string post = postNode == null ? null : postNode.InnerText;
-                string[] hosts = new string[hostNodes.Count];
-                for (int i = 0; i < hostNodes.Count; i++)
+                string localPath = localAtt.InnerText.Trim().TrimEnd('\\', '/');
+                if (localPath == string.Empty)
                 {
-                    hosts[i] = hostNodes[i].InnerText;
+                    MessageBox.Show("没有设置LocalPath的值");
+                    return;
+                }
+                if (!Directory.Exists(localPath))
+                {
+                    MessageBox.Show("指定的目录不存在：" + localPath);
+                    return;
+                } 
+                var postNode = node.SelectSingleNode("PostData");
+                string post = postNode == null ? null : postNode.InnerText;
+
+                string[] ignoreDirs;
+                var ignoreNodes = node.SelectNodes("IgnorePath");
+                if (ignoreNodes == null || ignoreNodes.Count == 0)
+                {
+                    ignoreDirs = new string[1];
+                    ignoreDirs[0] = ".svn";
+                }
+                else
+                {
+                    ignoreDirs = new string[ignoreNodes.Count];
+                    for (int i = 0; i < ignoreNodes.Count; i++)
+                    {
+                        ignoreDirs[i] = ignoreNodes[i].InnerText.Trim();
+                    }
                 }
 
                 #region 重建结果列
@@ -295,7 +332,7 @@ namespace Beinet.cn.Tools.FileHash
                 foreach (string host in hosts)
                 {
                     column = new DataGridViewTextBoxColumn();
-                    column.HeaderText = host;
+                    column.HeaderText = string.IsNullOrEmpty(host) ? "Web站点" : host;
                     column.AutoSizeMode = mode;
                     dgv.Columns.Add(column);
                 }
@@ -305,7 +342,7 @@ namespace Beinet.cn.Tools.FileHash
                 btnLoadConfig.Enabled = false;
                 ThreadPool.UnsafeQueueUserWorkItem(state =>
                 {
-                    try { BeginCompare(url, post, localPath, hosts); }
+                    try { BeginCompare(url, post, localPath, hosts, ignoreDirs); }
                     catch (Exception ee)
                     {
                         MessageBox.Show(ee.ToString());
@@ -322,17 +359,23 @@ namespace Beinet.cn.Tools.FileHash
             }
         }
 
-        void BeginCompare(string url, string postData, string localPath, string[] hosts)
+        void BeginCompare(string url, string postData, string localPath, string[] hosts, string[] ignoreDirs)
         {
             Dictionary<string, string[]> result = new Dictionary<string, string[]>();
             // 计算本地文件MD5
-            CountDirMd5ForCompare(new string[] { localPath }, localPath, result, hosts.Length + 2);
+            CountDirMd5ForCompare(new[] { localPath }, localPath, result, hosts.Length + 2, ignoreDirs);
+
+            postData = (postData ?? "") + "&ignoreDir=";
+            foreach (string ignoreDir in ignoreDirs)
+            {
+                postData += ignoreDir + "|";
+            }
 
             int idx = 2;
             // 获取网络文件MD5
             foreach (string host in hosts)
             {
-                string ret = string.Empty;
+                string ret;
                 try
                 {
                     ret = Utility.GetPage(url, postData, host, true);
@@ -360,8 +403,24 @@ namespace Beinet.cn.Tools.FileHash
                     }
                     getFiles++;
                     string key = arrItem[0].ToLower();
-                    if (key[0] != '\\')
+                    if (key[0] != '\\' && key[0] != '/')
                         key = '\\' + key;
+
+                    // 检查是否需要忽略的目录
+                    bool isbreak = false;
+                    foreach (string ignoreDir in ignoreDirs)
+                    {
+                        if (key.IndexOf("\\" + ignoreDir, StringComparison.OrdinalIgnoreCase) >= 0)
+                        {
+                            isbreak = true;
+                            break;
+                        }
+                    }
+                    if (isbreak)
+                    {
+                        continue;
+                    }
+
                     string[] val;
                     if(!result.TryGetValue(key, out val))
                     {
@@ -388,7 +447,7 @@ namespace Beinet.cn.Tools.FileHash
                                                    int rowIdx = dgv.Rows.Add(val);
                                                    for (int i = 2; i < val.Length; i++)
                                                    {
-                                                       if (Convert.ToString(val[i]) != Convert.ToString(val[1]))
+                                                       if (!Convert.ToString(val[i]).Equals(Convert.ToString(val[1]), StringComparison.OrdinalIgnoreCase))
                                                        {
                                                            dgv.Rows[rowIdx].Cells[i].Style.BackColor = Color.Salmon;
                                                        }
@@ -397,12 +456,25 @@ namespace Beinet.cn.Tools.FileHash
             }
         }
 
-        void CountDirMd5ForCompare(IEnumerable<string> dirsOrFiles, string root, Dictionary<string, string[]> result, int valLen)
+        void CountDirMd5ForCompare(IEnumerable<string> dirsOrFiles, string root, Dictionary<string, string[]> result, int valLen, string[] ignoreDirs)
         {
             foreach (string file in dirsOrFiles)
             {
-                if (file.IndexOf(".svn", StringComparison.OrdinalIgnoreCase) >= 0)
+                // 检查是否需要忽略的目录
+                bool isbreak = false;
+                foreach (string ignoreDir in ignoreDirs)
+                {
+                    if (file.IndexOf("\\" + ignoreDir, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        isbreak = true;
+                        break;
+                    }
+                }
+                if (isbreak)
+                {
                     continue;
+                }
+
                 if (_stop)
                     return;
 
@@ -421,8 +493,8 @@ namespace Beinet.cn.Tools.FileHash
                 }
                 else if (Directory.Exists(file))
                 {
-                    CountDirMd5ForCompare(Directory.GetFiles(file), root, result, valLen);
-                    CountDirMd5ForCompare(Directory.GetDirectories(file), root, result, valLen);
+                    CountDirMd5ForCompare(Directory.GetFiles(file), root, result, valLen, ignoreDirs);
+                    CountDirMd5ForCompare(Directory.GetDirectories(file), root, result, valLen, ignoreDirs);
                 }
             }
         }

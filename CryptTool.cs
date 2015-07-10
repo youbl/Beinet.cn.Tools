@@ -1,12 +1,22 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace Beinet.cn.Tools
 {
     public partial class CryptTool : Form
     {
+        /// <summary>
+        /// 允许拖入的文件扩展名
+        /// </summary>
+        private HashSet<string> _enableExt =
+            new HashSet<string>(new String[] { "", ".aspx", ".asax", ".ashx", ".asp", ".config", ".txt", ".xml", ".ini", ".html", ".htm" });
         public CryptTool()
         {
             InitializeComponent();
@@ -15,6 +25,8 @@ namespace Beinet.cn.Tools
             string pwd2 = ConfigurationManager.AppSettings["cryptPwd2"] ?? pwd;
             txtPwd1.Text = pwd;
             txtPwd2.Text = pwd2;
+
+            labScanStatus.Text = _enableExt.Aggregate("允许拖拽进入窗体的扩展名列表：", (s, s1) => s + " " + s1);
         }
 
         private string _pwd;
@@ -209,6 +221,150 @@ namespace Beinet.cn.Tools
             }
         }
 
+        private void CryptTool_DragDrop(object sender, DragEventArgs e)
+        {
+            var obj = e.Data.GetData(DataFormats.FileDrop);
+            if (obj == null)
+            {
+                return;
+            }
+            // 使用第一个密码
+            Init(btnDes1);
 
+            ThreadPool.UnsafeQueueUserWorkItem(DoUnCrypt, obj);
+        }
+
+        private void CryptTool_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Link;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+
+        void DoUnCrypt(object state)
+        {
+            // 处理files文件列表（可能是目录和文件混合）
+            string[] files = state as string[];
+            if (files == null || files.Length < 1)
+            {
+                return;
+            }
+
+            TextBox txt = txtRet;
+            Utility.InvokeControl(txt, () => txt.Text = "");
+            var ret = LoopDir(files, txt);
+            Utility.InvokeControl(labScanStatus, () =>
+            {
+                labScanStatus.Text = "找到" + ret[0].ToString() +
+                           "个文件中的" + ret[1].ToString() +
+                           "个加密串  注：使用第一个密码和编码进行解密哦";
+            });
+        }
+
+        int[] LoopDir(string[] arr, TextBox txt)
+        {
+            int[] ret = {0, 0};
+            foreach (string item in arr)
+            {
+                string item1 = item;
+                Utility.InvokeControl(labScanStatus, () => labScanStatus.Text = item1 + "扫描中...");
+                if (Directory.Exists(item))
+                {
+                    if (item.EndsWith(".svn") || item.EndsWith(".git"))
+                        continue;
+                    
+                    var nums = LoopDir(Directory.GetFiles(item), txt);
+                    ret[0] += nums[0];
+                    ret[1] += nums[1];
+                    nums = LoopDir(Directory.GetDirectories(item), txt);
+                    ret[0] += nums[0];
+                    ret[1] += nums[1];
+                }
+                else if (File.Exists(item))
+                {
+                    string ext = Path.GetExtension(item) ?? "";
+                    if (!_enableExt.Contains(ext.ToLower()))
+                        continue;
+                    
+                    int undesNum = UnCryptFile(item, txt);
+                    if (undesNum > 0)
+                    {
+                        ret[0]++;
+                        ret[1] += undesNum;
+                    }
+                }
+            }
+            return ret;
+        }
+
+
+        int UnCryptFile(string file, TextBox txt)
+        {
+            bool fileShowed = false;
+            int desNum = 0;
+            // 只处理小于2m的文件
+            if (File.Exists(file) && new FileInfo(file).Length <= 2000000)
+            {
+                try
+                {
+                    string content;
+                    using (var sr = new StreamReader(file, _encoding))
+                    {
+                        content = sr.ReadToEnd();
+                    }
+                    HashSet<string> desStrs = new HashSet<string>();
+                    // DES加密的结果都是ToString("X2")，因此匹配0-9A-Fa-f
+                    Match match = Regex.Match(content, "([^\\s]+)=\"([0-9A-Fa-f]+)\"");
+                    while (match.Success)
+                    {
+                        string attName = match.Groups[1].Value;
+                        string attValue = match.Groups[2].Value;
+                        if (!desStrs.Contains(attValue))
+                        {
+                            try
+                            {
+                                string value = Utility.DES_Decrypt(attValue, _pwd, _encoding);
+                                desNum++;
+                                desStrs.Add(attValue);
+                                Utility.InvokeControl(txt,
+                                    () =>
+                                    {
+                                        if (!fileShowed)
+                                        {
+                                            fileShowed = true;
+                                            txt.Text += "文件: " + file + "\r\n";
+                                        }
+                                        txt.Text += string.Format("    {0}={1}\r\n        {2}\r\n", attName, attValue, value);
+                                    });
+                            }
+                            // ReSharper disable once EmptyGeneralCatchClause
+                            catch (Exception)
+                            {
+                            }
+                        }
+                        else
+                        {
+                            desNum++;
+                        }
+                        match = match.NextMatch();
+                    }
+                    if (fileShowed)
+                    {
+                        Utility.InvokeControl(txt, () => txt.Text += "\r\n");
+                    }
+                }
+                catch (Exception exp)
+                {
+                    Utility.InvokeControl(txt, () => txt.Text += exp + "\r\n");
+                }
+            }
+            return desNum;
+        }
     }
 }

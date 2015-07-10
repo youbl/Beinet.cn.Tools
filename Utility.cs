@@ -644,7 +644,7 @@ namespace Beinet.cn.Tools
             request.AllowAutoRedirect = false;
             request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1;)";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
-            request.Timeout = 5000;
+            request.Timeout = 10000;
 
             // 必须在写入Post Stream之前设置Proxy
             if (!string.IsNullOrEmpty(proxy))

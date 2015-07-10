@@ -62,6 +62,7 @@
             this.btnHash32_1 = new System.Windows.Forms.Button();
             this.btnHash2 = new System.Windows.Forms.Button();
             this.btnHash32_2 = new System.Windows.Forms.Button();
+            this.labScanStatus = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -97,7 +98,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtStr1.Location = new System.Drawing.Point(235, 9);
             this.txtStr1.Name = "txtStr1";
-            this.txtStr1.Size = new System.Drawing.Size(473, 21);
+            this.txtStr1.Size = new System.Drawing.Size(513, 21);
             this.txtStr1.TabIndex = 2;
             // 
             // btnDes1
@@ -206,7 +207,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtStr2.Location = new System.Drawing.Point(235, 74);
             this.txtStr2.Name = "txtStr2";
-            this.txtStr2.Size = new System.Drawing.Size(473, 21);
+            this.txtStr2.Size = new System.Drawing.Size(513, 21);
             this.txtStr2.TabIndex = 11;
             // 
             // txtPwd2
@@ -241,7 +242,7 @@
             this.button6.BackColor = System.Drawing.Color.Red;
             this.button6.Location = new System.Drawing.Point(5, 64);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(712, 5);
+            this.button6.Size = new System.Drawing.Size(752, 5);
             this.button6.TabIndex = 17;
             this.button6.TabStop = false;
             this.button6.UseVisualStyleBackColor = false;
@@ -255,7 +256,7 @@
             this.txtRet.Multiline = true;
             this.txtRet.Name = "txtRet";
             this.txtRet.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtRet.Size = new System.Drawing.Size(712, 377);
+            this.txtRet.Size = new System.Drawing.Size(752, 360);
             this.txtRet.TabIndex = 18;
             this.txtRet.WordWrap = false;
             // 
@@ -401,11 +402,23 @@
             this.btnHash32_2.UseVisualStyleBackColor = true;
             this.btnHash32_2.Click += new System.EventHandler(this.btnHash32_1_Click);
             // 
+            // labScanStatus
+            // 
+            this.labScanStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.labScanStatus.AutoSize = true;
+            this.labScanStatus.Location = new System.Drawing.Point(5, 496);
+            this.labScanStatus.Name = "labScanStatus";
+            this.labScanStatus.Size = new System.Drawing.Size(77, 12);
+            this.labScanStatus.TabIndex = 0;
+            this.labScanStatus.Text = "没有文件拖入";
+            // 
             // CryptTool
             // 
+            this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(720, 512);
+            this.ClientSize = new System.Drawing.Size(760, 512);
+            this.Controls.Add(this.labScanStatus);
             this.Controls.Add(this.btnHash32_2);
             this.Controls.Add(this.btnHash2);
             this.Controls.Add(this.btnHash32_1);
@@ -438,6 +451,8 @@
             this.Controls.Add(this.label1);
             this.Name = "CryptTool";
             this.Text = "CryptTool";
+            this.DragDrop += new System.Windows.Forms.DragEventHandler(this.CryptTool_DragDrop);
+            this.DragEnter += new System.Windows.Forms.DragEventHandler(this.CryptTool_DragEnter);
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
@@ -483,6 +498,7 @@
         private System.Windows.Forms.Button btnHash32_1;
         private System.Windows.Forms.Button btnHash2;
         private System.Windows.Forms.Button btnHash32_2;
+        private System.Windows.Forms.Label labScanStatus;
 
     }
 }

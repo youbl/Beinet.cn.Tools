@@ -5,10 +5,19 @@
 <%@ Import Namespace="System.Security.Cryptography" %>
 
 <script language="C#" runat="server">
+	private const string m_whiteIpList = ";192.168.254.107;";
+	
     protected void Page_Load(object sender, EventArgs e)
     {
         string m_remoteIp = GetRemoteIp();
         string m_currentUrl = GetUrl(false);
+
+        if (m_whiteIpList.IndexOf(m_remoteIp) == -1)
+        {
+            Response.Write("对不起，页面请求失败！");
+            Response.End();
+            return;
+        }
 
         // 如果提交了ip参数，表示是请求Proxy
         string ip = Request.Form["ip"];
