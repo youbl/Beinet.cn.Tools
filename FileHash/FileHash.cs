@@ -438,21 +438,28 @@ namespace Beinet.cn.Tools.FileHash
             }
 
             var dgv = dataGridView1;
+            bool ishide = chkViewDiff.Checked;
             foreach (KeyValuePair<string, string[]> pair in result)
             {
                 object[] val = pair.Value.Select(item => (object)item).ToArray();
                 val[0] = pair.Key;
                 Utility.InvokeControl(dgv, () =>
-                                               {
-                                                   int rowIdx = dgv.Rows.Add(val);
-                                                   for (int i = 2; i < val.Length; i++)
-                                                   {
-                                                       if (!Convert.ToString(val[i]).Equals(Convert.ToString(val[1]), StringComparison.OrdinalIgnoreCase))
-                                                       {
-                                                           dgv.Rows[rowIdx].Cells[i].Style.BackColor = Color.Salmon;
-                                                       }
-                                                   }
-                                               });
+                {
+                    bool hasDiff = false;
+                    int rowIdx = dgv.Rows.Add(val);
+                    for (int i = 2; i < val.Length; i++)
+                    {
+                        if (!Convert.ToString(val[i]).Equals(Convert.ToString(val[1]), StringComparison.OrdinalIgnoreCase))
+                        {
+                            dgv.Rows[rowIdx].Cells[i].Style.BackColor = Color.Salmon;
+                            hasDiff = true;
+                        }
+                    }
+                    if (!hasDiff && ishide)
+                    {
+                        dgv.Rows[rowIdx].Visible = false;
+                    }
+                });
             }
         }
 
@@ -500,5 +507,73 @@ namespace Beinet.cn.Tools.FileHash
         }
 
         #endregion
+
+        /// <summary>
+        /// 是否只显示差异项
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void chkViewDiff_CheckedChanged(object sender, EventArgs e)
+        {
+            var dgv = dataGridView1;
+            var colCnt = dgv.Columns.Count;
+            if (colCnt >= 3)
+            {
+                ThreadPool.UnsafeQueueUserWorkItem(DoHide, dgv);
+            }
+        }
+
+        private void DoHide(object obj)
+        {
+            DataGridView dgv = (DataGridView) obj;
+
+            bool ishide = chkViewDiff.Checked;
+            List<int> arrShow = new List<int>();
+            foreach (DataGridViewRow eachRow in dgv.Rows)
+            {
+                DataGridViewRow row = eachRow;
+                if (!ishide)
+                {
+                    arrShow.Add(row.Index);
+                    continue;
+                }
+
+                bool hasDiff = false;
+                for (int i = 2, colCnt = dgv.Columns.Count; i < colCnt; i++)
+                {
+                    string localMd5 = Convert.ToString(row.Cells[1].Value);
+                    string remoteMd5 = Convert.ToString(row.Cells[i].Value);
+                    if (!localMd5.Equals(remoteMd5, StringComparison.OrdinalIgnoreCase))
+                    {
+                        hasDiff = true;
+                        break;
+                    }
+                }
+                if (hasDiff)
+                {
+                    arrShow.Add(row.Index);
+                }
+            }
+            Utility.InvokeControl(dgv, () =>
+            {
+                foreach (DataGridViewRow eachRow in dgv.Rows)
+                {
+                    bool isShow;
+                    if (arrShow.Count > 0 && eachRow.Index == arrShow[0])
+                    {
+                        isShow = true;
+                        arrShow.RemoveAt(0);
+                    }
+                    else
+                    {
+                        isShow = false;
+                    }
+                    if (eachRow != null && eachRow.Visible != isShow)
+                    {
+                        eachRow.Visible = isShow;
+                    }
+                }
+            });
+        }
     }
 }

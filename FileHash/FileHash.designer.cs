@@ -37,6 +37,7 @@
             this.btnLoadConfig = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.chkViewDiff = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -54,7 +55,7 @@
             // btnClear
             // 
             this.btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnClear.Location = new System.Drawing.Point(67, 405);
+            this.btnClear.Location = new System.Drawing.Point(65, 405);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(49, 23);
             this.btnClear.TabIndex = 2;
@@ -65,7 +66,7 @@
             // btnCopy
             // 
             this.btnCopy.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnCopy.Location = new System.Drawing.Point(122, 405);
+            this.btnCopy.Location = new System.Drawing.Point(118, 405);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(61, 23);
             this.btnCopy.TabIndex = 3;
@@ -76,7 +77,7 @@
             // btnSave
             // 
             this.btnSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnSave.Location = new System.Drawing.Point(189, 405);
+            this.btnSave.Location = new System.Drawing.Point(183, 405);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(61, 23);
             this.btnSave.TabIndex = 4;
@@ -88,9 +89,9 @@
             // 
             this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStop.Enabled = false;
-            this.btnStop.Location = new System.Drawing.Point(703, 405);
+            this.btnStop.Location = new System.Drawing.Point(717, 405);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(75, 23);
+            this.btnStop.Size = new System.Drawing.Size(61, 23);
             this.btnStop.TabIndex = 5;
             this.btnStop.Text = "停止计算";
             this.btnStop.UseVisualStyleBackColor = true;
@@ -115,7 +116,7 @@
             // btnLoadConfig
             // 
             this.btnLoadConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnLoadConfig.Location = new System.Drawing.Point(256, 405);
+            this.btnLoadConfig.Location = new System.Drawing.Point(248, 405);
             this.btnLoadConfig.Name = "btnLoadConfig";
             this.btnLoadConfig.Size = new System.Drawing.Size(75, 23);
             this.btnLoadConfig.TabIndex = 8;
@@ -129,7 +130,7 @@
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("宋体", 9F, ((System.Drawing.FontStyle)((System.Drawing.FontStyle.Bold | System.Drawing.FontStyle.Underline))), System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(337, 401);
+            this.label1.Location = new System.Drawing.Point(407, 401);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(303, 12);
             this.label1.TabIndex = 9;
@@ -140,11 +141,29 @@
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label2.AutoSize = true;
             this.label2.ForeColor = System.Drawing.SystemColors.ActiveCaption;
-            this.label2.Location = new System.Drawing.Point(337, 418);
+            this.label2.Location = new System.Drawing.Point(407, 418);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(305, 12);
             this.label2.TabIndex = 9;
             this.label2.Text = "可以在Config里配置DirNoProcess，指示哪些目录不处理";
+            // 
+            // chkViewDiff
+            // 
+            this.chkViewDiff.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.chkViewDiff.AutoSize = true;
+            this.chkViewDiff.Checked = true;
+            this.chkViewDiff.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkViewDiff.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.chkViewDiff.ForeColor = System.Drawing.Color.Blue;
+            this.chkViewDiff.Location = new System.Drawing.Point(327, 410);
+            this.chkViewDiff.Margin = new System.Windows.Forms.Padding(0);
+            this.chkViewDiff.Name = "chkViewDiff";
+            this.chkViewDiff.Size = new System.Drawing.Size(76, 16);
+            this.chkViewDiff.TabIndex = 0;
+            this.chkViewDiff.TabStop = false;
+            this.chkViewDiff.Text = "仅差异项";
+            this.chkViewDiff.UseVisualStyleBackColor = true;
+            this.chkViewDiff.CheckedChanged += new System.EventHandler(this.chkViewDiff_CheckedChanged);
             // 
             // FileHash
             // 
@@ -152,6 +171,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(780, 431);
+            this.Controls.Add(this.chkViewDiff);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnLoadConfig);
@@ -182,6 +202,7 @@
         private System.Windows.Forms.Button btnLoadConfig;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.CheckBox chkViewDiff;
     }
 }
 
