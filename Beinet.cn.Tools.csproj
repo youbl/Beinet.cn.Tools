@@ -87,6 +87,12 @@
     <Compile Include="GetIpFromBaidu\GetIp.Designer.cs">
       <DependentUpon>GetIp.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImgTools\ImgTool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ImgTools\ImgTool.Designer.cs">
+      <DependentUpon>ImgTool.cs</DependentUpon>
+    </Compile>
     <Compile Include="LvsManager\About.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -399,6 +405,7 @@
     <Compile Include="RegexTool\OptionSelect.designer.cs">
       <DependentUpon>OptionSelect.cs</DependentUpon>
     </Compile>
+    <Compile Include="ImgHelper.cs" />
     <Compile Include="SqlHelper.cs" />
     <Compile Include="SqlInjectForm\ErrDetail.cs">
       <SubType>Form</SubType>
@@ -443,6 +450,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GetIpFromBaidu\GetIp.resx">
       <DependentUpon>GetIp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ImgTools\ImgTool.resx">
+      <DependentUpon>ImgTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LvsManager\About.resx">
       <DependentUpon>About.cs</DependentUpon>

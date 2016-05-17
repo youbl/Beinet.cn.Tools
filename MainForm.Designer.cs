@@ -45,7 +45,6 @@
             this.button1 = new System.Windows.Forms.Button();
             this.tabLvs = new System.Windows.Forms.TabPage();
             this.tabEncrypt = new System.Windows.Forms.TabPage();
-            this.tabCopyTool = new System.Windows.Forms.TabPage();
             this.tabMd5File = new System.Windows.Forms.TabPage();
             this.tabWebCompare = new System.Windows.Forms.TabPage();
             this.tabSqlInject = new System.Windows.Forms.TabPage();
@@ -54,6 +53,7 @@
             this.tabQQWry = new System.Windows.Forms.TabPage();
             this.tabGZip = new System.Windows.Forms.TabPage();
             this.tabOtherTools = new System.Windows.Forms.TabPage();
+            this.tabImgTool = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabDllAnlyse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -76,7 +76,6 @@
             this.tabControl1.Controls.Add(this.tabDllAnlyse);
             this.tabControl1.Controls.Add(this.tabLvs);
             this.tabControl1.Controls.Add(this.tabEncrypt);
-            this.tabControl1.Controls.Add(this.tabCopyTool);
             this.tabControl1.Controls.Add(this.tabMd5File);
             this.tabControl1.Controls.Add(this.tabWebCompare);
             this.tabControl1.Controls.Add(this.tabSqlInject);
@@ -85,6 +84,7 @@
             this.tabControl1.Controls.Add(this.tabQQWry);
             this.tabControl1.Controls.Add(this.tabGZip);
             this.tabControl1.Controls.Add(this.tabOtherTools);
+            this.tabControl1.Controls.Add(this.tabImgTool);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -101,7 +101,7 @@
             this.tabDllAnlyse.Padding = new System.Windows.Forms.Padding(3);
             this.tabDllAnlyse.Size = new System.Drawing.Size(776, 536);
             this.tabDllAnlyse.TabIndex = 0;
-            this.tabDllAnlyse.Text = "Dll分析";
+            this.tabDllAnlyse.Text = "dll";
             this.tabDllAnlyse.UseVisualStyleBackColor = true;
             // 
             // splitContainer1
@@ -273,7 +273,7 @@
             this.tabLvs.Padding = new System.Windows.Forms.Padding(3);
             this.tabLvs.Size = new System.Drawing.Size(776, 536);
             this.tabLvs.TabIndex = 4;
-            this.tabLvs.Text = "Lvs控制";
+            this.tabLvs.Text = "Lvs";
             this.tabLvs.UseVisualStyleBackColor = true;
             // 
             // tabEncrypt
@@ -286,16 +286,6 @@
             this.tabEncrypt.Text = "加解密";
             this.tabEncrypt.UseVisualStyleBackColor = true;
             // 
-            // tabCopyTool
-            // 
-            this.tabCopyTool.Location = new System.Drawing.Point(4, 22);
-            this.tabCopyTool.Name = "tabCopyTool";
-            this.tabCopyTool.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCopyTool.Size = new System.Drawing.Size(776, 536);
-            this.tabCopyTool.TabIndex = 8;
-            this.tabCopyTool.Text = "目录同步";
-            this.tabCopyTool.UseVisualStyleBackColor = true;
-            // 
             // tabMd5File
             // 
             this.tabMd5File.Location = new System.Drawing.Point(4, 22);
@@ -303,7 +293,7 @@
             this.tabMd5File.Padding = new System.Windows.Forms.Padding(3);
             this.tabMd5File.Size = new System.Drawing.Size(776, 536);
             this.tabMd5File.TabIndex = 2;
-            this.tabMd5File.Text = "文件MD5";
+            this.tabMd5File.Text = "MD5";
             this.tabMd5File.UseVisualStyleBackColor = true;
             // 
             // tabWebCompare
@@ -313,7 +303,7 @@
             this.tabWebCompare.Padding = new System.Windows.Forms.Padding(3);
             this.tabWebCompare.Size = new System.Drawing.Size(776, 536);
             this.tabWebCompare.TabIndex = 10;
-            this.tabWebCompare.Text = "Web内容对比";
+            this.tabWebCompare.Text = "Web对比";
             this.tabWebCompare.UseVisualStyleBackColor = true;
             // 
             // tabSqlInject
@@ -323,7 +313,7 @@
             this.tabSqlInject.Padding = new System.Windows.Forms.Padding(3);
             this.tabSqlInject.Size = new System.Drawing.Size(776, 536);
             this.tabSqlInject.TabIndex = 3;
-            this.tabSqlInject.Text = "SQL拼接检查";
+            this.tabSqlInject.Text = "SQL检查";
             this.tabSqlInject.UseVisualStyleBackColor = true;
             // 
             // tabRegex
@@ -333,7 +323,7 @@
             this.tabRegex.Padding = new System.Windows.Forms.Padding(3);
             this.tabRegex.Size = new System.Drawing.Size(776, 536);
             this.tabRegex.TabIndex = 6;
-            this.tabRegex.Text = "正则工具";
+            this.tabRegex.Text = "正则";
             this.tabRegex.UseVisualStyleBackColor = true;
             // 
             // tabDataSync
@@ -343,7 +333,7 @@
             this.tabDataSync.Padding = new System.Windows.Forms.Padding(3);
             this.tabDataSync.Size = new System.Drawing.Size(776, 536);
             this.tabDataSync.TabIndex = 7;
-            this.tabDataSync.Text = "数据库同步";
+            this.tabDataSync.Text = "DB同步";
             this.tabDataSync.UseVisualStyleBackColor = true;
             // 
             // tabQQWry
@@ -363,7 +353,7 @@
             this.tabGZip.Padding = new System.Windows.Forms.Padding(3);
             this.tabGZip.Size = new System.Drawing.Size(776, 536);
             this.tabGZip.TabIndex = 1;
-            this.tabGZip.Text = "GZip测试";
+            this.tabGZip.Text = "GZip";
             this.tabGZip.UseVisualStyleBackColor = true;
             // 
             // tabOtherTools
@@ -373,8 +363,18 @@
             this.tabOtherTools.Padding = new System.Windows.Forms.Padding(3);
             this.tabOtherTools.Size = new System.Drawing.Size(776, 536);
             this.tabOtherTools.TabIndex = 11;
-            this.tabOtherTools.Text = "其它小工具";
+            this.tabOtherTools.Text = "其它";
             this.tabOtherTools.UseVisualStyleBackColor = true;
+            // 
+            // tabImgTool
+            // 
+            this.tabImgTool.Location = new System.Drawing.Point(4, 22);
+            this.tabImgTool.Name = "tabImgTool";
+            this.tabImgTool.Padding = new System.Windows.Forms.Padding(3);
+            this.tabImgTool.Size = new System.Drawing.Size(776, 536);
+            this.tabImgTool.TabIndex = 12;
+            this.tabImgTool.Text = "图片工具";
+            this.tabImgTool.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -435,10 +435,10 @@
         private System.Windows.Forms.TabPage tabEncrypt;
         private System.Windows.Forms.TabPage tabRegex;
         private System.Windows.Forms.TabPage tabDataSync;
-        private System.Windows.Forms.TabPage tabCopyTool;
         private System.Windows.Forms.TabPage tabQQWry;
         private System.Windows.Forms.TabPage tabWebCompare;
         private System.Windows.Forms.TabPage tabOtherTools;
+        private System.Windows.Forms.TabPage tabImgTool;
 
 
     }

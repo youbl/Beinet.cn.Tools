@@ -39,10 +39,10 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabEncrypt, typeof(CryptTool));
             _tabForms.Add(tabRegex, typeof(RegexTool.MainForm));
             _tabForms.Add(tabDataSync, typeof(DataSync.MainForm));
-            _tabForms.Add(tabCopyTool, typeof(MergeDll.MergeForm));
             _tabForms.Add(tabQQWry, typeof(QQWry.IP_QQWry));
             _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
             _tabForms.Add(tabOtherTools, typeof(Others.OtherTools));
+            _tabForms.Add(tabImgTool, typeof(ImgTools.ImgTool));
             #endregion
 
             

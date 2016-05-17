@@ -120,6 +120,26 @@ namespace Beinet.cn.Tools
         }
 
         /// <summary>
+        /// 把对象序列化为Xml字符串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static string XmlSerialize<T>(T obj)
+        {
+            DataContractSerializer formatter = new DataContractSerializer(typeof(T));
+            using (MemoryStream memory = new MemoryStream())
+            {
+                formatter.WriteObject(memory, obj);
+                memory.Seek(0, SeekOrigin.Begin);
+                using (StreamReader sr = new StreamReader(memory, Encoding.UTF8))
+                {
+                    return sr.ReadToEnd();
+                }
+            }
+        }
+
+        /// <summary>
         /// 把对象序列化为Xml文件
         /// </summary>
         /// <typeparam name="T"></typeparam>
