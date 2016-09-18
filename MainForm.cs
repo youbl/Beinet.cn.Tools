@@ -43,6 +43,7 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
             _tabForms.Add(tabOtherTools, typeof(Others.OtherTools));
             _tabForms.Add(tabImgTool, typeof(ImgTools.ImgTool));
+            _tabForms.Add(tabSvn, typeof(Others.svntool));
             #endregion
 
             

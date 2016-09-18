@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -65,7 +66,7 @@ namespace Beinet.cn.Tools
         public static void InvokeControl(Control ctl, Action method)
         {
             Form frm = ctl.FindForm();
-            if(frm == null || frm.IsDisposed)
+            if (frm == null || frm.IsDisposed)
             {
                 return;
             }
@@ -79,7 +80,7 @@ namespace Beinet.cn.Tools
                 {
                     method();
                 }
-                catch(Exception exp)
+                catch (Exception exp)
                 {
                     MessageBox.Show(frm, exp.ToString());
                 }
@@ -186,7 +187,7 @@ namespace Beinet.cn.Tools
                 xmlreader.Normalization = false;
                 xmlreader.WhitespaceHandling = WhitespaceHandling.Significant;
                 xmlreader.XmlResolver = null;
-                return (T) xs.ReadObject(xmlreader);
+                return (T)xs.ReadObject(xmlreader);
             }
         }
         #endregion
@@ -627,7 +628,7 @@ namespace Beinet.cn.Tools
                 return ret;
             }
         }
-    
+
         #endregion
 
 
@@ -653,7 +654,7 @@ namespace Beinet.cn.Tools
                 url += "&" + rnd;
             else
                 url += "?" + rnd;
-            
+
             if (!isPost && !string.IsNullOrEmpty(param))
             {
                 url = url + "&" + param;
@@ -811,6 +812,50 @@ namespace Beinet.cn.Tools
             foreach (Thread thread in arrTh)
             {
                 thread.Join();
+            }
+        }
+
+
+
+        public static string ExecCmd(string cmd, string args)
+        {
+            try
+            {
+                using (var p = new Process())
+                {
+                    p.StartInfo.FileName = cmd;//"cmd.exe";
+                    p.StartInfo.Arguments = args;
+                    p.StartInfo.UseShellExecute = false; // 在当前进程中启动，不使用系统外壳程序启动
+                    p.StartInfo.RedirectStandardInput = false; //设置为true，后面可以通过StandardInput输入dos命令
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.RedirectStandardError = true;
+                    p.StartInfo.CreateNoWindow = true; //不创建窗口
+                    p.Start();
+                    // string _dosPing = "ping -n {0} -l 512 ";// 修改这个，必须同时修改上面的正则
+                    // string _dosExit = "exit";// 修改这个，必须同时修改上面的正则
+                    // p.StandardInput.WriteLine(dosping + ipOrNs);
+                    // p.StandardInput.WriteLine(_dosExit);
+                    string strRst = p.StandardOutput.ReadToEnd();
+                    return strRst;
+
+                    //p.StartInfo.FileName = "cmd.exe";
+                    //p.StartInfo.UseShellExecute = true; // 在当前进程中启动，不使用系统外壳程序启动
+                    ////p.StartInfo.WindowStyle = ProcessWindowStyle.Maximized;// 让dos窗体最大化
+                    //p.StartInfo.Arguments = "/C ping " + ipOrNs; //设定参数，其中的“/C”表示执行完命令后马上退出
+                    //p.StartInfo.RedirectStandardInput = false; //设置为true，后面可以通过StandardInput输入dos命令
+                    //p.StartInfo.RedirectStandardOutput = false;
+                    ////p.StartInfo.CreateNoWindow = true;     //不创建窗口
+                    //p.Start();
+                    ////SetWindowPos(p.Handle, 3, Left, Top, Width, Height, 8);
+                    ////p.StandardInput.WriteLine("ping " + url);
+                    //p.WaitForExit(1000);
+                    ////MessageBox.Show(p.StandardOutput.ReadToEnd());
+                    //p.Close();
+                }
+            }
+            catch (Exception exp)
+            {
+                return exp.Message;
             }
         }
     }

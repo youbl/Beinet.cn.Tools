@@ -375,6 +375,12 @@
     <Compile Include="Others\qrcode\rsc66.cs" />
     <Compile Include="Others\qrcode\rsc68.cs" />
     <Compile Include="Others\qrcode\rsc7.cs" />
+    <Compile Include="Others\svntool.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Others\svntool.Designer.cs">
+      <DependentUpon>svntool.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="PromptWin.cs">
       <SubType>Form</SubType>
@@ -477,6 +483,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Others\OtherTools.resx">
       <DependentUpon>OtherTools.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Others\svntool.resx">
+      <DependentUpon>svntool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="PromptWin.resx">
       <DependentUpon>PromptWin.cs</DependentUpon>
