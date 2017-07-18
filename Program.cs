@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -15,7 +13,11 @@ namespace Beinet.cn.Tools
         static void Main(string[] args)
         {
             Application.ThreadException += Application_ThreadException;
-            
+            Application.SetUnhandledExceptionMode(UnhandledExceptionMode.CatchException);
+            // 对非UI线程异常进行处理，但是无法不退出程序
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             MainForm frm;
@@ -31,6 +33,20 @@ namespace Beinet.cn.Tools
             Application.Run(frm);
         }
 
+        /// <summary>
+        /// 处理应用程序域内的未处理异常（非UI线程异常）
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            try
+            {
+                Exception ex = e.ExceptionObject as Exception;
+                MessageBox.Show(ex.Message);
+            }
+            catch { }
+        }
         private static void Application_ThreadException(object sender, ThreadExceptionEventArgs e)
         {
             string message = "出错了：" + e.Exception;

@@ -54,7 +54,7 @@
             this.tabGZip = new System.Windows.Forms.TabPage();
             this.tabOtherTools = new System.Windows.Forms.TabPage();
             this.tabImgTool = new System.Windows.Forms.TabPage();
-            this.tabSvn = new System.Windows.Forms.TabPage();
+            this.tabIIS = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabDllAnlyse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -86,7 +86,7 @@
             this.tabControl1.Controls.Add(this.tabGZip);
             this.tabControl1.Controls.Add(this.tabOtherTools);
             this.tabControl1.Controls.Add(this.tabImgTool);
-            this.tabControl1.Controls.Add(this.tabSvn);
+            this.tabControl1.Controls.Add(this.tabIIS);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -378,15 +378,15 @@
             this.tabImgTool.Text = "图片工具";
             this.tabImgTool.UseVisualStyleBackColor = true;
             // 
-            // tabSvn
+            // tabIIS
             // 
-            this.tabSvn.Location = new System.Drawing.Point(4, 22);
-            this.tabSvn.Name = "tabSvn";
-            this.tabSvn.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSvn.Size = new System.Drawing.Size(776, 536);
-            this.tabSvn.TabIndex = 13;
-            this.tabSvn.Text = "svn工具";
-            this.tabSvn.UseVisualStyleBackColor = true;
+            this.tabIIS.Location = new System.Drawing.Point(4, 22);
+            this.tabIIS.Name = "tabIIS";
+            this.tabIIS.Padding = new System.Windows.Forms.Padding(3);
+            this.tabIIS.Size = new System.Drawing.Size(776, 536);
+            this.tabIIS.TabIndex = 13;
+            this.tabIIS.Text = "IIS日志";
+            this.tabIIS.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -451,7 +451,7 @@
         private System.Windows.Forms.TabPage tabWebCompare;
         private System.Windows.Forms.TabPage tabOtherTools;
         private System.Windows.Forms.TabPage tabImgTool;
-        private System.Windows.Forms.TabPage tabSvn;
+        private System.Windows.Forms.TabPage tabIIS;
 
 
     }

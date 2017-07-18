@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
 
@@ -58,7 +59,7 @@ namespace Beinet.cn.Tools
             }
         }
 
-        public static List<string> GetColNames(SqlDataReader reader)
+        public static List<string> GetColNames(DbDataReader reader)
         {
             List<string> ret = new List<string>();
             if (reader == null || !reader.HasRows)
@@ -148,6 +149,39 @@ namespace Beinet.cn.Tools
             if (obj == null || obj == DBNull.Value)
                 return -1;
             return Convert.ToInt64(obj);
+        }
+
+
+        public static void BulkCopy(DataTable data,
+            string targetConnectionString, string targetTableName,
+            int timeOut = 30, bool keepIdentity = true, int batchSize = 2000,
+            SqlRowsCopiedEventHandler copiedEventHandler = null)
+        {
+            if (data == null || data.Rows.Count <= 0)
+            {
+                return;
+            }
+            DataTableReader sourceData = data.CreateDataReader();
+            var opn = keepIdentity ? SqlBulkCopyOptions.KeepIdentity : SqlBulkCopyOptions.Default;
+            using (SqlBulkCopy bcp = new SqlBulkCopy(targetConnectionString, opn))
+            {
+                bcp.BulkCopyTimeout = timeOut;
+                if (copiedEventHandler != null)
+                    bcp.SqlRowsCopied += copiedEventHandler; // 用于进度显示
+
+                bcp.BatchSize = batchSize;
+                bcp.NotifyAfter = batchSize;// 设置为1，状态栏提示比较准确，但是速度很慢
+
+                bcp.DestinationTableName = targetTableName;
+
+                // 设置同名列的映射,避免建表语句列顺序不一致导致无法同步的bug
+                List<string> arrColNames = GetColNames(sourceData);
+                foreach (string colName in arrColNames)
+                {
+                    bcp.ColumnMappings.Add(colName, colName);
+                }
+                bcp.WriteToServer(sourceData);
+            }
         }
     }
 }
