@@ -13,6 +13,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
+using System.Drawing;
 
 namespace Beinet.cn.Tools
 {
@@ -85,6 +86,54 @@ namespace Beinet.cn.Tools
                     MessageBox.Show(frm, exp.ToString());
                 }
             }
+        }
+
+
+        public static void BindToDataGrid(DataGridView dgv, List<string[]> arrData, List<int> rowColor = null)
+        {
+            if (arrData.Count <= 0)
+            {
+                return;
+            }
+            // 用于隔行变色
+            Color[] rowBack = { Color.AliceBlue, Color.AntiqueWhite };
+            int idx = 0;
+            Color color;
+
+            // 为了后面Clone作准备，懒得研究和改DataTable了
+            if (dgv.Rows.Count <= 0)
+            {
+                color = rowColor != null ? rowBack[rowColor[idx]] : rowBack[idx];
+                Utility.InvokeControl(dgv, () =>
+                {
+                    dgv.Rows.Add(arrData[0]);
+                    dgv.Rows[0].DefaultCellStyle.BackColor = color;
+                });
+                arrData.RemoveAt(0);
+                if (arrData.Count <= 0)
+                {
+                    return;
+                }
+                idx++;
+            }
+
+            var arrRow = new List<DataGridViewRow>();
+            foreach (var item in arrData)
+            {
+                DataGridViewRow row = (DataGridViewRow)dgv.Rows[0].Clone();
+                for (var i = 0; i < item.Length; i++)
+                {
+                    row.Cells[i].Value = item[i];
+                }
+                color = rowColor != null ? rowBack[rowColor[idx]] : rowBack[idx % 2];
+                idx++;
+                row.DefaultCellStyle.BackColor = color;
+                arrRow.Add(row);
+            }
+            var tmpArr = arrRow.ToArray();
+            Utility.InvokeControl(dgv, () => {
+                dgv.Rows.AddRange(tmpArr);
+            });
         }
 
         //private delegate void SetValueDele(Control ctl, string propName, object val);

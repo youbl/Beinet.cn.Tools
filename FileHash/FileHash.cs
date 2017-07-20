@@ -14,6 +14,8 @@ namespace Beinet.cn.Tools.FileHash
     public partial class FileHash : Form
     {
         private bool _stop = false;
+        private DateTime _start;
+
         /// <summary>
         /// 用于查找相同文件的变量
         /// </summary>
@@ -91,33 +93,37 @@ namespace Beinet.cn.Tools.FileHash
                 int cnt = CountDirMd5(files, root);
                 if (chkSameFile.Checked)
                 {
-                    var dgv = dataGridView1;
-                    // 用于隔行变色
-                    Color[] rowBack = { Color.AliceBlue, Color.AntiqueWhite };
+                    // 用于不同Md5变色
+                    var arrColorIdx = new List<int>();
+                    var arrRow = new List<string[]>();
                     int idx = 0;
+
                     foreach (KeyValuePair<string, HashSet<string>> pair in _md5samelist)
                     {
                         string md5 = pair.Key;
-                        Color color = rowBack[idx % 2];
+                        int colorIdx = idx % 2;
                         idx++;
                         foreach (string file in pair.Value)
                         {
-                            string[] tmp = file.Split('|');
-                            Utility.InvokeControl(dgv, () => {
-                                dgv.Rows.Add(md5, tmp[0], tmp[1]);
-                                dgv.Rows[dgv.Rows.Count - 1].DefaultCellStyle.BackColor = color;
-                            });
+                            string[] tmp = (md5 + "|" + file).Split('|');
+                            arrRow.Add(tmp);
+                            arrColorIdx.Add(colorIdx);
                         }
                     }
+                    // 绑定到DataGridView
+                    Utility.BindToDataGrid(dataGridView1, arrRow, arrColorIdx);
                 }
+                _stop = true;
                 MessageBox.Show("处理的文件和目录个数：" + cnt.ToString());
             }
             catch(Exception exp)
             {
+                _stop = true;
                 MessageBox.Show("出错了：\r\n" + exp.Message);
             }
             finally
             {
+                _stop = true;
                 Utility.InvokeControl(btnSelectFile,()=>
                                                         {
                                                             btnSelectFile.Enabled = true;
@@ -130,12 +136,19 @@ namespace Beinet.cn.Tools.FileHash
         int CountDirMd5(IEnumerable<string> dirsOrFiles, string root)
         {
             int cnt = 0;
-            var dgv = dataGridView1;
+            if (_stop)
+            {
+                return cnt;
+            }
+            var arrRow = new List<string[]>();
             foreach (string file in dirsOrFiles)
             {
                 if (_stop)
+                {
+                    // 绑定到DataGridView
+                    Utility.BindToDataGrid(dataGridView1, arrRow);
                     return cnt;
-
+                }
                 if (File.Exists(file))
                 {
                     string md5, sha1;
@@ -171,7 +184,7 @@ namespace Beinet.cn.Tools.FileHash
                     }
                     else
                     {
-                        Utility.InvokeControl(dgv, () => dgv.Rows.Add(file1, md5, sha1));
+                        arrRow.Add(new string[]{ file1, md5, sha1 });
                     }
                     
                     cnt++;
@@ -186,6 +199,8 @@ namespace Beinet.cn.Tools.FileHash
                     }
                 }
             }
+            // 绑定到DataGridView
+            Utility.BindToDataGrid(dataGridView1, arrRow);
             return cnt;
         }
 
@@ -256,6 +271,18 @@ namespace Beinet.cn.Tools.FileHash
             btnSelectFile.Enabled = false;
             btnStop.Enabled = true;
             _stop = false;
+            _start = DateTime.Now;
+
+            ThreadPool.UnsafeQueueUserWorkItem(state => {
+                // 计时程序
+                var ts = TimeSpan.FromSeconds(1);
+                while (!_stop)
+                {
+                    Thread.Sleep(ts);
+                    var timeDiff = (DateTime.Now - _start).ToString(@"d\.hh\:mm\:ss");
+                    Utility.InvokeControl(btnStop, () => btnStop.Text = "停止计算\r\n" + timeDiff);
+                }
+            }, null);
 
             btnClear_Click(null, null);
 
@@ -556,6 +583,10 @@ namespace Beinet.cn.Tools.FileHash
         {
             foreach (string file in dirsOrFiles)
             {
+                if (_stop)
+                {
+                    return;
+                }
                 // 检查是否需要忽略的目录
                 bool isbreak = false;
                 foreach (string ignoreDir in ignoreDirs)
@@ -570,10 +601,7 @@ namespace Beinet.cn.Tools.FileHash
                 {
                     continue;
                 }
-
-                if (_stop)
-                    return;
-
+                
                 if (File.Exists(file))
                 {
                     string md5;
@@ -664,5 +692,6 @@ namespace Beinet.cn.Tools.FileHash
                 }
             });
         }
+
     }
 }

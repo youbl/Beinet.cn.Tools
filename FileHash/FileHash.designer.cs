@@ -90,13 +90,13 @@
             // 
             // btnStop
             // 
-            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnStop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.btnStop.Enabled = false;
             this.btnStop.Location = new System.Drawing.Point(391, 386);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(55, 46);
+            this.btnStop.Size = new System.Drawing.Size(75, 55);
             this.btnStop.TabIndex = 5;
-            this.btnStop.Text = "停止\r\n计算";
+            this.btnStop.Text = "停止计算";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
