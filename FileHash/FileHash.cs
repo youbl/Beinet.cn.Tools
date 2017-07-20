@@ -14,6 +14,14 @@ namespace Beinet.cn.Tools.FileHash
     public partial class FileHash : Form
     {
         private bool _stop = false;
+        /// <summary>
+        /// 用于查找相同文件的变量
+        /// </summary>
+        private Dictionary<string, string> _md5list;
+        /// <summary>
+        /// 收集查找到的相同文件的变量
+        /// </summary>
+        private Dictionary<string, HashSet<string>> _md5samelist; 
 
         public FileHash()
         {
@@ -21,13 +29,16 @@ namespace Beinet.cn.Tools.FileHash
         }
 
         private void btnSelectFile_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog ofd = new OpenFileDialog();
-            ofd.Multiselect = true;
+        {            
+            var ofd = new FolderBrowserDialog();
+            if(string.IsNullOrEmpty(ofd.SelectedPath))
+            {
+                ofd.SelectedPath = AppDomain.CurrentDomain.BaseDirectory;
+            }
             if (ofd.ShowDialog(this) != DialogResult.OK)
                 return;
 
-            DoCountMd5(ofd.FileNames);
+            DoCountMd5(ofd.SelectedPath);
         }
 
         private void btnClear_Click(object sender, EventArgs e)
@@ -78,6 +89,27 @@ namespace Beinet.cn.Tools.FileHash
                 }
 
                 int cnt = CountDirMd5(files, root);
+                if (chkSameFile.Checked)
+                {
+                    var dgv = dataGridView1;
+                    // 用于隔行变色
+                    Color[] rowBack = { Color.AliceBlue, Color.AntiqueWhite };
+                    int idx = 0;
+                    foreach (KeyValuePair<string, HashSet<string>> pair in _md5samelist)
+                    {
+                        string md5 = pair.Key;
+                        Color color = rowBack[idx % 2];
+                        idx++;
+                        foreach (string file in pair.Value)
+                        {
+                            string[] tmp = file.Split('|');
+                            Utility.InvokeControl(dgv, () => {
+                                dgv.Rows.Add(md5, tmp[0], tmp[1]);
+                                dgv.Rows[dgv.Rows.Count - 1].DefaultCellStyle.BackColor = color;
+                            });
+                        }
+                    }
+                }
                 MessageBox.Show("处理的文件和目录个数：" + cnt.ToString());
             }
             catch(Exception exp)
@@ -117,7 +149,31 @@ namespace Beinet.cn.Tools.FileHash
                         sha1 = BitConverter.ToString(get_sha1.ComputeHash(get_file)).Replace("-", "");
                     }
                     string file1 = file.Replace(root, "");
-                    Utility.InvokeControl(dgv, () => dgv.Rows.Add(file1, md5, sha1));
+                    if (chkSameFile.Checked)
+                    {
+                        // 查找相同文件时的收集工作
+                        string tmp;
+                        if (_md5list.TryGetValue(md5, out tmp))
+                        {
+                            HashSet<string> tmpSameFile;
+                            if (!_md5samelist.TryGetValue(md5, out tmpSameFile))
+                            {
+                                tmpSameFile = new HashSet<string>();
+                                tmpSameFile.Add(tmp);
+                                _md5samelist[md5] = tmpSameFile;
+                            }
+                            tmpSameFile.Add(file + "|" + sha1);
+                        }
+                        else
+                        {
+                            _md5list.Add(md5, file + "|" + sha1);
+                        }
+                    }
+                    else
+                    {
+                        Utility.InvokeControl(dgv, () => dgv.Rows.Add(file1, md5, sha1));
+                    }
+                    
                     cnt++;
                 }
                 else if (Directory.Exists(file))
@@ -136,18 +192,37 @@ namespace Beinet.cn.Tools.FileHash
         void AddCol(string dir)
         {
             var dgv = dataGridView1;
-            DataGridViewColumn column = new DataGridViewTextBoxColumn();
-            column.HeaderText = "文件名(目录:" + dir + ")";
-            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dgv.Columns.Add(column); 
-            column = new DataGridViewTextBoxColumn();
-            column.HeaderText = "本地MD5";
-            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dgv.Columns.Add(column);
-            column = new DataGridViewTextBoxColumn();
-            column.HeaderText = "本地SHA1";
-            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
-            dgv.Columns.Add(column);
+            DataGridViewColumn column;
+            if (chkSameFile.Checked)
+            {
+                column = new DataGridViewTextBoxColumn();
+                column.HeaderText = "MD5";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                dgv.Columns.Add(column);
+                column = new DataGridViewTextBoxColumn();
+                column.HeaderText = "文件";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                dgv.Columns.Add(column);
+                column = new DataGridViewTextBoxColumn();
+                column.HeaderText = "SHA1";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                dgv.Columns.Add(column);
+            }
+            else
+            {
+                column = new DataGridViewTextBoxColumn();
+                column.HeaderText = "文件名(目录:" + dir + ")";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                dgv.Columns.Add(column);
+                column = new DataGridViewTextBoxColumn();
+                column.HeaderText = "本地MD5";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                dgv.Columns.Add(column);
+                column = new DataGridViewTextBoxColumn();
+                column.HeaderText = "本地SHA1";
+                column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+                dgv.Columns.Add(column);
+            }
             //dgv.AutoSize = true;
         }
 
@@ -171,8 +246,13 @@ namespace Beinet.cn.Tools.FileHash
             return sb.ToString();
         }
 
-        void DoCountMd5(string[] dirsOrFiles)
+        void DoCountMd5(params string[] dirsOrFiles)
         {
+            if (chkSameFile.Checked)
+            {
+                _md5list = new Dictionary<string, string>();
+                _md5samelist = new Dictionary<string, HashSet<string>>();
+            }
             btnSelectFile.Enabled = false;
             btnStop.Enabled = true;
             _stop = false;
@@ -188,6 +268,7 @@ namespace Beinet.cn.Tools.FileHash
             {
                 path = Path.GetDirectoryName(dirsOrFiles[0]);
             }
+            // 初始化Grid
             AddCol(path);
             ThreadPool.UnsafeQueueUserWorkItem(CountMd5, dirsOrFiles);
         }
