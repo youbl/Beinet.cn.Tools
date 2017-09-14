@@ -640,7 +640,7 @@ namespace Beinet.cn.Tools
             return deocdeString;
         }
         #endregion
-
+        /*
         /// <summary>
         /// 在32位系统和64位系统上生成的HashCode会不一致，请统一使用此方法获取哈希值
         /// </summary>
@@ -677,7 +677,7 @@ namespace Beinet.cn.Tools
                 return ret;
             }
         }
-
+        */
         #endregion
 
 

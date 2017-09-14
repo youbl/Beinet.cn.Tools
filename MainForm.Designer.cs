@@ -47,8 +47,8 @@
             this.tabEncrypt = new System.Windows.Forms.TabPage();
             this.tabMd5File = new System.Windows.Forms.TabPage();
             this.tabWebCompare = new System.Windows.Forms.TabPage();
-            this.tabSqlInject = new System.Windows.Forms.TabPage();
             this.tabRegex = new System.Windows.Forms.TabPage();
+            this.tabSqlInject = new System.Windows.Forms.TabPage();
             this.tabDataSync = new System.Windows.Forms.TabPage();
             this.tabQQWry = new System.Windows.Forms.TabPage();
             this.tabGZip = new System.Windows.Forms.TabPage();
@@ -79,8 +79,8 @@
             this.tabControl1.Controls.Add(this.tabEncrypt);
             this.tabControl1.Controls.Add(this.tabMd5File);
             this.tabControl1.Controls.Add(this.tabWebCompare);
-            this.tabControl1.Controls.Add(this.tabSqlInject);
             this.tabControl1.Controls.Add(this.tabRegex);
+            this.tabControl1.Controls.Add(this.tabSqlInject);
             this.tabControl1.Controls.Add(this.tabDataSync);
             this.tabControl1.Controls.Add(this.tabQQWry);
             this.tabControl1.Controls.Add(this.tabGZip);
@@ -308,16 +308,6 @@
             this.tabWebCompare.Text = "Web对比";
             this.tabWebCompare.UseVisualStyleBackColor = true;
             // 
-            // tabSqlInject
-            // 
-            this.tabSqlInject.Location = new System.Drawing.Point(4, 22);
-            this.tabSqlInject.Name = "tabSqlInject";
-            this.tabSqlInject.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSqlInject.Size = new System.Drawing.Size(776, 536);
-            this.tabSqlInject.TabIndex = 3;
-            this.tabSqlInject.Text = "SQL检查";
-            this.tabSqlInject.UseVisualStyleBackColor = true;
-            // 
             // tabRegex
             // 
             this.tabRegex.Location = new System.Drawing.Point(4, 22);
@@ -328,6 +318,16 @@
             this.tabRegex.Text = "正则";
             this.tabRegex.UseVisualStyleBackColor = true;
             // 
+            // tabSqlInject
+            // 
+            this.tabSqlInject.Location = new System.Drawing.Point(4, 22);
+            this.tabSqlInject.Name = "tabSqlInject";
+            this.tabSqlInject.Padding = new System.Windows.Forms.Padding(3);
+            this.tabSqlInject.Size = new System.Drawing.Size(776, 536);
+            this.tabSqlInject.TabIndex = 3;
+            this.tabSqlInject.Text = "SQL拼接检查";
+            this.tabSqlInject.UseVisualStyleBackColor = true;
+            // 
             // tabDataSync
             // 
             this.tabDataSync.Location = new System.Drawing.Point(4, 22);
@@ -335,7 +335,7 @@
             this.tabDataSync.Padding = new System.Windows.Forms.Padding(3);
             this.tabDataSync.Size = new System.Drawing.Size(776, 536);
             this.tabDataSync.TabIndex = 7;
-            this.tabDataSync.Text = "DB同步";
+            this.tabDataSync.Text = "SQLServer";
             this.tabDataSync.UseVisualStyleBackColor = true;
             // 
             // tabQQWry

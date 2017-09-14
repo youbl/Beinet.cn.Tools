@@ -174,10 +174,11 @@ namespace Beinet.cn.Tools
         {
             try
             {
+                var hash = _str.GetHashCode();//Utility.GetHashCode32(_str, false)
                 Init(sender);
                 _sb.Length = 0;
                 _sb.AppendFormat("文本:{0}\r\n{2}:{1}\r\n\r\n",
-                    _str, Utility.GetHashCode32(_str, false).ToString(), ((Button)sender).Text);
+                    _str, hash.ToString(), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
             }
             catch (Exception exp)

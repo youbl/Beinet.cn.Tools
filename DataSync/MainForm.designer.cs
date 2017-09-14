@@ -35,6 +35,8 @@ namespace Beinet.cn.Tools.DataSync
             this.label1 = new System.Windows.Forms.Label();
             this.txtDbSource = new System.Windows.Forms.TextBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.chkAllIdentify = new System.Windows.Forms.CheckBox();
+            this.chkAllClear = new System.Windows.Forms.CheckBox();
             this.chkWithNolock = new System.Windows.Forms.CheckBox();
             this.chkUseTruncate = new System.Windows.Forms.CheckBox();
             this.chkErrContinue = new System.Windows.Forms.CheckBox();
@@ -52,14 +54,12 @@ namespace Beinet.cn.Tools.DataSync
             this.txtDbTarget = new System.Windows.Forms.TextBox();
             this.lstBoolean = new System.Windows.Forms.ComboBox();
             this.lstTarget = new System.Windows.Forms.ComboBox();
-            this.imglstForLvTables = new System.Windows.Forms.ImageList(this.components);
             this.lvTables = new Beinet.cn.Tools.ControlExt.ListViewNF();
             this.colSource = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTarget = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colTruncate = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colIdentifier = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.chkAllClear = new System.Windows.Forms.CheckBox();
-            this.chkAllIdentify = new System.Windows.Forms.CheckBox();
+            this.imglstForLvTables = new System.Windows.Forms.ImageList(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -81,9 +81,9 @@ namespace Beinet.cn.Tools.DataSync
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDbSource.Location = new System.Drawing.Point(72, 9);
             this.txtDbSource.Name = "txtDbSource";
-            this.txtDbSource.Size = new System.Drawing.Size(577, 21);
+            this.txtDbSource.Size = new System.Drawing.Size(514, 21);
             this.txtDbSource.TabIndex = 1;
-            this.txtDbSource.Text = "server=127.0.0.1;database=mySourceDb;uid=sa;pwd=xxx";
+            this.txtDbSource.Text = "server=10.2.0.7;database=test;uid=sa;pwd=mike123456";
             this.txtDbSource.TextChanged += new System.EventHandler(this.txtDbSource_TextChanged);
             // 
             // splitContainer1
@@ -131,14 +131,36 @@ namespace Beinet.cn.Tools.DataSync
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
             // 
+            // chkAllIdentify
+            // 
+            this.chkAllIdentify.AutoSize = true;
+            this.chkAllIdentify.Location = new System.Drawing.Point(606, 87);
+            this.chkAllIdentify.Name = "chkAllIdentify";
+            this.chkAllIdentify.Size = new System.Drawing.Size(48, 16);
+            this.chkAllIdentify.TabIndex = 15;
+            this.chkAllIdentify.Text = "全选";
+            this.chkAllIdentify.UseVisualStyleBackColor = true;
+            this.chkAllIdentify.CheckedChanged += new System.EventHandler(this.chkAllIdentify_CheckedChanged);
+            // 
+            // chkAllClear
+            // 
+            this.chkAllClear.AutoSize = true;
+            this.chkAllClear.Location = new System.Drawing.Point(508, 86);
+            this.chkAllClear.Name = "chkAllClear";
+            this.chkAllClear.Size = new System.Drawing.Size(48, 16);
+            this.chkAllClear.TabIndex = 14;
+            this.chkAllClear.Text = "全选";
+            this.chkAllClear.UseVisualStyleBackColor = true;
+            this.chkAllClear.CheckedChanged += new System.EventHandler(this.chkAllClear_CheckedChanged);
+            // 
             // chkWithNolock
             // 
             this.chkWithNolock.AutoSize = true;
-            this.chkWithNolock.Location = new System.Drawing.Point(298, 60);
+            this.chkWithNolock.Location = new System.Drawing.Point(283, 60);
             this.chkWithNolock.Name = "chkWithNolock";
-            this.chkWithNolock.Size = new System.Drawing.Size(108, 16);
+            this.chkWithNolock.Size = new System.Drawing.Size(84, 16);
             this.chkWithNolock.TabIndex = 5;
-            this.chkWithNolock.Text = "增加NoLock选项";
+            this.chkWithNolock.Text = "NoLock查询";
             this.chkWithNolock.UseVisualStyleBackColor = true;
             this.chkWithNolock.CheckedChanged += new System.EventHandler(this.chkWithNolock_CheckedChanged);
             // 
@@ -149,9 +171,9 @@ namespace Beinet.cn.Tools.DataSync
             this.chkUseTruncate.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkUseTruncate.Location = new System.Drawing.Point(136, 60);
             this.chkUseTruncate.Name = "chkUseTruncate";
-            this.chkUseTruncate.Size = new System.Drawing.Size(156, 16);
+            this.chkUseTruncate.Size = new System.Drawing.Size(144, 16);
             this.chkUseTruncate.TabIndex = 4;
-            this.chkUseTruncate.Text = "使用Truncate清空目标表";
+            this.chkUseTruncate.Text = "使用Truncate清空目标";
             this.chkUseTruncate.UseVisualStyleBackColor = true;
             // 
             // chkErrContinue
@@ -159,11 +181,11 @@ namespace Beinet.cn.Tools.DataSync
             this.chkErrContinue.AutoSize = true;
             this.chkErrContinue.Checked = true;
             this.chkErrContinue.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkErrContinue.Location = new System.Drawing.Point(412, 60);
+            this.chkErrContinue.Location = new System.Drawing.Point(375, 60);
             this.chkErrContinue.Name = "chkErrContinue";
-            this.chkErrContinue.Size = new System.Drawing.Size(144, 16);
+            this.chkErrContinue.Size = new System.Drawing.Size(84, 16);
             this.chkErrContinue.TabIndex = 6;
-            this.chkErrContinue.Text = "错误时继续同步其它表";
+            this.chkErrContinue.Text = "错误时继续";
             this.chkErrContinue.UseVisualStyleBackColor = true;
             // 
             // chkAll
@@ -202,7 +224,7 @@ namespace Beinet.cn.Tools.DataSync
             // btnGetSchma
             // 
             this.btnGetSchma.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGetSchma.Location = new System.Drawing.Point(655, 9);
+            this.btnGetSchma.Location = new System.Drawing.Point(657, 9);
             this.btnGetSchma.Name = "btnGetSchma";
             this.btnGetSchma.Size = new System.Drawing.Size(57, 39);
             this.btnGetSchma.TabIndex = 7;
@@ -212,8 +234,7 @@ namespace Beinet.cn.Tools.DataSync
             // 
             // btnLoad
             // 
-            this.btnLoad.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLoad.Location = new System.Drawing.Point(701, 56);
+            this.btnLoad.Location = new System.Drawing.Point(462, 56);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(84, 22);
             this.btnLoad.TabIndex = 9;
@@ -223,9 +244,8 @@ namespace Beinet.cn.Tools.DataSync
             // 
             // btnSaveConfig
             // 
-            this.btnSaveConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSaveConfig.Enabled = false;
-            this.btnSaveConfig.Location = new System.Drawing.Point(701, 81);
+            this.btnSaveConfig.Location = new System.Drawing.Point(552, 56);
             this.btnSaveConfig.Name = "btnSaveConfig";
             this.btnSaveConfig.Size = new System.Drawing.Size(84, 22);
             this.btnSaveConfig.TabIndex = 10;
@@ -290,9 +310,9 @@ namespace Beinet.cn.Tools.DataSync
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtDbTarget.Location = new System.Drawing.Point(72, 32);
             this.txtDbTarget.Name = "txtDbTarget";
-            this.txtDbTarget.Size = new System.Drawing.Size(577, 21);
+            this.txtDbTarget.Size = new System.Drawing.Size(514, 21);
             this.txtDbTarget.TabIndex = 2;
-            this.txtDbTarget.Text = "server=127.0.0.1;database=myTargetDb;uid=sa;pwd=xxx";
+            this.txtDbTarget.Text = "server=10.2.0.7;database=test;uid=sa;pwd=mike123456";
             this.txtDbTarget.TextChanged += new System.EventHandler(this.txtDbSource_TextChanged);
             // 
             // lstBoolean
@@ -326,12 +346,6 @@ namespace Beinet.cn.Tools.DataSync
             this.lstTarget.Visible = false;
             this.lstTarget.SelectedIndexChanged += new System.EventHandler(this.lstChange);
             this.lstTarget.Leave += new System.EventHandler(this.lstLeave);
-            // 
-            // imglstForLvTables
-            // 
-            this.imglstForLvTables.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
-            this.imglstForLvTables.ImageSize = new System.Drawing.Size(1, 20);
-            this.imglstForLvTables.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // lvTables
             // 
@@ -381,27 +395,11 @@ namespace Beinet.cn.Tools.DataSync
             this.colIdentifier.Text = "标识插入";
             this.colIdentifier.Width = 100;
             // 
-            // chkAllClear
+            // imglstForLvTables
             // 
-            this.chkAllClear.AutoSize = true;
-            this.chkAllClear.Location = new System.Drawing.Point(508, 86);
-            this.chkAllClear.Name = "chkAllClear";
-            this.chkAllClear.Size = new System.Drawing.Size(48, 16);
-            this.chkAllClear.TabIndex = 14;
-            this.chkAllClear.Text = "全选";
-            this.chkAllClear.UseVisualStyleBackColor = true;
-            this.chkAllClear.CheckedChanged += new System.EventHandler(this.chkAllClear_CheckedChanged);
-            // 
-            // chkAllIdentify
-            // 
-            this.chkAllIdentify.AutoSize = true;
-            this.chkAllIdentify.Location = new System.Drawing.Point(606, 87);
-            this.chkAllIdentify.Name = "chkAllIdentify";
-            this.chkAllIdentify.Size = new System.Drawing.Size(48, 16);
-            this.chkAllIdentify.TabIndex = 15;
-            this.chkAllIdentify.Text = "全选";
-            this.chkAllIdentify.UseVisualStyleBackColor = true;
-            this.chkAllIdentify.CheckedChanged += new System.EventHandler(this.chkAllIdentify_CheckedChanged);
+            this.imglstForLvTables.ColorDepth = System.Windows.Forms.ColorDepth.Depth8Bit;
+            this.imglstForLvTables.ImageSize = new System.Drawing.Size(1, 20);
+            this.imglstForLvTables.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // MainForm
             // 

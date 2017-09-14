@@ -69,7 +69,7 @@ namespace Beinet.cn.Tools.DataSync
                     }
                     errSetp = 10;
                     SqlCommand command;
-                    using (SqlDataReader reader = SqlHelper.ExecuteReader(m_task.SourceConstr, sql, m_task.TimeOut, out command))
+                    using (SqlDataReader reader = SqlHelper.ExecuteReader(m_task.SourceConstr, sql, out command, m_task.TimeOut))
                     {
                         errSetp = 20;
                         if (!reader.HasRows)

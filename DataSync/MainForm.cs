@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.OleDb;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -31,6 +34,7 @@ namespace Beinet.cn.Tools.DataSync
 
         private string _defaultPath = null;//Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "sync.xml");
 
+        private SqlForm _sqlForm;
 
         public MainForm()
         {
@@ -593,5 +597,6 @@ namespace Beinet.cn.Tools.DataSync
                 item.SubItems[colNum].Text = val;
             }
         }
+
     }
 }

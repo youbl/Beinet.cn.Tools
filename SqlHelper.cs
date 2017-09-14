@@ -9,10 +9,26 @@ namespace Beinet.cn.Tools
 {
     public static class SqlHelper
     {
-        public static SqlDataReader ExecuteReader(string connstr, string sql, int timeout, params SqlParameter[] parameters)
+        public static DataSet ExecuteDataSet(string connstr, string sql, int timeout = 10, params SqlParameter[] parameters)
+        {
+            using (var conn = new SqlConnection(connstr))
+            using (var command = conn.CreateCommand())
+            using (var da = new SqlDataAdapter(command))
+            {
+                command.CommandText = sql;
+                command.CommandTimeout = timeout;
+                if (parameters != null)
+                    command.Parameters.AddRange(parameters);
+                DataSet ds = new DataSet();
+                da.Fill(ds);
+                return ds;
+            }
+        }
+
+        public static SqlDataReader ExecuteReader(string connstr, string sql, int timeout = 10, params SqlParameter[] parameters)
         {
             SqlCommand command;
-            return ExecuteReader(connstr, sql, timeout, out command, parameters);
+            return ExecuteReader(connstr, sql, out command, timeout, parameters);
         }
 
         // 增加这个方法的用处：是为了便于提早关闭DataReader，参考SqlDataReader.Close方法的说明：
@@ -21,7 +37,7 @@ namespace Beinet.cn.Tools
          * 如果返回值和查询影响的记录的数量不重要，则可以在调用 Close 方法前调用关联的 SqlCommand 对象的 Cancel 方法，
          * 从而减少关闭 SqlDataReader 所需的时间。 
          */
-        public static SqlDataReader ExecuteReader(string connstr, string sql, int timeout, out SqlCommand command, params SqlParameter[] parameters)
+        public static SqlDataReader ExecuteReader(string connstr, string sql, out SqlCommand command, int timeout = 10, params SqlParameter[] parameters)
         {
             var conn = new SqlConnection(connstr);
             command = conn.CreateCommand();
