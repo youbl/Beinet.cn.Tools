@@ -71,12 +71,6 @@
       <DependentUpon>CryptTool.cs</DependentUpon>
     </Compile>
     <Compile Include="ControlExt\DataGridViewComboEditBoxColumn.cs" />
-    <Compile Include="DataSync\IISLogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="DataSync\IISLogForm.Designer.cs">
-      <DependentUpon>IISLogForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="DataSync\MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -470,9 +464,6 @@
     </Compile>
     <EmbeddedResource Include="CryptTool.resx">
       <DependentUpon>CryptTool.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="DataSync\IISLogForm.resx">
-      <DependentUpon>IISLogForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataSync\MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>

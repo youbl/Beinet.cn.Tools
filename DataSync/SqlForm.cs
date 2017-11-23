@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -46,7 +49,8 @@ namespace Beinet.cn.Tools.DataSync
                     return;
                 }
                 labStatus.Text += "; " + ds.Tables[0].Rows.Count.ToString("N0") + "行";
-                dataGridView1.DataSource = ds.Tables[0];
+
+                dataGridView1.DataSource = ConvertDt(ds.Tables[0]);
                 dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.AllCells;
                 /*using (var reader = SqlHelper.ExecuteReader(constr, sql))
                 {
@@ -59,6 +63,47 @@ namespace Beinet.cn.Tools.DataSync
                 labStatus.Text = "耗时:" + usetime.ToString("N0") + "毫秒";
                 MessageBox.Show(exp.Message);
             }
+        }
+
+        private DataTable ConvertDt(DataTable dt)
+        {
+            for (var i = dt.Columns.Count - 1; i >= 0; i--)
+            {
+                var column = dt.Columns[i];
+                if (column.DataType == typeof(byte[]))
+                {
+                    dt.Columns.Remove(column);
+                }
+            }
+            return dt;
+            //var arrConvert = new List<DataColumn>();
+            //foreach (DataColumn column in dt.Columns)
+            //{
+            //    // byte会被识别为图片并展示
+            //    if (column.DataType == typeof(byte[]))
+            //    {
+            //        arrConvert.Add(column);
+            //    }
+            //}
+            //foreach (var column in arrConvert)
+            //{
+            //    var newColName = column.ColumnName + "-2";
+            //    dt.Columns.Add(newColName, typeof(string));
+            //    foreach (DataRow row in dt.Rows)
+            //    {
+            //        var obj = row[column.ColumnName];
+            //        if (obj == null || obj == DBNull.Value)
+            //        {
+            //            continue;
+            //        }
+            //        row[newColName] = Encoding.UTF8.GetString((byte[])obj);
+            //    }
+            //}
+            //foreach (var column in arrConvert)
+            //{
+            //    dt.Columns.Remove(column);
+            //}
+            //return dt;
         }
 
         private void btnTest_Click(object sender, EventArgs e)
@@ -81,13 +126,18 @@ namespace Beinet.cn.Tools.DataSync
                 return false;
             }
             var server = GetServer(constr);
-            if (server == rootNode.Text)
+            if (constr == Convert.ToString(rootNode.Tag))
             {
                 return true;
             }
-
+            
             rootNode.Text = "未连接";
             rootNode.Nodes.Clear();
+            rootNode.Nodes.Add(new TreeNode("用户表"));
+            rootNode.Nodes.Add(new TreeNode("视图"));
+            rootNode.Nodes.Add(new TreeNode("存储过程"));
+            rootNode.Nodes.Add(new TreeNode("触发器"));
+            rootNode.Nodes.Add(new TreeNode("函数"));
 
             var sql = "SELECT type,name FROM sys.objects WHERE type in ('u','v','p','tr','fn') ORDER BY type,name";
             var begintime = DateTime.Now;
@@ -98,10 +148,30 @@ namespace Beinet.cn.Tools.DataSync
                     var usetime = (DateTime.Now - begintime).TotalMilliseconds;
                     labStatus.Text = "连接成功,耗时:" + usetime.ToString("N0") + "毫秒";
                     rootNode.Text = server;
+                    rootNode.Tag = constr;
                     while (reader.Read())
                     {
-                        var name = reader["name"] + "-" + reader["type"];
-                        rootNode.Nodes.Add(new TreeNode(name));
+                        var name = Convert.ToString(reader["name"]);
+                        var nodeIdx = 0;
+                        switch (Convert.ToString(reader["type"]).ToLower().Trim())
+                        {
+                            case "u":
+                                nodeIdx = 0;
+                                break;
+                            case "v":
+                                nodeIdx = 1;
+                                break;
+                            case "p":
+                                nodeIdx = 2;
+                                break;
+                            case "tr":
+                                nodeIdx = 3;
+                                break;
+                            case "fn":
+                                nodeIdx = 4;
+                                break;
+                        }
+                        rootNode.Nodes[nodeIdx].Nodes.Add(new TreeNode(name));
                     }
                 }
                 rootNode.ExpandAll();
@@ -133,13 +203,42 @@ namespace Beinet.cn.Tools.DataSync
 
         private void tvDB_DoubleClick(object sender, EventArgs e)
         {
-            var nodetxt = tvDB.SelectedNode.Text;
-            var idx = nodetxt.LastIndexOf("-", StringComparison.Ordinal);
-            if (idx > 0)
+            var node = tvDB.SelectedNode;
+            
+            var nodetxt = node.Text;
+            if (txtSql.Text.Length > 0)
             {
-                nodetxt = nodetxt.Substring(0, idx);
+                txtSql.Text += "\r\n\r\n";
             }
-            txtSql.Text += "\r\nSELECT TOP 1000 * \r\n FROM [" + nodetxt + "]";
+            string sql;
+            if (node.Level == 2 && node.Parent.Text == "用户表")
+            {
+                sql = "SELECT TOP 1000 * \r\n FROM [" + nodetxt + "]";
+            }
+            else
+            {
+                sql = nodetxt;
+            }
+            txtSql.Text += sql;
+            var len = sql.Length;
+            var alllen = txtSql.Text.Length;
+            txtSql.Focus();
+            txtSql.Select(alllen - len, len);
+
+            // txtSql.SelectedText = sql;
+        }
+
+        private void dataGridView1_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            e.ThrowException = false;
+        }
+        
+        private void txt_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A && e.Control)
+            {
+                ((TextBox)sender).SelectAll();
+            }
         }
 
         /*

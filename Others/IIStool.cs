@@ -58,7 +58,14 @@ namespace Beinet.cn.Tools.Others
             }
             ThreadPool.UnsafeQueueUserWorkItem(state =>
             {
-                ImportLog(logfile, constr, tbname, txtRet);
+                try
+                {
+                    ImportLog(logfile, constr, tbname, txtRet);
+                }
+                catch (Exception exp)
+                {
+                    MessageBox.Show("导入错误：" + exp.Message);
+                }
             }, null);
         }
 
@@ -189,11 +196,9 @@ namespace Beinet.cn.Tools.Others
                 {
                     case "cs-uri-stem":
                     case "cs(User-Agent)":
-                        type = "[varchar](400)";
-                        break;
                     case "cs-uri-query":
                     case "cs(Referer)":
-                        type = "[varchar](1000)";
+                        type = "[varchar](max)";
                         break;
                     case "time-taken":
                     case "s-port":

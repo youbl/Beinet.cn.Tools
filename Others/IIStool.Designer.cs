@@ -96,7 +96,7 @@
             this.txtDbTarget.Name = "txtDbTarget";
             this.txtDbTarget.Size = new System.Drawing.Size(558, 21);
             this.txtDbTarget.TabIndex = 7;
-            this.txtDbTarget.Text = "server=172.17.145.15,8433;database=logdb;uid=sa;pwd=123456";
+            this.txtDbTarget.Text = "server=10.2.0.148;database=logdb;uid=sa;pwd=mike123456";
             // 
             // label3
             // 

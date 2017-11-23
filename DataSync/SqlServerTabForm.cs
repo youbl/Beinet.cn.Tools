@@ -19,7 +19,6 @@ namespace Beinet.cn.Tools.DataSync
             _tabForms = new Dictionary<TabPage, Type>();
             _tabForms.Add(tabPage1, typeof(SqlForm));
             _tabForms.Add(tabPage2, typeof(MainForm));
-            _tabForms.Add(tabPage3, typeof(IISLogForm));
         }
 
         protected override void OnLoad(EventArgs e)
