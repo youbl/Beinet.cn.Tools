@@ -37,6 +37,7 @@
             this.label3 = new System.Windows.Forms.Label();
             this.txtTbName = new System.Windows.Forms.TextBox();
             this.btnImport = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -128,11 +129,22 @@
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(570, 58);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 10;
+            this.button1.Text = "常用SQL";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
             // IIStool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(748, 549);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtTbName);
             this.Controls.Add(this.label2);
@@ -160,5 +172,6 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtTbName;
         private System.Windows.Forms.Button btnImport;
+        private System.Windows.Forms.Button button1;
     }
 }

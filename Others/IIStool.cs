@@ -74,8 +74,8 @@ namespace Beinet.cn.Tools.Others
         {
             var totalBegin = DateTime.Now;
             double totalInsert = 0;
-            string msg1 = totalBegin.ToString("HH:mm:ss.fff") + "启动";
-            Utility.InvokeControl(txt, () => txt.Text = msg1 + txt.Text);
+            string msg1 = totalBegin.ToString("HH:mm:ss.fff") + "启动" + txt.Text;
+            Utility.InvokeControl(txt, () => txt.Text = msg1);
 
             var insertNum = 0;
             bool isTbAdded = false;
@@ -139,8 +139,8 @@ namespace Beinet.cn.Tools.Others
                             totalInsert += ts;
                             var msgtmp = insertEnd.ToString("HH:mm:ss.fff") + " " + insertNum
                                          + "行完成，本次插入耗时:" + ts.ToString("N2") + "秒，"
-                                         + "总插入耗时:" + totalInsert.ToString("N2") + "秒\r\n";
-                            Utility.InvokeControl(txt, () => txt.Text = msgtmp + txt.Text);
+                                         + "总插入耗时:" + totalInsert.ToString("N2") + "秒\r\n" + txt.Text;
+                            Utility.InvokeControl(txt, () => txt.Text = msgtmp);
                         }
                     }
                     else
@@ -158,8 +158,8 @@ namespace Beinet.cn.Tools.Others
             var msg2 = totalEnd.ToString("HH:mm:ss.fff") + " " + insertNum
                          + "行完成，总过程耗时:" + totalTime.ToString("N2") + "秒，"
                          + "本次插入耗时:" + ts2.ToString("N2") + "秒，"
-                         + "总插入耗时:" + totalInsert.ToString("N2") + "秒\r\n";
-            Utility.InvokeControl(txt, () => txt.Text = msg2 + txt.Text);
+                         + "总插入耗时:" + totalInsert.ToString("N2") + "秒\r\n" + txt.Text;
+            Utility.InvokeControl(txt, () => txt.Text = msg2);
         }
 
         static void AddToDT(string[] rowdata, DataTable dt)
@@ -248,6 +248,21 @@ namespace Beinet.cn.Tools.Others
                 }
                 return isTextFile;
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            var sql = @"select top 100 count(1) [次数],avg([time-taken]) [平均毫秒],sum([time-taken]) [累计毫秒],[cs-method],[cs-uri-stem],[cs-uri-query]
+ from iislog2017
+where [time] > '10:30:30'
+ group by  [cs-method],[cs-uri-stem],[cs-uri-query] having(count(1)>300)
+ order by [平均毫秒] desc;
+
+select top 111 left([time],4) minu, count(1) [访问次数] from iislog2017
+group by left([time],4)
+order by minu;
+";
+            txtRet.Text = sql + "\r\n\r\n" + txtRet.Text;
         }
     }
 }

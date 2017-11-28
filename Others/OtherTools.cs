@@ -19,13 +19,12 @@ namespace Beinet.cn.Tools.Others
         /// </summary>
         private static int _threads;
         /// <summary>
-        /// 扫描的最大线程数量
-        /// </summary>
-        private int _maxThread = 0;
-        /// <summary>
         /// 扫描过程中，是否中断进程
         /// </summary>
         private bool _stop = false;
+        private StringBuilder _sb = new StringBuilder();
+
+        IPAddress beginIp, endIp;
 
         private const string RUNTXT = "扫描中……";
 
@@ -36,48 +35,61 @@ namespace Beinet.cn.Tools.Others
             txtResult.Text = GetLocalInfo();
 
             lstOtherError.SelectedIndex = 1;
+
+            //int minworkthreads;
+            //int miniocpthreads;
+            //ThreadPool.GetMinThreads(out minworkthreads, out miniocpthreads);
+            ThreadPool.SetMinThreads(50, 50);
         }
 
-        private void btnSearch_Click(object sender, EventArgs e)
+
+        private bool Init(Button btn)
         {
-            if (labStatus.Text == RUNTXT)
+            if (labStatus.Text.StartsWith(RUNTXT, StringComparison.Ordinal))
             {
-                if (MessageBox.Show("扫描进行中，你要停止扫描吗？", "确认中止？", 
-                    MessageBoxButtons.OKCancel, MessageBoxIcon.Warning,
-                    MessageBoxDefaultButton.Button2) == DialogResult.OK)
+                if (MessageBox.Show("扫描进行中，你要停止扫描吗？", "确认中止？\r\n已启动的部分线程需要一点时间结束",
+                        MessageBoxButtons.OKCancel, MessageBoxIcon.Warning,
+                        MessageBoxDefaultButton.Button2) == DialogResult.OK)
                 {
                     _stop = true;
                 }
-                return;
+                return false;
             }
-            IPAddress beginIp, endIp;
 
             string strBeginIp = txtIp1.Text.Trim();
             if (!IPAddress.TryParse(strBeginIp, out beginIp))
             {
                 txtResult.Text = "起始IP格式不正确:" + strBeginIp;
-                return;
+                return false;
             }
-            
+
             string strEndIp = txtIp2.Text.Trim();
             if (strEndIp == string.Empty)
                 endIp = beginIp;
-            else if (!IPAddress.TryParse(strEndIp, out endIp))
+            else if (btn == btnSearch && !IPAddress.TryParse(strEndIp, out endIp))
             {
                 txtResult.Text = "结束IP格式不正确:" + strEndIp;
-                return;
+                return false;
             }
 
             _threads = 0;
-            if (!int.TryParse(txtThreadNum.Text, out _maxThread))
-            {
-                _maxThread = 5;
-                txtThreadNum.Text = _maxThread.ToString();
-            }
-            //bool showErr = chkShowErrIp.Checked;
+
             txtResult.Text = GetLocalInfo() + "\r\n扫描结果：\r\n";
+            txtErr.Text = "";
             _stop = false;
-            labStatus.Text = RUNTXT;
+            labStatus.Text = RUNTXT + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff");
+            _sb.Clear();
+            return true;
+        }
+
+
+        private void btnSearch_Click(object sender, EventArgs e)
+        {
+            if (!Init(sender as Button))
+            {
+                return;
+            }
+
             ThreadPool.UnsafeQueueUserWorkItem(state =>
             {
                 do
@@ -85,41 +97,53 @@ namespace Beinet.cn.Tools.Others
                     if (_stop)
                         break;
                     Interlocked.Increment(ref _threads);
-                    while (_threads > _maxThread)// 最多几个线程
-                    {
-                        Thread.Sleep(1000);
-                    }
-
                     IPAddress ip = beginIp;
                     ThreadPool.UnsafeQueueUserWorkItem(GetAndShow, ip);
                     beginIp = GetNextIp(beginIp);
                 } while (IsBigger(endIp, beginIp));
 
-                // 等待全部线程完成
-                while (_threads > 0)
-                {
-                    Thread.Sleep(1000);
-                }
-                Utility.InvokeControl(labStatus, () => labStatus.Text = "扫描完成");
+                EndCheck();
             }, null);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="state"></param>
         void GetAndShow(object state)
         {
             if (!_stop)
             {
-                try
+                IPAddress ip = (IPAddress)state;
+                // 获取mac地址
+                if (chkMac.Checked)
                 {
-                    IPAddress ip = (IPAddress) state;
-                    string mac = GetMac(ip);
-                    if (chkShowErrIp.Checked || !mac.StartsWith("err"))
-                        Utility.InvokeControl(txtResult, () =>
-                            txtResult.Text += ip + " : " + mac + "\r\n");
+                    try
+                    {
+                        string mac = GetMac(ip);
+                        if (!mac.StartsWith("err"))
+                        {
+                            var msg1 = txtResult.Text + ip + " : " + mac + "\r\n";
+                            Utility.InvokeControl(txtResult, () => txtResult.Text = msg1);
+                        }
+                        else
+                        {
+                            AddErrMsg(ip + " : " + mac + "\r\n");
+                        }
+                    }
+                    catch (Exception exp)
+                    {
+                        var msg1 = exp + "\r\n\r\n";
+                        AddErrMsg(msg1);
+                    }
                 }
-                catch (Exception exp)
+                if (chkNormalPort.Checked)
                 {
-                    Utility.InvokeControl(txtResult, () =>
-                        txtResult.Text = exp + "\r\n\r\n" + txtResult.Text);
+                    DoPortScan(ip, true);
+                }
+                else if (chkPortAll.Checked)
+                {
+                    DoPortScan(ip, false);
                 }
             }
             Interlocked.Decrement(ref _threads);
@@ -404,5 +428,168 @@ namespace Beinet.cn.Tools.Others
             }
         }
         #endregion
+
+        private void chkPortAll_CheckedChanged(object sender, EventArgs e)
+        {
+            var chkbox = (CheckBox) sender;
+            if (chkbox.Checked)
+            {
+                if (chkbox == chkNormalPort)
+                    chkPortAll.Checked = false;
+                else if (chkbox == chkPortAll)
+                    chkNormalPort.Checked = false;
+            }
+        }
+
+        private void DoPortScan(IPAddress ip, bool normal)
+        {
+            if (_stop) return;
+            if (normal)
+            {
+                int[] arrPort = new[] { 80, 8080, 3128, 8081, 9080, 1080, 21, 23, 443, 69, 22, 25, 110, 7001, 9090, 3389, 1521, 1158, 2100, 1433, 3306 };
+                foreach (var port in arrPort)
+                {
+                    PerPortCheck(ip, port);
+                }
+            }
+            else
+            {
+                for (var port = 1; port < 65535; port++)
+                {
+                    PerPortCheck(ip, port);
+                }
+            }
+        }
+
+        private void PerPortCheck(IPAddress ip, int port)
+        {
+            if (_stop)
+                return;
+            try
+            {
+                IPEndPoint serverInfo = new IPEndPoint(ip, port);
+                using (Socket socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
+                {
+                    //socket.BeginConnect(serverInfo, CallBackMethod, socket);
+                    socket.Connect(serverInfo);
+                    if (socket.Connected)
+                    {
+                        // ok
+                        var txt = txtResult.Text + ip + " : " + port + " 开放 \r\n";
+                        Utility.InvokeControl(txtResult, () => txtResult.Text = txt);
+                    }
+                    else
+                    {
+                        // fail
+                        var txt = ip + " : " + port + " 未开放 \r\n";
+                        AddErrMsg(txt);
+                    }
+                    socket.Close();
+                }
+            }
+            catch (Exception exp)
+            {
+                // err
+                var txt = ip + " : " + port + " 未开放:" + exp.Message + " \r\n";
+                AddErrMsg(txt);
+            }
+        }
+
+        private void btnPort_Click(object sender, EventArgs e)
+        {
+            if (!Init(sender as Button))
+            {
+                return;
+            }
+
+            ThreadPool.UnsafeQueueUserWorkItem(state =>
+            {
+                if (chkPortAll.Checked)
+                {
+                    for (var port = 1; port < 65535; port++)
+                    {
+                        if (_stop)
+                            break;
+                        var prot1 = port;
+                        ThreadPool.UnsafeQueueUserWorkItem(aaa =>
+                        {
+                            PerPortCheck(beginIp, prot1);
+                            Interlocked.Decrement(ref _threads);
+                        }, null);
+                        Interlocked.Increment(ref _threads);
+                    }
+                }
+                else
+                {
+                    int[] arrPort = new[]
+                    {
+                        80, 8080, 3128, 8081, 9080, 1080, 21, 23, 443, 69, 22, 25, 110, 7001, 9090, 3389, 1521, 1158,
+                        2100, 1433, 3306
+                    };
+                    foreach (var port in arrPort)
+                    {
+                        if (_stop)
+                            break;
+                        var prot1 = port;
+                        ThreadPool.UnsafeQueueUserWorkItem(aaa =>
+                        {
+                            PerPortCheck(beginIp, prot1);
+                            Interlocked.Decrement(ref _threads);
+                        }, null);
+                        Interlocked.Increment(ref _threads);
+                    }
+                }
+                EndCheck();
+            }, null);
+        }
+
+        private void EndCheck()
+        {
+            // 等待全部线程完成
+            while (_threads > 0)
+            {
+                Thread.Sleep(2000);
+                var maxlen = txtErr.MaxLength;
+                var start = maxlen / 2;
+                string errmsg;
+                lock (_sb)
+                {
+                    var len = _sb.Length;
+                    if (len > maxlen)
+                    {
+                        _sb.Remove(start, len - start);
+                    }
+                    errmsg = _sb.ToString();
+                }
+
+
+                ThreadPool.GetAvailableThreads(out var minworkthreads, out _);
+                var msg = $"{_threads.ToString()}/{minworkthreads.ToString()},";
+                ThreadPool.GetMaxThreads(out minworkthreads, out _);
+                msg += $"{minworkthreads.ToString()}";
+                Utility.InvokeControl(labTh, () =>
+                {
+                    labTh.Text = msg;
+                    txtErr.Text = errmsg;
+                });
+            }
+            Utility.InvokeControl(labStatus, () =>
+            {
+                labStatus.Text = "扫描完成" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff") + ", 启动于:" + labStatus.Text.Replace(RUNTXT, "");
+                lock (_sb)
+                {
+                    txtErr.Text = _sb.ToString();
+                }
+            });
+        }
+
+        private void AddErrMsg(string msg)
+        {
+            // StringBuilder线程不安全，简单处理吧
+            lock (_sb)
+            {
+                _sb.Insert(0, msg);
+            }
+        }
     }
 }

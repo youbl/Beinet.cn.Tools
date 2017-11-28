@@ -35,6 +35,7 @@ namespace Beinet.cn.Tools.DataSync
             {
                 sql = txtSql.Text;
             }
+            // dataGridView1.AutoGenerateColumns = false;
             dataGridView1.DataSource = null;
             labStatus.Text = "";
             var begintime = DateTime.Now;
@@ -238,6 +239,25 @@ namespace Beinet.cn.Tools.DataSync
             if (e.KeyCode == Keys.A && e.Control)
             {
                 ((TextBox)sender).SelectAll();
+            }
+        }
+
+        private void dataGridView1_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            if (e.Column == null)
+            {
+                return;
+            }
+            var type = e.Column.ValueType;
+            if (type == null)
+            {
+                e.Column.ValueType = typeof(string);
+                return;
+            }
+            if(type == typeof(byte[]))
+            {
+                e.Column.ValueType = typeof(string);
+                return;
             }
         }
 
