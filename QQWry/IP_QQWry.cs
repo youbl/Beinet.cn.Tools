@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Drawing;
 using System.IO;
@@ -122,6 +123,11 @@ namespace Beinet.cn.Tools.QQWry
         private void btnLocal_Click(object sender, EventArgs e)
         {
             txtRet.Text = Utility.GetServerIpList() + "\r\n\r\n" + txtRet.Text;
+        }
+
+        private void IP_QQWry_Load(object sender, EventArgs e)
+        {
+            txtConstr.Text = ConfigurationManager.AppSettings["DefalutConn"];
         }
     }
 }

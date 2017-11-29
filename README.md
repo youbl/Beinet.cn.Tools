@@ -2,7 +2,7 @@
 ==================
 
 整合了11个工具：
-    1、LVS控制（这个不通用，仅适用于我这边的lvs负载均衡逻辑）
+    1、上下线控制（用于配置CheckIpInfo.aspx页面进行前端负载均衡控制，便于多台服务器的发布）
     2、DES/3DES/Base64加密解密工具,MD5/Hash/Hash32加密工具
     3、DotNet的DLL合并工具
     4、检测DLL是64位还是32位，.net的程序或dll是Release还是Debug版本

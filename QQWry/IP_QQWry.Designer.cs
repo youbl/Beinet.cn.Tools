@@ -118,7 +118,6 @@
             this.txtConstr.Name = "txtConstr";
             this.txtConstr.Size = new System.Drawing.Size(362, 21);
             this.txtConstr.TabIndex = 1;
-            this.txtConstr.Text = "server=192.168.19.13;database=dbname;uid=sa;pwd=password";
             // 
             // btnImport
             // 
@@ -194,6 +193,7 @@
             this.Controls.Add(this.label1);
             this.Name = "IP_QQWry";
             this.Text = "IP_QQWry";
+            this.Load += new System.EventHandler(this.IP_QQWry_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

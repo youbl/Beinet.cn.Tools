@@ -91,7 +91,7 @@ namespace Beinet.cn.Tools
 
         public static void BindToDataGrid(DataGridView dgv, List<string[]> arrData, List<int> rowColor = null)
         {
-            if (arrData.Count <= 0)
+            if (arrData == null || arrData.Count <= 0)
             {
                 return;
             }
@@ -104,10 +104,12 @@ namespace Beinet.cn.Tools
             if (dgv.Rows.Count <= 0)
             {
                 color = rowColor != null ? rowBack[rowColor[idx]] : rowBack[idx];
-                Utility.InvokeControl(dgv, () =>
+                var color1 = color;
+                string[] tmpData = arrData[0];
+                InvokeControl(dgv, () =>
                 {
-                    dgv.Rows.Add(arrData[0]);
-                    dgv.Rows[0].DefaultCellStyle.BackColor = color;
+                    dgv.Rows.Add(tmpData);
+                    dgv.Rows[0].DefaultCellStyle.BackColor = color1;
                 });
                 arrData.RemoveAt(0);
                 if (arrData.Count <= 0)
@@ -131,7 +133,7 @@ namespace Beinet.cn.Tools
                 arrRow.Add(row);
             }
             var tmpArr = arrRow.ToArray();
-            Utility.InvokeControl(dgv, () => {
+            InvokeControl(dgv, () => {
                 dgv.Rows.AddRange(tmpArr);
             });
         }
@@ -139,7 +141,7 @@ namespace Beinet.cn.Tools
         //private delegate void SetValueDele(Control ctl, string propName, object val);
         public static void SetValue(Control ctl, string propName, object val)
         {
-            InvokeControl(ctl, () => Utility.SetValue((object)ctl, propName, val));// 转换后调用下面的SetValue重载
+            InvokeControl(ctl, () => SetValue((object)ctl, propName, val));// 转换后调用下面的SetValue重载
 
             //if (ctl.InvokeRequired)
             //    Invoke(new SetValueDele(SetValue), ctl, propName, val);
@@ -906,6 +908,40 @@ namespace Beinet.cn.Tools
             {
                 return exp.Message;
             }
+        }
+
+
+        public static bool SetConfigValue(string AppKey, string AppValue)
+        {
+            string configFile = System.Windows.Forms.Application.ExecutablePath + ".config";
+            if (!File.Exists(configFile))
+            {
+                using (StreamWriter sw = new StreamWriter(configFile, false, Encoding.UTF8))
+                {
+                    sw.Write(@"<?xml version=""1.0""?><configuration><appSettings></appSettings></configuration>");
+                }
+            }
+            System.Xml.XmlDocument xDoc = new System.Xml.XmlDocument();
+            xDoc.Load(configFile);
+
+            System.Xml.XmlNode xNode;
+            System.Xml.XmlElement xElem1;
+            System.Xml.XmlElement xElem2;
+            xNode = xDoc.SelectSingleNode("//appSettings");
+            if (xNode == null)
+                return false;
+
+            xElem1 = (System.Xml.XmlElement)xNode.SelectSingleNode("//add[@key='" + AppKey + "']");
+            if (xElem1 != null) xElem1.SetAttribute("value", AppValue);
+            else
+            {
+                xElem2 = xDoc.CreateElement("add");
+                xElem2.SetAttribute("key", AppKey);
+                xElem2.SetAttribute("value", AppValue);
+                xNode.AppendChild(xElem2);
+            }
+            xDoc.Save(configFile);
+            return true;
         }
     }
 }

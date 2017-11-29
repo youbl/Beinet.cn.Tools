@@ -83,7 +83,7 @@ namespace Beinet.cn.Tools.DataSync
             this.txtDbSource.Name = "txtDbSource";
             this.txtDbSource.Size = new System.Drawing.Size(514, 21);
             this.txtDbSource.TabIndex = 1;
-            this.txtDbSource.Text = "server=10.2.0.7;database=test;uid=sa;pwd=mike123456";
+            this.txtDbSource.Text = "";
             this.txtDbSource.TextChanged += new System.EventHandler(this.txtDbSource_TextChanged);
             // 
             // splitContainer1
@@ -312,7 +312,7 @@ namespace Beinet.cn.Tools.DataSync
             this.txtDbTarget.Name = "txtDbTarget";
             this.txtDbTarget.Size = new System.Drawing.Size(514, 21);
             this.txtDbTarget.TabIndex = 2;
-            this.txtDbTarget.Text = "server=10.2.0.7;database=test;uid=sa;pwd=mike123456";
+            this.txtDbTarget.Text = "";
             this.txtDbTarget.TextChanged += new System.EventHandler(this.txtDbSource_TextChanged);
             // 
             // lstBoolean
@@ -410,6 +410,7 @@ namespace Beinet.cn.Tools.DataSync
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "Sql Server数据导入导出";
+            this.Load += new System.EventHandler(this.Form_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);

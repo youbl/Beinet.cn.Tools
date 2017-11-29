@@ -97,7 +97,6 @@
             this.txtDbTarget.Name = "txtDbTarget";
             this.txtDbTarget.Size = new System.Drawing.Size(558, 21);
             this.txtDbTarget.TabIndex = 7;
-            this.txtDbTarget.Text = "server=10.2.0.148;database=logdb;uid=sa;pwd=mike123456";
             // 
             // label3
             // 
@@ -156,6 +155,7 @@
             this.Controls.Add(this.label1);
             this.Name = "IIStool";
             this.Text = "IIS日志工具";
+            this.Load += new System.EventHandler(this.IIStool_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

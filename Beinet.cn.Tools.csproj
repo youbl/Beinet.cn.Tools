@@ -565,6 +565,9 @@
   <ItemGroup>
     <Content Include="b.ico" />
     <Content Include="DataSync\sync.xml" />
+    <Content Include="LvsManager\CheckIPInfo.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <None Include="ILMerge.exe" />
     <None Include="FileMD.aspx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

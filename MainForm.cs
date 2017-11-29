@@ -395,5 +395,10 @@ namespace Beinet.cn.Tools
             return sb.ToString();
         }
 
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // e.Cancel = true;
+            Utility.SetConfigValue("StartIndex", tabControl1.SelectedIndex.ToString());
+        }
     }
 }

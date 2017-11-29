@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -259,6 +260,11 @@ namespace Beinet.cn.Tools.DataSync
                 e.Column.ValueType = typeof(string);
                 return;
             }
+        }
+
+        private void SqlForm_Load(object sender, EventArgs e)
+        {
+            txtConstr.Text = ConfigurationManager.AppSettings["DefalutConn"];
         }
 
         /*

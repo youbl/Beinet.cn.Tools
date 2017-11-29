@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.OleDb;
 using System.Data.SqlClient;
@@ -42,6 +43,13 @@ namespace Beinet.cn.Tools.DataSync
 
             // 用于后面可以给标题栏加复选框
             //lvTables.OwnerDraw = true;
+        }
+
+
+        private void Form_Load(object sender, EventArgs e)
+        {
+            txtDbTarget.Text = ConfigurationManager.AppSettings["DefalutConn"];
+            txtDbSource.Text = txtDbTarget.Text;
         }
 
         private void lvTables_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)

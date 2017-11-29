@@ -148,7 +148,6 @@
             this.txtConstr.Name = "txtConstr";
             this.txtConstr.Size = new System.Drawing.Size(437, 21);
             this.txtConstr.TabIndex = 1;
-            this.txtConstr.Text = "server=10.2.0.7;database=test;uid=sa;pwd=mike123456";
             this.txtConstr.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_KeyUp);
             // 
             // txtSql
@@ -215,6 +214,7 @@
             this.KeyPreview = true;
             this.Name = "SqlForm";
             this.Text = "Sql查询器";
+            this.Load += new System.EventHandler(this.SqlForm_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SqlForm_KeyDown);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);

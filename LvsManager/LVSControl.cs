@@ -2,11 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-using System.Net;
 
 namespace Beinet.cn.Tools.LvsManager
 {
@@ -287,7 +284,7 @@ namespace Beinet.cn.Tools.LvsManager
 
         private void 上架服务器ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PostCommandByMenu("SetState=ONLINE");
+            PostCommandByMenu("SetState=ONLINE&do=1");
         }
 
         private void 下架服务器ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -298,7 +295,7 @@ namespace Beinet.cn.Tools.LvsManager
                 if (MessageBox.Show(this, "是否确认将服务器【" + serverIP + "】下架", "确认下架", 
                     MessageBoxButtons.OKCancel) == System.Windows.Forms.DialogResult.OK)
                 {
-                    PostCommandByMenu("SetState=OFFLINE");
+                    PostCommandByMenu("SetState=OFFLINE&do=1");
                 }
             }
         }
@@ -365,7 +362,7 @@ namespace Beinet.cn.Tools.LvsManager
                         }
                         else
                         {
-                            item.SubItems[COLSTATUS].Text = "LVS未分配";
+                            item.SubItems[COLSTATUS].Text = "无流量";
                             item.ForeColor = Color.Red;
                         }
                     }

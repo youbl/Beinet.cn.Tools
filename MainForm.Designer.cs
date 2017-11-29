@@ -275,7 +275,7 @@
             this.tabLvs.Padding = new System.Windows.Forms.Padding(3);
             this.tabLvs.Size = new System.Drawing.Size(776, 536);
             this.tabLvs.TabIndex = 4;
-            this.tabLvs.Text = "Lvs";
+            this.tabLvs.Text = "上线控制";
             this.tabLvs.UseVisualStyleBackColor = true;
             // 
             // tabEncrypt
@@ -398,6 +398,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.Text = "工具合集_by ybl";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.Form1_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.Form1_DragEnter);
             this.tabControl1.ResumeLayout(false);

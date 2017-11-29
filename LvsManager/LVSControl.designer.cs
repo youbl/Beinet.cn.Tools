@@ -162,7 +162,7 @@
             // 
             // LVSState
             // 
-            this.LVSState.Text = "LVS设置";
+            this.LVSState.Text = "上下线状态";
             this.LVSState.Width = 90;
             // 
             // LVSRealState
@@ -366,7 +366,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "LVSControl";
-            this.Text = "LVS状态控制器";
+            this.Text = "上下线状态控制器";
             this.panel1.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();

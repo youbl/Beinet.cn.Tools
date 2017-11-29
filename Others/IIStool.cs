@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Text;
@@ -263,6 +264,11 @@ group by left([time],4)
 order by minu;
 ";
             txtRet.Text = sql + "\r\n\r\n" + txtRet.Text;
+        }
+
+        private void IIStool_Load(object sender, EventArgs e)
+        {
+            txtDbTarget.Text = ConfigurationManager.AppSettings["DefalutConn"];
         }
     }
 }
