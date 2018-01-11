@@ -8,6 +8,8 @@ namespace Beinet.cn.Tools.LvsManager
     public partial class ConfigSet : Form
     {
         private List<Site> arrServer { get; set; }
+
+        private bool isModifyed;
         public ConfigSet()
         {
             InitializeComponent();
@@ -53,13 +55,30 @@ namespace Beinet.cn.Tools.LvsManager
             List<string> servers = new List<string>();
             foreach (string ip in txtIP.Text.Split(new char[] { ' ', ',', ';' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                long longip = Utility.ConvertIp(ip);
+                var arr = ip.Split(':');
+                if (arr.Length > 2)
+                {
+                    MessageBox.Show("输入的ip不正确" + ip);
+                    return;
+                }
+                long longip = Utility.ConvertIp(arr[0]);
                 if (longip == -1)
                 {
                     MessageBox.Show("输入的ip不正确" + ip);
                     return;
                 }
-                servers.Add(Utility.ConvertIp(longip));
+                var tmpip = Utility.ConvertIp(longip);
+                int port = 0;
+                if (arr.Length == 2 && !int.TryParse(arr[1], out port))
+                {
+                    MessageBox.Show("输入的ip端口不正确" + ip);
+                    return;
+                }
+                if (arr.Length == 2)
+                {
+                    tmpip += ":" + port.ToString();
+                }
+                servers.Add(tmpip);
             }
             if (!servers.Any())
             {
@@ -90,7 +109,7 @@ namespace Beinet.cn.Tools.LvsManager
             server.offlineSecond = offlinesecond;
             server.Servers = servers;
             Common.SaveServers(arrServer);// 保存到文件
-
+            isModifyed = true;
             if (isadd)
                 lstServers.Items.Add(server.name);
 
@@ -105,6 +124,7 @@ namespace Beinet.cn.Tools.LvsManager
             {
                 arrServer.Remove(server);
                 Common.SaveServers(arrServer);// 保存到文件
+                isModifyed = true;
 
                 lstServers.Items.Remove(domain);
                 if (lstServers.Items.Count > 0)
@@ -150,6 +170,14 @@ namespace Beinet.cn.Tools.LvsManager
         {
             if(e.KeyCode == Keys.Escape)
                 Close();
+        }
+
+        private void ConfigSet_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isModifyed)
+                DialogResult = DialogResult.OK;
+            else
+                DialogResult = DialogResult.Cancel;
         }
     }
 }

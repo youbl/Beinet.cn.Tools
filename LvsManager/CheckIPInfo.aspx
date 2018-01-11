@@ -1,22 +1,22 @@
-<%@ Page Language="C#" AutoEventWireup="true" %>
+ï»¿<%@ Page Language="C#" AutoEventWireup="true" %>
 <%@ Import Namespace="System.Net" %>
 <%@ Import Namespace="System.Net.Sockets" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Reflection" %>
 <script language="C#" runat="server">
     /************************************************************************************/
-    //ÔÚGlobal.asax.csÀïÔö¼ÓÈçÏÂ´úÂë£º
+    //åœ¨Global.asax.csé‡Œå¢åŠ å¦‚ä¸‹ä»£ç ï¼š
     /*
-        // ×î½üÒ»´ÎÓÃ»§·ÃÎÊµÄÊ±¼ä    
+        // æœ€è¿‘ä¸€æ¬¡ç”¨æˆ·è®¿é—®çš„æ—¶é—´    
         public static DateTime LAST_ACCESS_TIME_KEY = DateTime.Now;
-        // Õ¾µãÆô¶¯ÒÔÀ´£¬Õı³£ÓÃ»§·ÃÎÊ´ÎÊı
+        // ç«™ç‚¹å¯åŠ¨ä»¥æ¥ï¼Œæ­£å¸¸ç”¨æˆ·è®¿é—®æ¬¡æ•°
         public static int AccessCount = 0;
         void Application_EndRequest(object sender, EventArgs e)
         {
             string url = Request.Url.ToString().ToLower();
-            // ¼ÇÂ¼»î¶¯Ê±¼ä£¬ÓÃÓÚÅĞ¶ÏÕ¾µãÊÇ·ñ±»ÓÃ»§Ê¹ÓÃÖĞ£¨ÕâĞ©ÅĞ¶Ï´úÂë×¢ÒâÒªÆÁ±Î²âÊÔÒ³Ãæ£©
-            if (url.IndexOf("iswebmon=", StringComparison.Ordinal) < 0 &&           // Õ¾µã¼à¿Ø³ÌĞò·ÃÎÊ£¬²»×÷ÎªÓÃ»§
-                url.IndexOf("/checkipinfo.aspx", StringComparison.Ordinal) < 0 &&   // Ç°¶ËÂÖÑ¯Ê±£¬²»×÷ÎªÓÃ»§
+            // è®°å½•æ´»åŠ¨æ—¶é—´ï¼Œç”¨äºåˆ¤æ–­ç«™ç‚¹æ˜¯å¦è¢«ç”¨æˆ·ä½¿ç”¨ä¸­ï¼ˆè¿™äº›åˆ¤æ–­ä»£ç æ³¨æ„è¦å±è”½æµ‹è¯•é¡µé¢ï¼‰
+            if (url.IndexOf("iswebmon=", StringComparison.Ordinal) < 0 &&           // ç«™ç‚¹ç›‘æ§ç¨‹åºè®¿é—®ï¼Œä¸ä½œä¸ºç”¨æˆ·
+                url.IndexOf("/checkipinfo.aspx", StringComparison.Ordinal) < 0 &&   // å‰ç«¯è½®è¯¢æ—¶ï¼Œä¸ä½œä¸ºç”¨æˆ·
                 url.IndexOf("/z.aspx", StringComparison.Ordinal) < 0)       
             {
                 LAST_ACCESS_TIME_KEY = DateTime.Now;
@@ -24,20 +24,20 @@
             }
      */
     //
-    //Ê¹ÓÃ×¢Òâ£º
-    //1¡¢ĞŞ¸ÄÏÂÃæ´úÂëLAST_ACCESS_TIME_KEYÇ°ÃæµÄÃüÃû¿Õ¼ä
-    //2¡¢ĞŞ¸ÄWhiteIpListÀïµÄÔÊĞíÉèÖÃÉÏÏÂÏß×´Ì¬µÄipÁĞ±í£¬±ÜÃâ·Ç·¨ÓÃ»§ÉèÖÃ
+    //ä½¿ç”¨æ³¨æ„ï¼š
+    //1ã€ä¿®æ”¹ä¸‹é¢ä»£ç LAST_ACCESS_TIME_KEYå‰é¢çš„å‘½åç©ºé—´
+    //2ã€ä¿®æ”¹WhiteIpListé‡Œçš„å…è®¸è®¾ç½®ä¸Šä¸‹çº¿çŠ¶æ€çš„ipåˆ—è¡¨ï¼Œé¿å…éæ³•ç”¨æˆ·è®¾ç½®
     /************************************************************************************/
 
-    // ¿ª¹Ø×´Ì¬±£´æµ½µÄÎÄ¼şÃû
-    private static string SavePath  = Path.Combine(@"e:\upload", ReplaceNonValidChars(HttpContext.Current.Server.MapPath("."), "_") + ".onoffconfig");
+    // å¼€å…³çŠ¶æ€ä¿å­˜åˆ°çš„æ–‡ä»¶å
+    private static string StatusSavePath  = Path.Combine(@"e:\upload", ReplaceNonValidChars(HttpContext.Current.Server.MapPath("."), "_") + ".onoffconfig");
 
-    // Global.asax.csÀïµÄÍêÕûÀàÃû£¬´øÃüÃû¿Õ¼ä£¬ÓÃÓÚºóÃæ·´Éä»ñÈ¡×î½ü·ÃÎÊÊ±¼ä
+    // Global.asax.csé‡Œçš„å®Œæ•´ç±»åï¼Œå¸¦å‘½åç©ºé—´ï¼Œç”¨äºåé¢åå°„è·å–æœ€è¿‘è®¿é—®æ—¶é—´
     private static string GlobalClassName = "Mike.ConfigsCenter.Web.WebApiApplication";
 
     private static List<string> _whiteIpList;
     /// <summary>
-    /// ÔÊĞíÉèÖÃÉÏÏÂÏß×´Ì¬µÄipÁĞ±í,Çë¸ù¾İÊµ¼ÊÏîÄ¿ĞŞ¸Äip
+    /// å…è®¸è®¾ç½®ä¸Šä¸‹çº¿çŠ¶æ€çš„ipåˆ—è¡¨,è¯·æ ¹æ®å®é™…é¡¹ç›®ä¿®æ”¹ip
     /// </summary>
     private static List<string> WhiteIpList
     {
@@ -50,9 +50,9 @@
                     if (_whiteIpList == null)
                     {
                         _whiteIpList = new List<string>();
-                        _whiteIpList.Add("127.");          // localhost±¾µØµØÖ·
-                        _whiteIpList.Add("218.85.23.101"); // VPN³ö¿ÚIP
-                        _whiteIpList.Add("110.80.152.72"); // °ì¹«³ö¿ÚIP
+                        _whiteIpList.Add("127.");          // localhostæœ¬åœ°åœ°å€
+                        _whiteIpList.Add("218.85.23.101"); // VPNå‡ºå£IP
+                        _whiteIpList.Add("110.80.152.72"); // åŠå…¬å‡ºå£IP
                     }
                 }
             }
@@ -71,17 +71,17 @@
     const string ymd = "yyyy-MM-dd HH:mm:ss";
 
     /// <summary>
-    /// ËùÓĞ½Ó¿Ú¶¼Ğ´ÔÚÕâÀïÁË
+    /// æ‰€æœ‰æ¥å£éƒ½å†™åœ¨è¿™é‡Œäº†
     /// </summary>
     /// <param name="e"></param>
     protected override void OnInit(EventArgs e)
     {
-        //»ñÈ¡µ±Ç°·şÎñÆ÷µÄÉÏÏÂÏß×´Ì¬£¬Èç¹û»ñÈ¡²»µ½£¬ÔòÄ¬ÈÏÎªÔÚÏß×´Ì¬
+        //è·å–å½“å‰æœåŠ¡å™¨çš„ä¸Šä¸‹çº¿çŠ¶æ€ï¼Œå¦‚æœè·å–ä¸åˆ°ï¼Œåˆ™é»˜è®¤ä¸ºåœ¨çº¿çŠ¶æ€
         string currentState = GetCurrentStatus() ? ONLINE : OFFLINE;
         DateTime now = DateTime.Now;
 
         //==============================================================================================================
-        // ¹¤¾ß½Ó¿Ú£º½øĞĞ×´Ì¬²éÑ¯£º¸ù¾İµ±Ç°·şÎñÆ÷×îºóÒ»´ÎÇëÇóÊ±¼äÅĞ¶Ï·şÎñÆ÷ÊÇ·ñÒÑ¾­ÏÂÏß
+        // å·¥å…·æ¥å£ï¼šè¿›è¡ŒçŠ¶æ€æŸ¥è¯¢ï¼šæ ¹æ®å½“å‰æœåŠ¡å™¨æœ€åä¸€æ¬¡è¯·æ±‚æ—¶é—´åˆ¤æ–­æœåŠ¡å™¨æ˜¯å¦å·²ç»ä¸‹çº¿
         //==============================================================================================================
         if (Request.QueryString["getrealstate"] != null)
         {
@@ -101,13 +101,13 @@
 
             if (Request.QueryString["format"] != null && Request.QueryString["format"].Equals("robot"))
             {
-                //·şÎñÆ÷ÉÏ´ÎÇëÇóÊ±¼ä|µ±Ç°Ê±¼ä|µ±Ç°·şÎñÆ÷µÄÉÏÏÂÏßÉèÖÃ×´Ì¬
+                //æœåŠ¡å™¨ä¸Šæ¬¡è¯·æ±‚æ—¶é—´|å½“å‰æ—¶é—´|å½“å‰æœåŠ¡å™¨çš„ä¸Šä¸‹çº¿è®¾ç½®çŠ¶æ€
                 Response.Write(string.Format("{0}|{1}|{2}|{3}", lastRequestTime.ToString(ymd), now.ToString(ymd), currentState, accessCount));
             }
             else
             {
-                Response.Write(string.Format("µ±Ç°µÄÉÏÏÂÏß×´Ì¬Îª£º{5}<br />·şÎñÆ÷ÉÏ´ÎÇëÇóÊ±¼äÎª£º{0}£¬µ±Ç°Ê±¼äÎª£º{1}£¬" +
-                                             "¼ä¸ôÁË£º<span style=\"font-weight:bold; color:red;\">{2}</span> Ãë<br />{3}<br />{4}<br />"
+                Response.Write(string.Format("å½“å‰çš„ä¸Šä¸‹çº¿çŠ¶æ€ä¸ºï¼š{5}<br />æœåŠ¡å™¨ä¸Šæ¬¡è¯·æ±‚æ—¶é—´ä¸ºï¼š{0}ï¼Œå½“å‰æ—¶é—´ä¸ºï¼š{1}ï¼Œ" +
+                                             "é—´éš”äº†ï¼š<span style=\"font-weight:bold; color:red;\">{2}</span> ç§’<br />{3}<br />{4}<br />"
                     , lastRequestTime
                     , now
                     , (now - lastRequestTime).TotalSeconds
@@ -122,7 +122,7 @@
 
 
         //==============================================================================================================
-        // µ÷ÊÔÊ±Ê¹ÓÃ£¬»ñÈ¡¿Í»§¶Ëip »ò ·şÎñÆ÷ip
+        // è°ƒè¯•æ—¶ä½¿ç”¨ï¼Œè·å–å®¢æˆ·ç«¯ip æˆ– æœåŠ¡å™¨ip
         //==============================================================================================================
         if (Request.QueryString["getuserip"] != null)
         {
@@ -131,7 +131,7 @@
         }
         if (Request.QueryString["getip"] != null)
         {
-            //»ñÈ¡µ±Ç°·şÎñÆ÷µÄipµØÖ·
+            //è·å–å½“å‰æœåŠ¡å™¨çš„ipåœ°å€
             string currentServerIp = GetSelfIpv4List();
             Response.Write(currentServerIp);
             return;
@@ -139,13 +139,13 @@
 
 
         //==============================================================================================================
-        // ¹¤¾ß½Ó¿Ú£ºĞŞ¸Ä·şÎñÆ÷ÔÚÏß×´Ì¬
+        // å·¥å…·æ¥å£ï¼šä¿®æ”¹æœåŠ¡å™¨åœ¨çº¿çŠ¶æ€
         //==============================================================================================================
         if (!string.IsNullOrEmpty(Request.QueryString["SetState"]))
         {
             if (string.IsNullOrEmpty(Request.QueryString["do"]))
             {
-                Response.Write("ÇëÓÃ¹¤¾ßÉèÖÃÉÏÏÂÏß×´Ì¬");
+                Response.Write("è¯·ç”¨å·¥å…·è®¾ç½®ä¸Šä¸‹çº¿çŠ¶æ€");
                 return;
             }
             string clientip = Request.UserHostAddress ?? string.Empty;
@@ -160,16 +160,21 @@
             }
             if (!isIpOk)
             {
-                Response.Write("ÄúµÄIPÃ»ÓĞÈ¨ÏŞÉèÖÃÉÏÏÂÏß×´Ì¬");
+                Response.Write("æ‚¨çš„IPæ²¡æœ‰æƒé™è®¾ç½®ä¸Šä¸‹çº¿çŠ¶æ€");
                 return;
             }
             string tmp = Request.QueryString["SetState"];
             bool setState = string.IsNullOrEmpty(tmp) || tmp == "1" ||
                             tmp.Equals("true", StringComparison.OrdinalIgnoreCase) ||
                             tmp.Equals("online", StringComparison.OrdinalIgnoreCase);
-            SetCurrentStatus(setState);
+            string msg = SetCurrentStatus(setState);
+            if (!string.IsNullOrEmpty(msg))
+            {
+                Response.Write(msg);
+                return;
+            }
             currentState = setState ? ONLINE : OFFLINE;
-            Response.Write("ĞŞ¸Ä³É¹¦£¬µ±Ç°×´Ì¬£º" + currentState);
+            Response.Write("ä¿®æ”¹æˆåŠŸï¼Œå½“å‰çŠ¶æ€ï¼š" + currentState);
             return;
         }
 
@@ -179,17 +184,17 @@
     }
 
     /// <summary>
-    /// ¶ÁÈ¡±¾»úÉÏÏÂÏß×´Ì¬
+    /// è¯»å–æœ¬æœºä¸Šä¸‹çº¿çŠ¶æ€
     /// </summary>
     /// <returns></returns>
     private static bool GetCurrentStatus()
     {
-        if (!File.Exists(SavePath))
+        if (!File.Exists(StatusSavePath))
             return true;
         lock(lockobj)
         {
             string content;
-            using (StreamReader sr = new StreamReader(SavePath, Encoding.UTF8))
+            using (StreamReader sr = new StreamReader(StatusSavePath, Encoding.UTF8))
             {
                 content = sr.ReadLine() ?? "1";
             }
@@ -198,25 +203,38 @@
     }
 
     /// <summary>
-    /// ÉèÖÃ±¾»úÉÏÏÂÏß×´Ì¬
+    /// è®¾ç½®æœ¬æœºä¸Šä¸‹çº¿çŠ¶æ€
     /// </summary>
     /// <returns></returns>
-    private static void SetCurrentStatus(bool state)
+    private static string SetCurrentStatus(bool state)
     {
-        lock (lockobj)
+        try
         {
-            using (StreamWriter sr = new StreamWriter(SavePath, false, Encoding.UTF8))
+            string dir = Path.GetDirectoryName(StatusSavePath);
+            if (dir != null && !Directory.Exists(dir))
             {
-                sr.Write(state ? "1" : "0");
+                Directory.CreateDirectory(dir);
             }
+            lock (lockobj)
+            {
+                using (StreamWriter sr = new StreamWriter(StatusSavePath, false, Encoding.UTF8))
+                {
+                    sr.Write(state ? "1" : "0");
+                }
+            }
+            return null;
+        }
+        catch (Exception exp)
+        {
+            return "é”™è¯¯ï¼š " + exp.Message;
         }
     }
 
 
     /// <summary>
-    /// »ñÈ¡±¾»úËùÓĞIPV4µØÖ·ÁĞ±í
+    /// è·å–æœ¬æœºæ‰€æœ‰IPV4åœ°å€åˆ—è¡¨
     /// </summary>
-    /// <returns>±¾»úËùÓĞIPV4µØÖ·ÁĞ±í£¬ÒÔ·ÖºÅ·Ö¸ô</returns>
+    /// <returns>æœ¬æœºæ‰€æœ‰IPV4åœ°å€åˆ—è¡¨ï¼Œä»¥åˆ†å·åˆ†éš”</returns>
     public static string GetSelfIpv4List()
     {
         StringBuilder ips = new StringBuilder();
@@ -231,13 +249,13 @@
         }
         catch (Exception)
         {
-            // LogHelper.WriteCustom("»ñÈ¡±¾µØip´íÎó" + ex, @"zIP\", false);
+            // LogHelper.WriteCustom("è·å–æœ¬åœ°ipé”™è¯¯" + ex, @"zIP\", false);
         }
         return ips.ToString();
     }
 
     /// <summary>
-    /// ÒÆ³ıÎÄ¼şÃûÖĞ²»¿ÉÓÃµÄ11¸ö×Ö·û
+    /// ç§»é™¤æ–‡ä»¶åä¸­ä¸å¯ç”¨çš„11ä¸ªå­—ç¬¦
     /// </summary>
     /// <param name="filenameNoDir"></param>
     /// <param name="replaceWith"></param>
@@ -246,12 +264,12 @@
     {
         if (string.IsNullOrEmpty(filenameNoDir))
             return string.Empty;
-        //Ìæ»»Õâ9¸ö×Ö·û<>/\|:"*? ÒÔ¼° »Ø³µ»»ĞĞ
+        //æ›¿æ¢è¿™9ä¸ªå­—ç¬¦<>/\|:"*? ä»¥åŠ å›è½¦æ¢è¡Œ
         return Regex.Replace(filenameNoDir, @"[\<\>\/\\\|\:""\*\?\r\n]", replaceWith, RegexOptions.Compiled);
     }
 
     /// <summary>
-    /// »ñÈ¡×Ö·û´®Ö¸¶¨µÄÀàĞÍ·µ»Ø
+    /// è·å–å­—ç¬¦ä¸²æŒ‡å®šçš„ç±»å‹è¿”å›
     /// </summary>
     /// <param name="type"></param>
     /// <returns></returns>
@@ -286,7 +304,7 @@
     }
 
     /// <summary>
-    /// »ñÈ¡Ö¸¶¨ÀàĞÍÀïµÄ¾²Ì¬¹«¿ª×Ö¶ÎÖµ
+    /// è·å–æŒ‡å®šç±»å‹é‡Œçš„é™æ€å…¬å¼€å­—æ®µå€¼
     /// </summary>
     /// <param name="type"></param>
     /// <param name="fieldName"></param>

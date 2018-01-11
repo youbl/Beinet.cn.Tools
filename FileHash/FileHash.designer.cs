@@ -61,7 +61,7 @@
             this.btnClear.Location = new System.Drawing.Point(653, 379);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(64, 23);
-            this.btnClear.TabIndex = 2;
+            this.btnClear.TabIndex = 4;
             this.btnClear.Text = "清空结果";
             this.btnClear.UseVisualStyleBackColor = true;
             this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
@@ -72,7 +72,7 @@
             this.btnCopy.Location = new System.Drawing.Point(653, 404);
             this.btnCopy.Name = "btnCopy";
             this.btnCopy.Size = new System.Drawing.Size(64, 23);
-            this.btnCopy.TabIndex = 3;
+            this.btnCopy.TabIndex = 5;
             this.btnCopy.Text = "复制结果";
             this.btnCopy.UseVisualStyleBackColor = true;
             this.btnCopy.Click += new System.EventHandler(this.btnCopy_Click);
@@ -83,7 +83,7 @@
             this.btnSave.Location = new System.Drawing.Point(653, 428);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(64, 23);
-            this.btnSave.TabIndex = 4;
+            this.btnSave.TabIndex = 6;
             this.btnSave.Text = "保存结果";
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
@@ -95,7 +95,7 @@
             this.btnStop.Location = new System.Drawing.Point(391, 386);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(75, 55);
-            this.btnStop.TabIndex = 5;
+            this.btnStop.TabIndex = 3;
             this.btnStop.Text = "停止计算";
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
@@ -115,6 +115,7 @@
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.Size = new System.Drawing.Size(766, 371);
             this.dataGridView1.TabIndex = 7;
+            this.dataGridView1.TabStop = false;
             // 
             // btnLoadConfig
             // 
@@ -122,7 +123,7 @@
             this.btnLoadConfig.Location = new System.Drawing.Point(36, 8);
             this.btnLoadConfig.Name = "btnLoadConfig";
             this.btnLoadConfig.Size = new System.Drawing.Size(93, 23);
-            this.btnLoadConfig.TabIndex = 8;
+            this.btnLoadConfig.TabIndex = 2;
             this.btnLoadConfig.Text = "网站配置文件..";
             this.btnLoadConfig.UseVisualStyleBackColor = true;
             this.btnLoadConfig.Click += new System.EventHandler(this.btnLoadConfig_Click);

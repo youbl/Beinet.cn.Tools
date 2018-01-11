@@ -307,12 +307,7 @@ namespace Beinet.cn.Tools.RegexTool
         /// <param name="e"></param>
         private void txt_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Control && e.KeyCode == Keys.A && !e.Alt && !e.Shift)
-            {
-                ((TextBoxBase) sender).SelectAll();
-                e.Handled = true;
-                //e.SuppressKeyPress = true;
-            }
+            Utility.txt_KeyDownUp(sender, e);
 
             if (e.Control && e.KeyCode == Keys.V)
             {

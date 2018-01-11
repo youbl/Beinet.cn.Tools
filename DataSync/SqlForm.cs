@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -15,6 +13,13 @@ namespace Beinet.cn.Tools.DataSync
             InitializeComponent();
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+
+            txtSql.KeyUp += Utility.txt_KeyDownUp;
+            txtConstr.KeyUp += Utility.txt_KeyDownUp;
+        }
 
         private void SqlForm_KeyDown(object sender, KeyEventArgs e)
         {
@@ -235,14 +240,6 @@ namespace Beinet.cn.Tools.DataSync
             e.ThrowException = false;
         }
         
-        private void txt_KeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.A && e.Control)
-            {
-                ((TextBox)sender).SelectAll();
-            }
-        }
-
         private void dataGridView1_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
         {
             if (e.Column == null)
@@ -258,7 +255,7 @@ namespace Beinet.cn.Tools.DataSync
             if(type == typeof(byte[]))
             {
                 e.Column.ValueType = typeof(string);
-                return;
+                // return;
             }
         }
 

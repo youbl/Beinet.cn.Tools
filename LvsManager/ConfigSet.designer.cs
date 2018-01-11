@@ -247,6 +247,7 @@
             this.KeyPreview = true;
             this.Name = "ConfigSet";
             this.Text = "参数设置";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ConfigSet_FormClosing);
             this.Load += new System.EventHandler(this.ConfigSet_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.ConfigSet_KeyDown);
             this.tabControl1.ResumeLayout(false);

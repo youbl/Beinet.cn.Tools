@@ -319,12 +319,14 @@ namespace Beinet.cn.Tools.LvsManager
 
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            using(var configset = new ConfigSet())
+            DialogResult ret;
+            using (var configset = new ConfigSet())
             {
-                configset.ShowDialog(this);
+                ret = configset.ShowDialog(this);
             }
-            // 重新加载
-            LoadList();
+            if(ret == DialogResult.OK)
+                // 有修改才重新加载
+                LoadList();
         }
 
 

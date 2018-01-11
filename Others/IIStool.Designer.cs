@@ -38,6 +38,8 @@
             this.txtTbName = new System.Windows.Forms.TextBox();
             this.btnImport = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
+            this.chkClear = new System.Windows.Forms.CheckBox();
+            this.chkTimeAdd8 = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -77,17 +79,18 @@
             this.txtRet.Location = new System.Drawing.Point(12, 87);
             this.txtRet.Multiline = true;
             this.txtRet.Name = "txtRet";
+            this.txtRet.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtRet.Size = new System.Drawing.Size(724, 450);
-            this.txtRet.TabIndex = 5;
+            this.txtRet.TabIndex = 7;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(8, 36);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 12);
-            this.label2.TabIndex = 6;
-            this.label2.Text = "数据目标:";
+            this.label2.Size = new System.Drawing.Size(71, 12);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "目标数据库:";
             // 
             // txtDbTarget
             // 
@@ -96,7 +99,7 @@
             this.txtDbTarget.Location = new System.Drawing.Point(87, 33);
             this.txtDbTarget.Name = "txtDbTarget";
             this.txtDbTarget.Size = new System.Drawing.Size(558, 21);
-            this.txtDbTarget.TabIndex = 7;
+            this.txtDbTarget.TabIndex = 3;
             // 
             // label3
             // 
@@ -104,17 +107,15 @@
             this.label3.Location = new System.Drawing.Point(8, 63);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(59, 12);
-            this.label3.TabIndex = 8;
+            this.label3.TabIndex = 0;
             this.label3.Text = "导入表名:";
             // 
             // txtTbName
             // 
-            this.txtTbName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtTbName.Location = new System.Drawing.Point(87, 60);
             this.txtTbName.Name = "txtTbName";
             this.txtTbName.Size = new System.Drawing.Size(241, 21);
-            this.txtTbName.TabIndex = 9;
+            this.txtTbName.TabIndex = 4;
             this.txtTbName.Text = "iislog2017";
             // 
             // btnImport
@@ -123,7 +124,7 @@
             this.btnImport.Location = new System.Drawing.Point(651, 36);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(75, 45);
-            this.btnImport.TabIndex = 2;
+            this.btnImport.TabIndex = 5;
             this.btnImport.Text = "启动导入";
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
@@ -133,16 +134,40 @@
             this.button1.Location = new System.Drawing.Point(570, 58);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 10;
+            this.button1.TabIndex = 6;
             this.button1.Text = "常用SQL";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // chkClear
+            // 
+            this.chkClear.AutoSize = true;
+            this.chkClear.Location = new System.Drawing.Point(343, 62);
+            this.chkClear.Name = "chkClear";
+            this.chkClear.Size = new System.Drawing.Size(96, 16);
+            this.chkClear.TabIndex = 8;
+            this.chkClear.Text = "导入前清空表";
+            this.chkClear.UseVisualStyleBackColor = true;
+            // 
+            // chkTimeAdd8
+            // 
+            this.chkTimeAdd8.AutoSize = true;
+            this.chkTimeAdd8.Checked = true;
+            this.chkTimeAdd8.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTimeAdd8.Location = new System.Drawing.Point(445, 62);
+            this.chkTimeAdd8.Name = "chkTimeAdd8";
+            this.chkTimeAdd8.Size = new System.Drawing.Size(114, 16);
+            this.chkTimeAdd8.TabIndex = 9;
+            this.chkTimeAdd8.Text = "访问时间加8小时";
+            this.chkTimeAdd8.UseVisualStyleBackColor = true;
             // 
             // IIStool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(748, 549);
+            this.Controls.Add(this.chkTimeAdd8);
+            this.Controls.Add(this.chkClear);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.txtTbName);
@@ -173,5 +198,7 @@
         private System.Windows.Forms.TextBox txtTbName;
         private System.Windows.Forms.Button btnImport;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox chkClear;
+        private System.Windows.Forms.CheckBox chkTimeAdd8;
     }
 }

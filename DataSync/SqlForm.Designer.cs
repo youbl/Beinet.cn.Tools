@@ -102,7 +102,7 @@
             this.tvDB.Location = new System.Drawing.Point(0, 0);
             this.tvDB.Name = "tvDB";
             this.tvDB.Size = new System.Drawing.Size(98, 171);
-            this.tvDB.TabIndex = 0;
+            this.tvDB.TabIndex = 4;
             this.tvDB.DoubleClick += new System.EventHandler(this.tvDB_DoubleClick);
             // 
             // splitContainer4
@@ -135,7 +135,7 @@
             this.btnTest.Location = new System.Drawing.Point(440, 1);
             this.btnTest.Name = "btnTest";
             this.btnTest.Size = new System.Drawing.Size(57, 23);
-            this.btnTest.TabIndex = 1;
+            this.btnTest.TabIndex = 2;
             this.btnTest.Text = "连接DB";
             this.btnTest.UseVisualStyleBackColor = true;
             this.btnTest.Click += new System.EventHandler(this.btnTest_Click);
@@ -148,7 +148,6 @@
             this.txtConstr.Name = "txtConstr";
             this.txtConstr.Size = new System.Drawing.Size(437, 21);
             this.txtConstr.TabIndex = 1;
-            this.txtConstr.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_KeyUp);
             // 
             // txtSql
             // 
@@ -158,9 +157,8 @@
             this.txtSql.Multiline = true;
             this.txtSql.Name = "txtSql";
             this.txtSql.Size = new System.Drawing.Size(500, 145);
-            this.txtSql.TabIndex = 0;
+            this.txtSql.TabIndex = 3;
             this.txtSql.Text = "SELECT * FROM sys.objects WHERE type=\'u\'";
-            this.txtSql.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txt_KeyUp);
             // 
             // splitContainer2
             // 
@@ -193,7 +191,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.RowTemplate.Height = 23;
             this.dataGridView1.Size = new System.Drawing.Size(599, 233);
-            this.dataGridView1.TabIndex = 0;
+            this.dataGridView1.TabIndex = 5;
             this.dataGridView1.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.dataGridView1_ColumnAdded);
             this.dataGridView1.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView1_DataError);
             // 

@@ -87,7 +87,7 @@
             this.txtIP.Location = new System.Drawing.Point(78, 41);
             this.txtIP.Name = "txtIP";
             this.txtIP.Size = new System.Drawing.Size(110, 21);
-            this.txtIP.TabIndex = 1;
+            this.txtIP.TabIndex = 3;
             this.txtIP.Text = "253.253.253.253";
             // 
             // btnSearch
@@ -95,7 +95,7 @@
             this.btnSearch.Location = new System.Drawing.Point(194, 39);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(52, 23);
-            this.btnSearch.TabIndex = 2;
+            this.btnSearch.TabIndex = 4;
             this.btnSearch.Text = "查询";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
@@ -117,7 +117,7 @@
             this.txtConstr.Location = new System.Drawing.Point(90, 259);
             this.txtConstr.Name = "txtConstr";
             this.txtConstr.Size = new System.Drawing.Size(362, 21);
-            this.txtConstr.TabIndex = 1;
+            this.txtConstr.TabIndex = 7;
             // 
             // btnImport
             // 
@@ -125,7 +125,7 @@
             this.btnImport.Location = new System.Drawing.Point(458, 259);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(82, 23);
-            this.btnImport.TabIndex = 2;
+            this.btnImport.TabIndex = 8;
             this.btnImport.Text = "导入数据库";
             this.btnImport.UseVisualStyleBackColor = true;
             this.btnImport.Click += new System.EventHandler(this.btnImport_Click);
@@ -140,7 +140,7 @@
             this.txtRet.Name = "txtRet";
             this.txtRet.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtRet.Size = new System.Drawing.Size(533, 185);
-            this.txtRet.TabIndex = 1;
+            this.txtRet.TabIndex = 6;
             this.txtRet.Text = resources.GetString("txtRet.Text");
             // 
             // label5
@@ -158,7 +158,7 @@
             this.btnLocal.Location = new System.Drawing.Point(488, 39);
             this.btnLocal.Name = "btnLocal";
             this.btnLocal.Size = new System.Drawing.Size(52, 23);
-            this.btnLocal.TabIndex = 2;
+            this.btnLocal.TabIndex = 5;
             this.btnLocal.Text = "本机IP";
             this.btnLocal.UseVisualStyleBackColor = true;
             this.btnLocal.Click += new System.EventHandler(this.btnLocal_Click);

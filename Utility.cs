@@ -108,6 +108,7 @@ namespace Beinet.cn.Tools
                 string[] tmpData = arrData[0];
                 InvokeControl(dgv, () =>
                 {
+                    // ReSharper disable once CoVariantArrayConversion
                     dgv.Rows.Add(tmpData);
                     dgv.Rows[0].DefaultCellStyle.BackColor = color1;
                 });
@@ -942,6 +943,16 @@ namespace Beinet.cn.Tools
             }
             xDoc.Save(configFile);
             return true;
+        }
+
+        public static void txt_KeyDownUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.A && e.Control && !e.Alt && !e.Shift)
+            {
+                ((TextBox)sender).SelectAll();
+                e.Handled = true;
+                //e.SuppressKeyPress = true;
+            }
         }
     }
 }

@@ -89,7 +89,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(554, 439);
+            this.tabPage2.Size = new System.Drawing.Size(601, 442);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "二维码生成工具";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -124,7 +124,7 @@
             this.lstOtherError.Location = new System.Drawing.Point(136, 33);
             this.lstOtherError.Name = "lstOtherError";
             this.lstOtherError.Size = new System.Drawing.Size(52, 20);
-            this.lstOtherError.TabIndex = 4;
+            this.lstOtherError.TabIndex = 3;
             // 
             // label4
             // 
@@ -140,7 +140,7 @@
             this.button2.Location = new System.Drawing.Point(66, 71);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(52, 41);
-            this.button2.TabIndex = 3;
+            this.button2.TabIndex = 5;
             this.button2.Text = "保存\r\n二维码";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
@@ -168,7 +168,7 @@
             this.button4.Location = new System.Drawing.Point(235, 90);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(105, 22);
-            this.button4.TabIndex = 3;
+            this.button4.TabIndex = 7;
             this.button4.Text = "清除插入的图片";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
@@ -187,7 +187,7 @@
             this.button3.Location = new System.Drawing.Point(124, 90);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(105, 22);
-            this.button3.TabIndex = 3;
+            this.button3.TabIndex = 6;
             this.button3.Text = "插入图片...";
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
@@ -206,7 +206,7 @@
             this.button1.Location = new System.Drawing.Point(8, 70);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(52, 41);
-            this.button1.TabIndex = 3;
+            this.button1.TabIndex = 4;
             this.button1.Text = "预览\r\n二维码";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
@@ -258,7 +258,7 @@
             this.label8.Location = new System.Drawing.Point(450, 42);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 12);
-            this.label8.TabIndex = 11;
+            this.label8.TabIndex = 0;
             this.label8.Text = "当前线程数:";
             // 
             // tabControl2
@@ -280,7 +280,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(535, 329);
+            this.tabPage3.Size = new System.Drawing.Size(582, 332);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "成功记录";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -292,7 +292,7 @@
             this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
             this.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtResult.Size = new System.Drawing.Size(529, 323);
+            this.txtResult.Size = new System.Drawing.Size(576, 326);
             this.txtResult.TabIndex = 8;
             this.txtResult.WordWrap = false;
             // 
@@ -324,7 +324,7 @@
             this.chkMac.Location = new System.Drawing.Point(452, 12);
             this.chkMac.Name = "chkMac";
             this.chkMac.Size = new System.Drawing.Size(108, 16);
-            this.chkMac.TabIndex = 9;
+            this.chkMac.TabIndex = 7;
             this.chkMac.Text = "扫描MAC-仅内网";
             this.chkMac.UseVisualStyleBackColor = true;
             // 
@@ -393,7 +393,7 @@
             this.labStatus.Location = new System.Drawing.Point(5, 66);
             this.labStatus.Name = "labStatus";
             this.labStatus.Size = new System.Drawing.Size(65, 12);
-            this.labStatus.TabIndex = 6;
+            this.labStatus.TabIndex = 0;
             this.labStatus.Text = "未开始扫描";
             // 
             // btnPort
@@ -411,7 +411,7 @@
             this.btnSearch.Location = new System.Drawing.Point(161, 8);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(137, 23);
-            this.btnSearch.TabIndex = 4;
+            this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "扫描";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
