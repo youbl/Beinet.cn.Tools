@@ -583,6 +583,11 @@ namespace Beinet.cn.Tools.Others
             });
         }
 
+        private void btnRead_Click(object sender, EventArgs e)
+        {
+
+        }
+
         private void AddErrMsg(string msg)
         {
             // StringBuilder线程不安全，简单处理吧

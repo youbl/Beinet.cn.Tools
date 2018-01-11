@@ -61,6 +61,7 @@
             this.btnPort = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.btnRead = new System.Windows.Forms.Button();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -73,6 +74,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnRead);
             this.tabPage2.Controls.Add(this.pictureBox2);
             this.tabPage2.Controls.Add(this.pictureBox1);
             this.tabPage2.Controls.Add(this.lstOtherError);
@@ -96,7 +98,7 @@
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(352, 47);
+            this.pictureBox2.Location = new System.Drawing.Point(470, 47);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(65, 65);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -165,7 +167,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(235, 90);
+            this.button4.Location = new System.Drawing.Point(353, 90);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(105, 22);
             this.button4.TabIndex = 7;
@@ -184,7 +186,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(124, 90);
+            this.button3.Location = new System.Drawing.Point(242, 90);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(105, 22);
             this.button3.TabIndex = 6;
@@ -214,7 +216,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(194, 33);
+            this.label7.Location = new System.Drawing.Point(235, 33);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(191, 48);
             this.label7.TabIndex = 1;
@@ -427,6 +429,16 @@
             this.tabControl1.Size = new System.Drawing.Size(609, 468);
             this.tabControl1.TabIndex = 1;
             // 
+            // btnRead
+            // 
+            this.btnRead.Location = new System.Drawing.Point(124, 59);
+            this.btnRead.Name = "btnRead";
+            this.btnRead.Size = new System.Drawing.Size(81, 53);
+            this.btnRead.TabIndex = 8;
+            this.btnRead.Text = "解析\r\n二维码...";
+            this.btnRead.UseVisualStyleBackColor = true;
+            this.btnRead.Click += new System.EventHandler(this.btnRead_Click);
+            // 
             // OtherTools
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -486,5 +498,6 @@
         private System.Windows.Forms.Button btnPort;
         private System.Windows.Forms.Label labTh;
         private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Button btnRead;
     }
 }

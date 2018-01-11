@@ -64,10 +64,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CryptTool.cs">
+    <Compile Include="Others\CryptTool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CryptTool.Designer.cs">
+    <Compile Include="Others\CryptTool.Designer.cs">
       <DependentUpon>CryptTool.cs</DependentUpon>
     </Compile>
     <Compile Include="ControlExt\DataGridViewComboEditBoxColumn.cs" />
@@ -138,10 +138,10 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="GzipTest.cs">
+    <Compile Include="Others\GzipTest.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="GzipTest.designer.cs">
+    <Compile Include="Others\GzipTest.designer.cs">
       <DependentUpon>GzipTest.cs</DependentUpon>
     </Compile>
     <Compile Include="FileHash\FileHash.cs">
@@ -402,10 +402,10 @@
       <DependentUpon>IIStool.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
-    <Compile Include="PromptWin.cs">
+    <Compile Include="Util\PromptWin.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PromptWin.Designer.cs">
+    <Compile Include="Util\PromptWin.Designer.cs">
       <DependentUpon>PromptWin.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -431,8 +431,8 @@
     <Compile Include="RegexTool\OptionSelect.designer.cs">
       <DependentUpon>OptionSelect.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImgHelper.cs" />
-    <Compile Include="SqlHelper.cs" />
+    <Compile Include="Util\ImgHelper.cs" />
+    <Compile Include="Util\SqlHelper.cs" />
     <Compile Include="SqlInjectForm\ErrDetail.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -448,8 +448,8 @@
     <Compile Include="SqlInjectForm\SqlInject.designer.cs">
       <DependentUpon>SqlInject.cs</DependentUpon>
     </Compile>
-    <Compile Include="ThreadScheduler.cs" />
-    <Compile Include="Utility.cs" />
+    <Compile Include="Util\ThreadScheduler.cs" />
+    <Compile Include="Util\Utility.cs" />
     <Compile Include="WebContentCompare\Compare.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -462,7 +462,7 @@
     <Compile Include="WebContentCompare\CompareRegEdit.Designer.cs">
       <DependentUpon>CompareRegEdit.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="CryptTool.resx">
+    <EmbeddedResource Include="Others\CryptTool.resx">
       <DependentUpon>CryptTool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DataSync\MainForm.resx">
@@ -498,7 +498,7 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GzipTest.resx">
+    <EmbeddedResource Include="Others\GzipTest.resx">
       <DependentUpon>GzipTest.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FileHash\FileHash.resx">
@@ -513,7 +513,7 @@
     <EmbeddedResource Include="Others\IIStool.resx">
       <DependentUpon>IIStool.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="PromptWin.resx">
+    <EmbeddedResource Include="Util\PromptWin.resx">
       <DependentUpon>PromptWin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -559,15 +559,17 @@
     </Compile>
     <None Include="README.md" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CopyTool\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="b.ico" />
     <Content Include="DataSync\sync.xml" />
     <Content Include="LvsManager\CheckIPInfo.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>
+    <None Include="IPMap.txt">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="ILMerge.exe" />
     <None Include="FileMD.aspx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

@@ -14,6 +14,8 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Drawing;
+using System.Runtime.Serialization.Json;
+using System.Text.RegularExpressions;
 
 namespace Beinet.cn.Tools
 {
@@ -24,6 +26,11 @@ namespace Beinet.cn.Tools
         /// exe的启动目录
         /// </summary>
         public static string StartPath { get { return _path; } }
+
+        /// <summary>
+        /// 是否ip的正则
+        /// </summary>
+        static Regex regIp = new Regex(@"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$", RegexOptions.Compiled);
 
         private static readonly object lockobj = new object();
         public static void Log(string msg, string suffix = null)
@@ -289,7 +296,7 @@ namespace Beinet.cn.Tools
                 return -1;
             return BitConverter.ToInt32(ip.GetAddressBytes(), 0);
 
-            //if (!Regex.IsMatch(strIp, @"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}"))
+            //if (!regIp.IsMatch(strIp))
             //    return -1;
             //string[] subIP = strIp.Split('.');
             //long ip = 16777216 * Convert.ToInt64(subIP[0]) +
@@ -711,7 +718,11 @@ namespace Beinet.cn.Tools
             {
                 url = url + "&" + param;
             }
-
+            var needSetHost = !string.IsNullOrEmpty(proxy);
+            if (needSetHost)
+            {
+                SwitchHost(ref url, ref proxy);
+            }
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             request.Referer = url;
             request.AllowAutoRedirect = false;
@@ -720,20 +731,21 @@ namespace Beinet.cn.Tools
             request.Timeout = 10000;
 
             // 必须在写入Post Stream之前设置Proxy
-            if (!string.IsNullOrEmpty(proxy))
+            if (needSetHost)
             {
-                #region 设置代理
-                string[] tmp = proxy.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
-                int port = 80;
-                if (tmp.Length >= 2)
-                {
-                    if (!int.TryParse(tmp[1], out port))
-                    {
-                        port = 80;
-                    }
-                }
-                request.Proxy = new WebProxy(tmp[0], port);
-                #endregion
+                request.Host = proxy.Split(':')[0]; // 避免替换出来的域名带了端口
+                //#region 设置代理
+                //string[] tmp = proxy.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
+                //int port = 80;
+                //if (tmp.Length >= 2)
+                //{
+                //    if (!int.TryParse(tmp[1], out port))
+                //    {
+                //        port = 80;
+                //    }
+                //}
+                //request.Proxy = new WebProxy(tmp[0], port);
+                //#endregion
             }
 
             if (!isPost)
@@ -792,7 +804,53 @@ namespace Beinet.cn.Tools
             throw new Exception(errMsg);
         }
 
+        /// <summary>
+        /// 替换url里的主机和ip
+        /// </summary>
+        /// <param name="url"></param>
+        /// <param name="hostip"></param>
+        public static void SwitchHost(ref string url, ref string hostip)
+        {
+            var urlHost = GetHostFromUrl(url);
+            if (urlHost == String.Empty)
+            {
+                return;
+            }
+            if (string.IsNullOrEmpty(hostip) || !regIp.IsMatch(hostip.Split(':')[0]))
+            {
+                return;
+            }
+            url = url.Replace(urlHost, hostip);
+            hostip = urlHost.Split(':')[0];
+        }
 
+        /// <summary>
+        /// 从url中截取出域名和端口
+        /// </summary>
+        /// <param name="url"></param>
+        /// <returns></returns>
+        public static string GetHostFromUrl(string url)
+        {
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                return string.Empty;
+            }
+            if (url.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+            {
+                url = url.Substring("http://".Length);
+            }
+            else if (url.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+            {
+                url = url.Substring("https://".Length);
+            }
+
+            var idx = url.IndexOf('/');
+            if (idx <= 0)
+            {
+                return string.Empty;
+            }
+            return url.Substring(0, idx);
+        }
 
         /// <summary>
         /// 获取本机所有IPV4地址列表
@@ -954,5 +1012,44 @@ namespace Beinet.cn.Tools
                 //e.SuppressKeyPress = true;
             }
         }
+
+
+
+        /// <summary>
+        /// 对象生成Json串
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static string ToJson<T>(T source)
+        {
+            DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(T));
+            using (MemoryStream ms = new MemoryStream())
+            {
+                jsonSerializer.WriteObject(ms, source);
+                StringBuilder sb = new StringBuilder();
+                sb.Append(Encoding.UTF8.GetString(ms.ToArray()));
+
+                return sb.ToString();
+            }
+        }
+
+        /// <summary>
+        /// 字符串转对象
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public static T FromJson<T>(string source)
+        {
+            DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(T));
+            using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(source)))
+            {
+                T obj = (T)jsonSerializer.ReadObject(ms);
+                return obj;
+            }
+        }
+
+
     }
 }

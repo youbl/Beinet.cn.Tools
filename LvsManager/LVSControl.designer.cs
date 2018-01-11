@@ -46,6 +46,7 @@
             this.colName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.LVSState = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.LVSRealState = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.colNginxStatus = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.LastRequestTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.currentTime = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.colPv = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -70,6 +71,7 @@
             this.statusStrip1.SuspendLayout();
             this.cmsServer.SuspendLayout();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -131,6 +133,7 @@
             this.colName,
             this.LVSState,
             this.LVSRealState,
+            this.colNginxStatus,
             this.LastRequestTime,
             this.currentTime,
             this.colPv});
@@ -143,7 +146,7 @@
             this.lvServers.Location = new System.Drawing.Point(0, 0);
             this.lvServers.MultiSelect = false;
             this.lvServers.Name = "lvServers";
-            this.lvServers.Size = new System.Drawing.Size(769, 261);
+            this.lvServers.Size = new System.Drawing.Size(769, 267);
             this.lvServers.SmallImageList = this.imageList1;
             this.lvServers.TabIndex = 4;
             this.lvServers.UseCompatibleStateImageBehavior = false;
@@ -158,17 +161,22 @@
             // colName
             // 
             this.colName.Text = "域名";
-            this.colName.Width = 170;
+            this.colName.Width = 140;
             // 
             // LVSState
             // 
-            this.LVSState.Text = "上下线状态";
-            this.LVSState.Width = 90;
+            this.LVSState.Text = "上线状态";
+            this.LVSState.Width = 65;
             // 
             // LVSRealState
             // 
             this.LVSRealState.Text = "当前状态";
-            this.LVSRealState.Width = 70;
+            this.LVSRealState.Width = 65;
+            // 
+            // colNginxStatus
+            // 
+            this.colNginxStatus.Text = "ng状态";
+            this.colNginxStatus.Width = 65;
             // 
             // LastRequestTime
             // 
@@ -309,7 +317,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.flowLayoutPanel1);
             this.splitContainer1.Panel2MinSize = 1;
             this.splitContainer1.Size = new System.Drawing.Size(769, 338);
-            this.splitContainer1.SplitterDistance = 261;
+            this.splitContainer1.SplitterDistance = 267;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
@@ -321,7 +329,7 @@
             this.flowLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(1);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(769, 76);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(769, 70);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
             // panel2
@@ -375,6 +383,7 @@
             this.toolStrip1.PerformLayout();
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
@@ -416,5 +425,6 @@
         private System.Windows.Forms.ColumnHeader colName;
         private System.Windows.Forms.ToolStripStatusLabel labStatus2;
         private System.Windows.Forms.Label labStatus1;
+        private System.Windows.Forms.ColumnHeader colNginxStatus;
     }
 }
