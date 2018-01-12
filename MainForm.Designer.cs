@@ -50,9 +50,9 @@
             this.tabRegex = new System.Windows.Forms.TabPage();
             this.tabSqlInject = new System.Windows.Forms.TabPage();
             this.tabDataSync = new System.Windows.Forms.TabPage();
-            this.tabQQWry = new System.Windows.Forms.TabPage();
+            this.tabQr = new System.Windows.Forms.TabPage();
             this.tabGZip = new System.Windows.Forms.TabPage();
-            this.tabOtherTools = new System.Windows.Forms.TabPage();
+            this.tabIpTools = new System.Windows.Forms.TabPage();
             this.tabImgTool = new System.Windows.Forms.TabPage();
             this.tabIIS = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
@@ -76,17 +76,17 @@
             // 
             this.tabControl1.Controls.Add(this.tabDllAnlyse);
             this.tabControl1.Controls.Add(this.tabLvs);
+            this.tabControl1.Controls.Add(this.tabRegex);
             this.tabControl1.Controls.Add(this.tabEncrypt);
             this.tabControl1.Controls.Add(this.tabMd5File);
             this.tabControl1.Controls.Add(this.tabWebCompare);
-            this.tabControl1.Controls.Add(this.tabRegex);
-            this.tabControl1.Controls.Add(this.tabSqlInject);
-            this.tabControl1.Controls.Add(this.tabDataSync);
-            this.tabControl1.Controls.Add(this.tabQQWry);
             this.tabControl1.Controls.Add(this.tabGZip);
-            this.tabControl1.Controls.Add(this.tabOtherTools);
-            this.tabControl1.Controls.Add(this.tabImgTool);
             this.tabControl1.Controls.Add(this.tabIIS);
+            this.tabControl1.Controls.Add(this.tabDataSync);
+            this.tabControl1.Controls.Add(this.tabSqlInject);
+            this.tabControl1.Controls.Add(this.tabQr);
+            this.tabControl1.Controls.Add(this.tabImgTool);
+            this.tabControl1.Controls.Add(this.tabIpTools);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -295,7 +295,7 @@
             this.tabMd5File.Padding = new System.Windows.Forms.Padding(3);
             this.tabMd5File.Size = new System.Drawing.Size(776, 536);
             this.tabMd5File.TabIndex = 2;
-            this.tabMd5File.Text = "MD5";
+            this.tabMd5File.Text = "文件MD5";
             this.tabMd5File.UseVisualStyleBackColor = true;
             // 
             // tabWebCompare
@@ -325,7 +325,7 @@
             this.tabSqlInject.Padding = new System.Windows.Forms.Padding(3);
             this.tabSqlInject.Size = new System.Drawing.Size(776, 536);
             this.tabSqlInject.TabIndex = 3;
-            this.tabSqlInject.Text = "SQL拼接检查";
+            this.tabSqlInject.Text = "查SQL拼接";
             this.tabSqlInject.UseVisualStyleBackColor = true;
             // 
             // tabDataSync
@@ -338,15 +338,15 @@
             this.tabDataSync.Text = "SQLServer";
             this.tabDataSync.UseVisualStyleBackColor = true;
             // 
-            // tabQQWry
+            // tabQr
             // 
-            this.tabQQWry.Location = new System.Drawing.Point(4, 22);
-            this.tabQQWry.Name = "tabQQWry";
-            this.tabQQWry.Padding = new System.Windows.Forms.Padding(3);
-            this.tabQQWry.Size = new System.Drawing.Size(776, 536);
-            this.tabQQWry.TabIndex = 9;
-            this.tabQQWry.Text = "IP纯真库";
-            this.tabQQWry.UseVisualStyleBackColor = true;
+            this.tabQr.Location = new System.Drawing.Point(4, 22);
+            this.tabQr.Name = "tabQr";
+            this.tabQr.Padding = new System.Windows.Forms.Padding(3);
+            this.tabQr.Size = new System.Drawing.Size(776, 536);
+            this.tabQr.TabIndex = 9;
+            this.tabQr.Text = "二维码";
+            this.tabQr.UseVisualStyleBackColor = true;
             // 
             // tabGZip
             // 
@@ -358,15 +358,15 @@
             this.tabGZip.Text = "GZip";
             this.tabGZip.UseVisualStyleBackColor = true;
             // 
-            // tabOtherTools
+            // tabIpTools
             // 
-            this.tabOtherTools.Location = new System.Drawing.Point(4, 22);
-            this.tabOtherTools.Name = "tabOtherTools";
-            this.tabOtherTools.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOtherTools.Size = new System.Drawing.Size(776, 536);
-            this.tabOtherTools.TabIndex = 11;
-            this.tabOtherTools.Text = "其它";
-            this.tabOtherTools.UseVisualStyleBackColor = true;
+            this.tabIpTools.Location = new System.Drawing.Point(4, 22);
+            this.tabIpTools.Name = "tabIpTools";
+            this.tabIpTools.Padding = new System.Windows.Forms.Padding(3);
+            this.tabIpTools.Size = new System.Drawing.Size(776, 536);
+            this.tabIpTools.TabIndex = 11;
+            this.tabIpTools.Text = "IP相关";
+            this.tabIpTools.UseVisualStyleBackColor = true;
             // 
             // tabImgTool
             // 
@@ -448,9 +448,9 @@
         private System.Windows.Forms.TabPage tabEncrypt;
         private System.Windows.Forms.TabPage tabRegex;
         private System.Windows.Forms.TabPage tabDataSync;
-        private System.Windows.Forms.TabPage tabQQWry;
+        private System.Windows.Forms.TabPage tabQr;
         private System.Windows.Forms.TabPage tabWebCompare;
-        private System.Windows.Forms.TabPage tabOtherTools;
+        private System.Windows.Forms.TabPage tabIpTools;
         private System.Windows.Forms.TabPage tabImgTool;
         private System.Windows.Forms.TabPage tabIIS;
 

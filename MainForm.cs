@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using Beinet.cn.Tools.Others;
 using Microsoft.Win32;
 
 namespace Beinet.cn.Tools
@@ -39,9 +40,9 @@ namespace Beinet.cn.Tools
             _tabForms.Add(tabEncrypt, typeof(CryptTool));
             _tabForms.Add(tabRegex, typeof(RegexTool.MainForm));
             _tabForms.Add(tabDataSync, typeof(DataSync.SqlServerTabForm));
-            _tabForms.Add(tabQQWry, typeof(QQWry.IP_QQWry));
+            _tabForms.Add(tabQr, typeof(QrCodeTool));
             _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
-            _tabForms.Add(tabOtherTools, typeof(Others.OtherTools));
+            _tabForms.Add(tabIpTools, typeof(Others.OtherTools));
             _tabForms.Add(tabImgTool, typeof(ImgTools.ImgTool));
             _tabForms.Add(tabIIS, typeof(Others.IIStool));
             #endregion

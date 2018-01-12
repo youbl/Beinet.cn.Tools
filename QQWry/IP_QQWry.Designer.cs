@@ -59,13 +59,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtIPFile.Location = new System.Drawing.Point(78, 9);
             this.txtIPFile.Name = "txtIPFile";
-            this.txtIPFile.Size = new System.Drawing.Size(404, 21);
+            this.txtIPFile.Size = new System.Drawing.Size(437, 21);
             this.txtIPFile.TabIndex = 1;
             // 
             // btnSelect
             // 
             this.btnSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelect.Location = new System.Drawing.Point(488, 7);
+            this.btnSelect.Location = new System.Drawing.Point(521, 7);
             this.btnSelect.Name = "btnSelect";
             this.btnSelect.Size = new System.Drawing.Size(52, 23);
             this.btnSelect.TabIndex = 2;
@@ -104,7 +104,7 @@
             // 
             this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 262);
+            this.label3.Location = new System.Drawing.Point(5, 296);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(89, 12);
             this.label3.TabIndex = 0;
@@ -114,15 +114,15 @@
             // 
             this.txtConstr.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtConstr.Location = new System.Drawing.Point(90, 259);
+            this.txtConstr.Location = new System.Drawing.Point(90, 293);
             this.txtConstr.Name = "txtConstr";
-            this.txtConstr.Size = new System.Drawing.Size(362, 21);
+            this.txtConstr.Size = new System.Drawing.Size(395, 21);
             this.txtConstr.TabIndex = 7;
             // 
             // btnImport
             // 
             this.btnImport.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnImport.Location = new System.Drawing.Point(458, 259);
+            this.btnImport.Location = new System.Drawing.Point(491, 293);
             this.btnImport.Name = "btnImport";
             this.btnImport.Size = new System.Drawing.Size(82, 23);
             this.btnImport.TabIndex = 8;
@@ -139,7 +139,7 @@
             this.txtRet.Multiline = true;
             this.txtRet.Name = "txtRet";
             this.txtRet.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtRet.Size = new System.Drawing.Size(533, 185);
+            this.txtRet.Size = new System.Drawing.Size(566, 219);
             this.txtRet.TabIndex = 6;
             this.txtRet.Text = resources.GetString("txtRet.Text");
             // 
@@ -148,14 +148,14 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(252, 44);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(209, 12);
+            this.label5.Size = new System.Drawing.Size(251, 12);
             this.label5.TabIndex = 0;
-            this.label5.Text = "IP可以是长整型，也可以是正常IP格式";
+            this.label5.Text = "IP格式：正常IP or 长整型，更新：2018-1-10";
             // 
             // btnLocal
             // 
             this.btnLocal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnLocal.Location = new System.Drawing.Point(488, 39);
+            this.btnLocal.Location = new System.Drawing.Point(521, 39);
             this.btnLocal.Name = "btnLocal";
             this.btnLocal.Size = new System.Drawing.Size(52, 23);
             this.btnLocal.TabIndex = 5;
@@ -167,7 +167,7 @@
             // 
             this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(5, 294);
+            this.label4.Location = new System.Drawing.Point(5, 328);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(509, 12);
             this.label4.TabIndex = 0;
@@ -177,7 +177,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(545, 315);
+            this.ClientSize = new System.Drawing.Size(578, 349);
             this.Controls.Add(this.btnImport);
             this.Controls.Add(this.btnLocal);
             this.Controls.Add(this.btnSearch);
