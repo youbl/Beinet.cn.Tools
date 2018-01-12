@@ -150,19 +150,15 @@
     <Compile Include="FileHash\FileHash.designer.cs">
       <DependentUpon>FileHash.cs</DependentUpon>
     </Compile>
-    <Compile Include="MergeDll\MergeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="MergeDll\MergeForm.Designer.cs">
-      <DependentUpon>MergeForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Others\OtherTools.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Others\OtherTools.Designer.cs">
       <DependentUpon>OtherTools.cs</DependentUpon>
     </Compile>
+    <Compile Include="Others\QRCodeDecoder.cs" />
     <Compile Include="Others\QRCodeEncoder.cs" />
+    <Compile Include="Others\QRCodeData.cs" />
     <Compile Include="Others\QRCodeUtility.cs" />
     <Compile Include="Others\qrcode\qrv10_0.cs" />
     <Compile Include="Others\qrcode\qrv10_1.cs" />
@@ -504,9 +500,6 @@
     <EmbeddedResource Include="FileHash\FileHash.resx">
       <DependentUpon>FileHash.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MergeDll\MergeForm.resx">
-      <DependentUpon>MergeForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Others\OtherTools.resx">
       <DependentUpon>OtherTools.cs</DependentUpon>
     </EmbeddedResource>
@@ -570,7 +563,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="ILMerge.exe" />
     <None Include="FileMD.aspx">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using ThoughtWorks.QRCode.Codec;
+using ThoughtWorks.QRCode.Codec.Data;
 
 namespace Beinet.cn.Tools.Others
 {
@@ -585,7 +586,32 @@ namespace Beinet.cn.Tools.Others
 
         private void btnRead_Click(object sender, EventArgs e)
         {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = "D:\\";
+            ofd.Filter = "Img files (*.jpg;*.png;*.gif;*.bmp)|*.jpg;*.png;*.gif;*.bmp|All files (*.*)|*.*";
 
+            var dialogRet = ofd.ShowDialog(this);
+            if (dialogRet != DialogResult.OK)
+                return;
+            var file = ofd.FileName;
+            try
+            {
+                string ret;
+                using (Bitmap bmp = new Bitmap(file))
+                {
+                    QRCodeDecoder decoder = new QRCodeDecoder();
+                    ret = decoder.decode(new QRCodeBitmapImage(bmp));
+                }
+                txtOtherQr.Text = ret;
+
+                if (pictureBox1.Image != null)
+                    pictureBox1.Image.Dispose();
+                pictureBox1.Image = Image.FromFile(file);
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(file + "解析出错：" + exp.Message);
+            }
         }
 
         private void AddErrMsg(string msg)

@@ -35,8 +35,6 @@ namespace Beinet.cn.Tools.DataSync
 
         private string _defaultPath = null;//Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "sync.xml");
 
-        private SqlForm _sqlForm;
-
         public MainForm()
         {
             InitializeComponent();
