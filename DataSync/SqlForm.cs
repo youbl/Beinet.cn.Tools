@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Text.RegularExpressions;
@@ -140,12 +141,18 @@ namespace Beinet.cn.Tools.DataSync
             
             rootNode.Text = "未连接";
             rootNode.Nodes.Clear();
-            rootNode.Nodes.Add(new TreeNode("用户表"));
-            rootNode.Nodes.Add(new TreeNode("视图"));
-            rootNode.Nodes.Add(new TreeNode("存储过程"));
-            rootNode.Nodes.Add(new TreeNode("触发器"));
-            rootNode.Nodes.Add(new TreeNode("函数"));
+            var tbNode = new TreeNode("用户表");
+            rootNode.Nodes.Add(tbNode);
+            var viewNode = new TreeNode("视图");
+            rootNode.Nodes.Add(viewNode);
+            var uspNode = new TreeNode("存储过程");
+            rootNode.Nodes.Add(uspNode);
+            var trigNode = new TreeNode("触发器");
+            rootNode.Nodes.Add(trigNode);
+            var funcNode = new TreeNode("函数");
+            rootNode.Nodes.Add(funcNode);
 
+            // 查询所有表、视图、存储过程、触发器、函数的sql
             var sql = "SELECT type,name FROM sys.objects WHERE type in ('u','v','p','tr','fn') ORDER BY type,name";
             var begintime = DateTime.Now;
             try
@@ -159,29 +166,39 @@ namespace Beinet.cn.Tools.DataSync
                     while (reader.Read())
                     {
                         var name = Convert.ToString(reader["name"]);
-                        var nodeIdx = 0;
+                        TreeNode nodeRoot = tbNode;
                         switch (Convert.ToString(reader["type"]).ToLower().Trim())
                         {
                             case "u":
-                                nodeIdx = 0;
+                                nodeRoot = tbNode;
                                 break;
                             case "v":
-                                nodeIdx = 1;
+                                nodeRoot = viewNode;
                                 break;
                             case "p":
-                                nodeIdx = 2;
+                                nodeRoot = uspNode;
                                 break;
                             case "tr":
-                                nodeIdx = 3;
+                                nodeRoot = trigNode;
                                 break;
                             case "fn":
-                                nodeIdx = 4;
+                                nodeRoot = funcNode;
                                 break;
                         }
-                        rootNode.Nodes[nodeIdx].Nodes.Add(new TreeNode(name));
+                        var eachTbNode = new TreeNode(name);
+                        nodeRoot.Nodes.Add(eachTbNode);
                     }
                 }
                 rootNode.ExpandAll();
+
+                // 绑定字段和索引
+                var cols = GetAllCols(constr);
+                var indexes = GetAllIndex(constr);
+                foreach (TreeNode subTbNode in tbNode.Nodes)
+                {
+                    BindColAndIndex(cols, indexes, subTbNode);
+                }
+
                 return true;
             }
             catch (Exception exp)
@@ -190,6 +207,153 @@ namespace Beinet.cn.Tools.DataSync
                 labStatus.Text = "连接失败，耗时:" + usetime.ToString("N0") + "毫秒";
                 MessageBox.Show(exp.Message);
                 return false;
+            }
+        }
+
+        static void BindColAndIndex(Dictionary<string, Dictionary<string, string>> cols,
+            Dictionary<string, Dictionary<string, string>> indexes, TreeNode tbNode)
+        {
+            string name = tbNode.Text;
+            // 绑定字段
+            Dictionary<string, string> tbCols;
+            if (!cols.TryGetValue(name, out tbCols))
+            {
+                return;
+            }
+            foreach (var pair in tbCols)
+            {
+                var txt = pair.Key + " " + pair.Value;
+                tbNode.Nodes.Add(new TreeNode(txt));
+            }
+
+            // 绑定索引
+            Dictionary<string, string> tbIdx;
+            if (!indexes.TryGetValue(name, out tbIdx))
+            {
+                return;
+            }
+            //var nodeIdx = new TreeNode("索引");
+            //tbNode.Nodes.Add(nodeIdx);
+            foreach (var pair in tbIdx)
+            {
+                var txt = "索引:" + pair.Value + " (" + pair.Key + ")";
+                tbNode.Nodes.Add(new TreeNode(txt));
+            }
+        }
+
+        static Dictionary<string, Dictionary<string, string>> GetAllCols(string constr)
+        {
+            var ret = new Dictionary<string, Dictionary<string, string>>();
+            // 获取表结构和行号
+            var sqlIdx = @"SELECT --b.colorder,
+       a.name tablename,
+       b.name column_name,
+       d.value comments,            -- 字段注释
+       e.name data_type,                -- 字段类型
+       b.length char_length,            -- 指示nvarchar的长度(不是表定义里的长度)
+       b.scale data_scale,                -- 指示number小数的长度
+       b.isnullable,                    -- 字段是否允许为空值,1允许,0不允许
+       f.text column_default             -- 字段默认值
+FROM   sys.sysobjects a
+INNER JOIN sys.syscolumns b ON  a.id = b.id
+ LEFT JOIN sys.extended_properties d on d.major_id = b.id and d.minor_id = b.colid
+INNER JOIN systypes e ON  e.xusertype = b.xusertype
+ LEFT JOIN syscomments f ON  b.cdefault = f.id
+ORDER BY a.name, b.colorder";
+            try
+            {
+                using (var reader = SqlHelper.ExecuteReader(constr, sqlIdx))
+                {
+                    while (reader.Read())
+                    {
+                        var name = Convert.ToString(reader["tablename"]);
+                        Dictionary<string, string> tbCols;
+                        if (!ret.TryGetValue(name, out tbCols))
+                        {
+                            tbCols = new Dictionary<string, string>();
+                            ret[name] = tbCols;
+                        }
+
+                        var colName = Convert.ToString(reader["column_name"]);
+                        var collen = Convert.ToString(reader["char_length"]);
+                        var colScale = Convert.ToString(reader["data_scale"]).Trim();
+                        if (colScale.Length > 0)
+                        {
+                            collen += "," + colScale;
+                        }
+                        else if(collen == "-1")
+                        {
+                            collen = "max";
+                        }
+
+                        var colNull = Convert.ToString(reader["isnullable"]).Trim() == "0" ? " NOT NULL" : "";
+                        var colDefault = Convert.ToString(reader["column_default"]).Trim();
+                        if (colDefault.Length > 0)
+                        {
+                            colDefault = " DEFAULT " + colDefault;
+                        }
+                        var colcomments = Convert.ToString(reader["comments"]).Trim();
+                        if (colcomments.Length > 0)
+                        {
+                            colcomments = " comment " + colDefault;
+                        }
+                        var colAtt = Convert.ToString(reader["data_type"]) + "(" + collen + ")" + colNull +
+                                     colDefault + colcomments;
+                        tbCols[colName] = colAtt;
+                    }
+                }
+                return ret;
+            }
+            catch (Exception)
+            {
+                return ret;
+            }
+        }
+
+        static Dictionary<string, Dictionary<string, string>> GetAllIndex(string constr)
+        {
+            var ret = new Dictionary<string, Dictionary<string, string>>();
+            // 查询所有索引的sql
+            var sqlIdx = @"select tb.name tablename, idx.name idxname, tp.name coltype,
+       idxcol.index_column_id colIdx, col.name colname, idx.type_desc
+ from sys.columns col, sys.index_columns idxcol,sys.indexes idx,sys.tables tb,sys.types tp
+where col.column_id=idxcol.column_id and idxcol.index_id=idx.index_id 
+  and idx.object_id=tb.object_id and idxcol.object_id=idx.object_id
+  and col.object_id=idx.object_id and tp.user_type_id=col.user_type_id
+order by tb.name, idx.name, idxcol.index_column_id";
+            try
+            {
+                using (var reader = SqlHelper.ExecuteReader(constr, sqlIdx))
+                {
+                    while (reader.Read())
+                    {
+                        var name = Convert.ToString(reader["tablename"]);
+                        Dictionary<string, string> tbIdx;
+                        if (!ret.TryGetValue(name, out tbIdx))
+                        {
+                            tbIdx = new Dictionary<string, string>();
+                            ret[name] = tbIdx;
+                        }
+
+                        var idxName = Convert.ToString(reader["idxname"]);
+                        string idxStr;
+                        if (tbIdx.TryGetValue(idxName, out idxStr))
+                        {
+                            idxStr += ", ";
+                        }
+                        else
+                        {
+                            idxStr = Convert.ToString(reader["type_desc"]) == "CLUSTERED" ? "PK:" : "";
+                        }
+                        idxStr += Convert.ToString(reader["colname"]);
+                        tbIdx[idxName] = idxStr;
+                    }
+                }
+                return ret;
+            }
+            catch (Exception)
+            {
+                return ret;
             }
         }
 
