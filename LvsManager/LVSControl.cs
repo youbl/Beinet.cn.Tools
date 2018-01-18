@@ -237,7 +237,7 @@ namespace Beinet.cn.Tools.LvsManager
             {
                 try
                 {
-                    string html = Utility.GetPage(site.url + "?getrealstate=yes&format=robot", null, serverIP); 
+                    string html = DoGetPage(site.url + "?getrealstate=yes&format=robot", null, serverIP); 
                     string[] arr = html.Split('|');
                     if (arr.Length > 2)
                     {
@@ -300,7 +300,7 @@ namespace Beinet.cn.Tools.LvsManager
                     {
                         //var selectedItem = GetValue(lvServers, "SelectedItems") as
                         //    ListView.SelectedListViewItemCollection;
-                        str = Utility.GetPage(url, null, serverIP); 
+                        str = DoGetPage(url, null, serverIP); 
                     }
                     catch (Exception ex)
                     {
@@ -330,8 +330,10 @@ namespace Beinet.cn.Tools.LvsManager
                     {
                         continue;
                     }
-                    if (item.SubItems[COLLVS].Text.Equals("ONLINE", StringComparison.OrdinalIgnoreCase) )
-                        // && item.SubItems[COLNGINX].Text.Equals("up", StringComparison.OrdinalIgnoreCase)
+                    var ngStatus = item.SubItems[COLNGINX].Text;
+                    // ng状态不等于down就ok，避免未配置的情况
+                    if (item.SubItems[COLLVS].Text.Equals("ONLINE", StringComparison.OrdinalIgnoreCase) 
+                        && !ngStatus.Equals("down", StringComparison.OrdinalIgnoreCase))
                     {
                         upCnt++;
                     }
@@ -446,15 +448,15 @@ namespace Beinet.cn.Tools.LvsManager
         {
             ThreadPool.UnsafeQueueUserWorkItem(state =>
             {
-                var ngurl = "http://nginx.bbb.com/get_status";
-                var ipmap = LoadIpMap();
+                var ngurl = "http://nginx.xxx.com/check_status";
+                var ipmap = InOutIpMap;
                 while (true)
                 {
                     Thread.Sleep(3000);
                     string html = null;
                     try
                     {
-                        html = Utility.GetPage(ngurl);
+                        html = DoGetPage(ngurl);
                         //var obj = Utility.FromJson<object>(html);
                     }
                     catch (Exception exp)
@@ -478,6 +480,7 @@ namespace Beinet.cn.Tools.LvsManager
             }, null);
         }
 
+        private static Dictionary<string, string> InOutIpMap = LoadIpMap();
         /// <summary>
         /// 加载内外网ip映射关系
         /// </summary>
@@ -520,14 +523,25 @@ namespace Beinet.cn.Tools.LvsManager
         // 匹配单行里的上线状态字段
         static Regex regStatus = new Regex(@"""status""\s*:\s*""([^""]+)""", RegexOptions.Compiled);
 
-        private static Dictionary<string, Tuple<string, string>> MatchNginxRows(string html)
+        /// <summary>
+        /// key为upstream域名，value为多行name即IP列表
+        /// </summary>
+        /// <param name="html"></param>
+        /// <returns></returns>
+        private static Dictionary<string, List<Tuple<string, string>>> MatchNginxRows(string html)
         {
-            var ret = new Dictionary<string, Tuple<string, string>>();
+            var ret = new Dictionary<string, List<Tuple<string, string>>>();
             var match = regRow.Match(html);
             while (match.Success)
             {
                 var row = match.Value;
-                var upstream = match.Result("$1").Trim();
+                var upstream = match.Result("$1").Trim().Replace("_conf", "");
+                List<Tuple<string, string>> domainIpLst;
+                if (!ret.TryGetValue(upstream, out domainIpLst))
+                {
+                    domainIpLst = new List<Tuple<string, string>>();
+                    ret[upstream] = domainIpLst;
+                }
 
                 var matchName = regName.Match(row);
                 var name = string.Empty;
@@ -546,19 +560,28 @@ namespace Beinet.cn.Tools.LvsManager
                 {
                     status = matchStatus.Result("$1").Trim();
                 }
-                ret[name] = new Tuple<string, string>(upstream, status);
+                domainIpLst.Add(new Tuple<string, string>(name, status));
                 match = match.NextMatch();
             }
             return ret;
         }
 
-        private static void SetGridStatus(ListView lv, Dictionary<string, Tuple<string, string>> statuses,
+        private static void SetGridStatus(ListView lv, Dictionary<string, List<Tuple<string, string>>> statuses,
             Dictionary<string, string> ipmap)
         {
             Utility.InvokeControl(lv, () =>
             {
                 foreach (ListViewItem item in lv.Items)
                 {
+                    List<Tuple<string, string>> ngStatus;
+                    var domain = item.SubItems[COLNAME].Text;
+                    if (!statuses.TryGetValue(domain, out ngStatus))
+                    {
+                        // 该域名在ng列表不存在
+                        item.SubItems[COLNGINX].Text = "未配置";
+                        continue;
+                    }
+
                     var ipall = item.SubItems[0].Text;
                     var arr = ipall.Split(':');
                     string ip2;
@@ -570,20 +593,17 @@ namespace Beinet.cn.Tools.LvsManager
                     {
                         ip2 = ip2 + ":" + arr[1];
                     }
-
-                    Tuple<string, string> ngStatus;
-                    if (!statuses.TryGetValue(ipall, out ngStatus) && !statuses.TryGetValue(ip2, out ngStatus))
+                    bool statusSetted = false;
+                    foreach (Tuple<string, string> tuple in ngStatus)
                     {
-
-                        item.SubItems[COLNGINX].Text = "未配置";
-                        continue;
+                        if (tuple.Item1 == ipall || tuple.Item1 == ip2)
+                        {
+                            item.SubItems[COLNGINX].Text = tuple.Item2;
+                            statusSetted = true;
+                            break;
+                        }
                     }
-                    var domain = item.SubItems[COLNAME].Text;
-                    if (ngStatus.Item1.IndexOf(domain, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        item.SubItems[COLNGINX].Text = ngStatus.Item2;
-                    }
-                    else
+                    if (!statusSetted)
                     {
                         item.SubItems[COLNGINX].Text = "未配置";
                     }
@@ -601,6 +621,28 @@ namespace Beinet.cn.Tools.LvsManager
         {
             string name = item.SubItems[COLNAME].Text;
             return _sites.Find(site => site.name == name);
+        }
+
+
+        static string DoGetPage(string url, string para = null, string proxy = null)
+        {
+            // 10网段的ip代理，要切换为外网ip
+            if (proxy != null && proxy.StartsWith("10.", StringComparison.Ordinal))
+            {
+                var ipmap = InOutIpMap;
+                var arr = proxy.Split(':');
+                string ip2;
+                if (ipmap.TryGetValue(arr[0], out ip2))
+                {
+                    if (arr.Length > 1)
+                    {
+                        ip2 = ip2 + ":" + arr[1];
+                    }
+                    proxy = ip2;
+                }
+            }
+
+            return Utility.GetPage(url, para, proxy);
         }
     }
 }

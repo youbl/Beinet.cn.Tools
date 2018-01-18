@@ -1007,7 +1007,16 @@ namespace Beinet.cn.Tools
         {
             if (e.KeyCode == Keys.A && e.Control && !e.Alt && !e.Shift)
             {
-                ((TextBox)sender).SelectAll();
+                var txtBox = sender as TextBox;
+                if (txtBox != null)
+                {
+                    txtBox.SelectAll();
+                }
+                else
+                {
+                    var richBox = sender as RichTextBox;
+                    richBox?.SelectAll();
+                }
                 e.Handled = true;
                 //e.SuppressKeyPress = true;
             }
