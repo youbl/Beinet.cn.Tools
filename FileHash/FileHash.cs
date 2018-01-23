@@ -419,8 +419,9 @@ namespace Beinet.cn.Tools.FileHash
                 var ignoreNodes = node.SelectNodes("IgnorePath");
                 if (ignoreNodes == null || ignoreNodes.Count == 0)
                 {
-                    ignoreDirs = new string[1];
+                    ignoreDirs = new string[2];
                     ignoreDirs[0] = ".svn";
+                    ignoreDirs[1] = ".git";
                 }
                 else
                 {
@@ -693,5 +694,9 @@ namespace Beinet.cn.Tools.FileHash
             });
         }
 
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            new FileHashConfig().ShowDialog(this);
+        }
     }
 }

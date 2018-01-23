@@ -64,6 +64,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileHash\FileHashConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileHash\FileHashConfig.designer.cs">
+      <DependentUpon>FileHashConfig.cs</DependentUpon>
+    </Compile>
     <Compile Include="Others\CryptTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -464,6 +470,9 @@
     <Compile Include="WebContentCompare\CompareRegEdit.Designer.cs">
       <DependentUpon>CompareRegEdit.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FileHash\FileHashConfig.resx">
+      <DependentUpon>FileHashConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Others\CryptTool.resx">
       <DependentUpon>CryptTool.cs</DependentUpon>
     </EmbeddedResource>
@@ -549,7 +558,9 @@
     <EmbeddedResource Include="WebContentCompare\CompareRegEdit.resx">
       <DependentUpon>CompareRegEdit.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="app.config" />
+    <None Include="app.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -567,6 +578,9 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="b.ico" />
+    <Content Include="CheckIPInfo.aspx">
+      <SubType>ASPXCodeBehind</SubType>
+    </Content>
     <Content Include="DataSync\sync.xml" />
     <Content Include="LvsManager\CheckIPInfo.aspx">
       <SubType>ASPXCodeBehind</SubType>

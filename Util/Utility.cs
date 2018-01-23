@@ -721,6 +721,7 @@ namespace Beinet.cn.Tools
             var needSetHost = !string.IsNullOrEmpty(proxy);
             if (needSetHost)
             {
+                // 不再使用proxy方案，改用替换url里的host为ip，并设置header里的host实现
                 SwitchHost(ref url, ref proxy);
             }
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
@@ -734,6 +735,8 @@ namespace Beinet.cn.Tools
             if (needSetHost)
             {
                 request.Host = proxy.Split(':')[0]; // 避免替换出来的域名带了端口
+                // request.Proxy = null;// 直接连接，避免fiddler干扰, 在Web.Config里配置
+
                 //#region 设置代理
                 //string[] tmp = proxy.Split(new[] { ':' }, StringSplitOptions.RemoveEmptyEntries);
                 //int port = 80;
