@@ -848,9 +848,13 @@ namespace Beinet.cn.Tools
             }
 
             var idx = url.IndexOf('/');
-            if (idx <= 0)
+            if (idx == 0)
             {
                 return string.Empty;
+            }
+            if (idx < 0)
+            {
+                return url;
             }
             return url.Substring(0, idx);
         }

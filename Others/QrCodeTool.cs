@@ -2,6 +2,7 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
@@ -27,7 +28,7 @@ namespace Beinet.cn.Tools.Others
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button1_Click(object sender, EventArgs e)
+        private void btnBuild_Click(object sender, EventArgs e)
         {
             Image img = BuildQrCode();
             if (img == null)
@@ -42,7 +43,7 @@ namespace Beinet.cn.Tools.Others
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void button2_Click(object sender, EventArgs e)
+        private void btnSaveToFile_Click(object sender, EventArgs e)
         {
             using (Image img = BuildQrCode())
             {
@@ -105,6 +106,7 @@ namespace Beinet.cn.Tools.Others
             if (dialogRet != DialogResult.OK)
                 return;
             var file = ofd.FileName;
+            txtRet.Text = "";
             try
             {
                 string ret;
@@ -113,7 +115,7 @@ namespace Beinet.cn.Tools.Others
                     QRCodeDecoder decoder = new QRCodeDecoder();
                     ret = decoder.decode(new QRCodeBitmapImage(bmp));
                 }
-                txtOtherQr.Text = ret;
+                txtRet.Text = ret;
 
                 if (pictureBox1.Image != null)
                     pictureBox1.Image.Dispose();
@@ -121,7 +123,29 @@ namespace Beinet.cn.Tools.Others
             }
             catch (Exception exp)
             {
-                MessageBox.Show(file + "解析出错：" + exp.Message);
+                MessageBox.Show(file + " 解析出错：" + exp.Message);
+                txtRet.Text = exp.Message;
+            }
+        }
+
+
+        private void btnParseUrl_Click(object sender, EventArgs e)
+        {
+            var url = txtOtherQr.Text;
+            if (url.Length == 0)
+            {
+                MessageBox.Show("请在二维码内容框内输入要识别的二维码URL");
+                return;
+            }
+            txtRet.Text = "";
+            try
+            {
+                GetQrPage(url);
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(url + " 解析出错：" + exp.Message);
+                txtRet.Text = exp.Message;
             }
         }
 
@@ -226,9 +250,38 @@ namespace Beinet.cn.Tools.Others
                 return null;
             }
         }
+
+
+        /// <summary>
+        /// 获取指定网页的二进制流,并解析二维码
+        /// </summary>
+        /// <param name="url"></param>
+        void GetQrPage(string url)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; Trident/4.0;)";
+            request.AllowAutoRedirect = true; //出现301或302之类的转向时，是否要转向
+
+            string ret;
+            Bitmap bmp = null;
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            {
+                if (stream == null)
+                    ret = "";
+                else
+                {
+                    bmp = new Bitmap(stream);
+                    QRCodeDecoder decoder = new QRCodeDecoder();
+                    ret = decoder.decode(new QRCodeBitmapImage(bmp), Encoding.UTF8);
+                }
+            }
+            txtRet.Text = ret;
+            
+            pictureBox1.Image?.Dispose();
+            pictureBox1.Image = bmp;
+        }
         #endregion
 
-
-        
     }
 }

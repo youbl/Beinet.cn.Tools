@@ -43,7 +43,8 @@ namespace Beinet.cn.Tools
             try
             {
                 Exception ex = e.ExceptionObject as Exception;
-                MessageBox.Show(ex.Message);
+                var msg = ex?.Message ?? Convert.ToString(e.ExceptionObject);
+                MessageBox.Show(msg);
             }
             catch { }
         }
