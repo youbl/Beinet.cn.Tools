@@ -3,38 +3,33 @@
 <%@ Import Namespace="System.Net.Sockets" %>
 <%@ Import Namespace="System.IO" %>
 <%@ Import Namespace="System.Reflection" %>
+<%@ Import Namespace="System.Security.Cryptography" %>
 <script language="C#" runat="server">
     /************************************************************************************/
-    //在Global.asax.cs里增加如下代码：
+    // 使用步骤：
+    // 1、修改第29行代码 GlobalClassName 变量的值，为你的Global.asax.cs的完整命名空间+类名
+    // 2、在你的项目 Global.asax.cs 里增加如下代码：
     /*
-        // 最近一次用户访问的时间    
-        public static DateTime LAST_ACCESS_TIME_KEY = DateTime.Now;
-        // 站点启动以来，正常用户访问次数
-        public static int AccessCount = 0;
+        public static DateTime LAST_ACCESS_TIME_KEY = DateTime.Now;                 // 最近一次用户访问的时间
+        public static int AccessCount = 0;                                          // 站点启动以来，正常用户访问次数
         void Application_EndRequest(object sender, EventArgs e)
         {
             string url = Request.Url.ToString().ToLower();
             // 记录活动时间，用于判断站点是否被用户使用中（这些判断代码注意要屏蔽测试页面）
             if (url.IndexOf("iswebmon=", StringComparison.Ordinal) < 0 &&           // 站点监控程序访问，不作为用户
                 url.IndexOf("/checkipinfo.aspx", StringComparison.Ordinal) < 0 &&   // 前端轮询时，不作为用户
-                url.IndexOf("/z.aspx", StringComparison.Ordinal) < 0)       
+                url.IndexOf("/z.aspx", StringComparison.Ordinal) < 0)               // 这里修改为你自己站点的测试页面
             {
                 LAST_ACCESS_TIME_KEY = DateTime.Now;
                 Interlocked.Increment(ref AccessCount);
             }
      */
-    //
-    //使用注意：
-    //1、修改下面代码LAST_ACCESS_TIME_KEY前面的命名空间
-    //2、修改WhiteIpList里的允许设置上下线状态的ip列表，避免非法用户设置
     /************************************************************************************/
 
-    // 开关状态保存到的文件名
-    private static string StatusSavePath  = Path.Combine(@"e:\upload", ReplaceNonValidChars(HttpContext.Current.Server.MapPath("."), "_") + ".onoffconfig");
-
     // Global.asax.cs里的完整类名，带命名空间，用于后面反射获取最近访问时间
-    private static string GlobalClassName = "Mike.ConfigsCenter.Web.WebApiApplication";
-
+    private static string GlobalClassName = "MyWeb.WebApiApplication";
+    // 上下线开关状态保存到的文件名
+    private static string StatusSavePath  = Path.Combine(@"e:\data", ReplaceNonValidChars(HttpContext.Current.Server.MapPath("."), "_") + ".onoffconfig");
     private static List<string> _whiteIpList;
     /// <summary>
     /// 允许设置上下线状态的ip列表,请根据实际项目修改ip
@@ -79,6 +74,7 @@
         //获取当前服务器的上下线状态，如果获取不到，则默认为在线状态
         string currentState = GetCurrentStatus() ? ONLINE : OFFLINE;
         DateTime now = DateTime.Now;
+        Response.ContentEncoding = Encoding.UTF8;
 
         //==============================================================================================================
         // 工具接口：进行状态查询：根据当前服务器最后一次请求时间判断服务器是否已经下线
@@ -106,7 +102,7 @@
             }
             else
             {
-                Response.Write(string.Format("当前的上下线状态为：{5}<br />服务器上次请求时间为：{0}，当前时间为：{1}，" +
+                Response.Write(string.Format("当前状态：{5}，站点目录：{6}<br />服务器最近用户请求时间：{0}，当前时间：{1}，" +
                                              "间隔了：<span style=\"font-weight:bold; color:red;\">{2}</span> 秒<br />{3}<br />{4}<br />"
                     , lastRequestTime
                     , now
@@ -114,7 +110,7 @@
                     , GetSelfIpv4List()
                     , Request.Url
                     , currentState
-                    ));
+                    , Server.MapPath(".")));
             }
             return;
         }
@@ -178,6 +174,16 @@
             return;
         }
 
+
+        //==============================================================================================================
+        // 工具接口：读取服务器文件MD5，用于版本比对
+        //==============================================================================================================
+        if (!string.IsNullOrEmpty(Request.QueryString["md5"]))
+        {
+            DoGetMd5();
+            return;
+        }
+
         Response.StatusCode = (currentState == OFFLINE ? OFFLINE_CODE : ONLINE_CODE);
         Response.Write(currentState);
         Response.End();
@@ -231,11 +237,96 @@
     }
 
 
+    private void DoGetMd5()
+    {
+        string dir = Request.Form["d"] ?? Request.QueryString["d"];
+        if (dir == null || (dir = dir.Trim()).Length == 0)
+            return;
+        if (dir.Length == 2)
+            dir += "\\"; // 处理e:这样的格式,因为e:是当前站点根目录，不是磁盘根目录
+        // 防止出现 c:\\\\a.exe 或 c:/a.exe这样的路径,统一格式化成：c:\a.exe形式
+        dir = Path.Combine(Path.GetDirectoryName(dir) ?? "", Path.GetFileName(dir) ?? "");
+
+        //获取指定目录下所有文件的md5值，用于接口调用
+        Dictionary<string, string> md5s = new Dictionary<string, string>();
+        string err = GetAllFileMd5(dir, md5s, dir);
+        Response.ContentType = "text/plain";
+        if (!string.IsNullOrEmpty(err))
+        {
+            Response.Write("出错了," + err + "\r\n");
+        }
+        foreach (KeyValuePair<string, string> pair in md5s)
+        {
+            Response.Write(pair.Key + "," + pair.Value + "\r\n");
+        }
+    }
+
+    /// <summary>
+    /// 返回指定目录下的全部
+    /// </summary>
+    /// <param name="dirPath"></param>
+    /// <param name="md5s"></param>
+    /// <param name="root"></param>
+    /// <returns></returns>
+    static string GetAllFileMd5(string dirPath, Dictionary<string, string> md5s, string root)
+    {
+        if (string.IsNullOrEmpty(dirPath) || !Directory.Exists(dirPath))
+        {
+            return dirPath + " 目录不存在";
+        }
+        if (!dirPath.EndsWith("\\"))
+        {
+            dirPath += "\\";
+        }
+        if (dirPath.IndexOf(".svn", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            dirPath.IndexOf(".git", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            dirPath.IndexOf("\\configs\\", StringComparison.OrdinalIgnoreCase) >= 0 ||
+            dirPath.IndexOf("\\logs\\", StringComparison.OrdinalIgnoreCase) >= 0)
+        {
+            return string.Empty; // 不比对svn或git目录
+        }
+        try
+        {
+            foreach (string file in Directory.GetFiles(dirPath))
+            {
+                md5s.Add(file.Replace(root, ""), GetMD5(file));
+            }
+            foreach (string dir in Directory.GetDirectories(dirPath))
+            {
+                string ret = GetAllFileMd5(dir, md5s, root);
+                if (ret != string.Empty)
+                {
+                    return ret;
+                }
+            }
+            return string.Empty;
+        }
+        catch (Exception exp)
+        {
+            return dirPath + " 子目录或文件列表获取失败:" + exp;
+        }
+    }
+    static string GetMD5(string path)
+    {
+        try
+        {
+            using (MD5CryptoServiceProvider get_md5 = new MD5CryptoServiceProvider())
+            using (FileStream get_file = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.Read))
+            {
+                return BitConverter.ToString(get_md5.ComputeHash(get_file)).Replace("-", "");
+            }
+        }
+        catch (Exception exp)
+        {
+            return exp.Message;
+        }
+    }
+
     /// <summary>
     /// 获取本机所有IPV4地址列表
     /// </summary>
     /// <returns>本机所有IPV4地址列表，以分号分隔</returns>
-    public static string GetSelfIpv4List()
+    static string GetSelfIpv4List()
     {
         StringBuilder ips = new StringBuilder();
         try

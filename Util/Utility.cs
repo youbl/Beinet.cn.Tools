@@ -697,12 +697,13 @@ namespace Beinet.cn.Tools
         /// <param name="url"></param>
         /// <param name="param"></param>
         /// <param name="isPost"></param>
+        /// <param name="isJson"></param>
         /// <param name="encoding"></param>
         /// <param name="showHeader"></param>
         /// <param name="proxy"></param>
         /// <returns></returns>
         public static string GetPage(string url, string param = null, string proxy = null, bool isPost = false,
-            Encoding encoding = null, bool showHeader = false)
+            bool isJson = false, Encoding encoding = null, bool showHeader = false)
         {
             if (encoding == null)
                 encoding = Encoding.UTF8;
@@ -730,6 +731,14 @@ namespace Beinet.cn.Tools
             request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1;)";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
             request.Timeout = 10000;
+            if (isJson)
+            {
+                request.Accept = "application/json";
+            }
+            else
+            {
+                request.Accept = "*/*";
+            }
 
             // 必须在写入Post Stream之前设置Proxy
             if (needSetHost)

@@ -759,13 +759,16 @@ Ctrl+R: 开始检查");
                     string compareFile = "compare" + compareIp + ".txt";
                     WriteFile(rowDir, compareFile, url, post, compareHtml);
                     // 重新读取文件，因为写入文件前换行符有所不同
-                    compareHtml = ReadFile(rowDir, compareFile);
+                    string beforeHtml = ReadFile(rowDir, compareFile);
 
                     // 替换后的内容也写入文件
-                    compareHtml = ReplaceWithRegex(ReplaceWithRegex(compareHtml, regs), globalRegs);
-                    string replaceFile = "compare" + compareIp + "replace.txt";
-                    WriteFile(rowDir, replaceFile, "", "", compareHtml);
-                    compareHtml = ReadFile(rowDir, replaceFile);
+                    compareHtml = ReplaceWithRegex(ReplaceWithRegex(beforeHtml, regs), globalRegs);
+                    if (beforeHtml != compareHtml)
+                    {
+                        string replaceFile = "compare" + compareIp + "replace.txt";
+                        WriteFile(rowDir, replaceFile, "", "", compareHtml);
+                        compareHtml = ReadFile(rowDir, replaceFile);
+                    }
 
                     if (compareHtml.Trim() == string.Empty)
                     {
@@ -800,13 +803,16 @@ Ctrl+R: 开始检查");
 
                                 WriteFile(rowDir, ip + ".txt", url, post, html);
                                 // 重新读取文件，因为换行不同
-                                html = ReadFile(rowDir, ip + ".txt");
+                                string tmpHtml = ReadFile(rowDir, ip + ".txt");
 
 
                                 // 替换后的内容也写入文件
-                                html = ReplaceWithRegex(ReplaceWithRegex(html, regs), globalRegs);
-                                WriteFile(rowDir, ip + "replace.txt", "", "", html);
-                                html = ReadFile(rowDir, ip + "replace.txt");
+                                html = ReplaceWithRegex(ReplaceWithRegex(tmpHtml, regs), globalRegs);
+                                if (html != tmpHtml)
+                                {
+                                    WriteFile(rowDir, ip + "replace.txt", "", "", html);
+                                    html = ReadFile(rowDir, ip + "replace.txt");
+                                }
                             }
                             catch (Exception exp)
                             {
