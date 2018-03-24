@@ -129,14 +129,20 @@ namespace Beinet.cn.Tools.Others
         {
             if (!_stop)
             {
+                int seconds;
+                if (!int.TryParse(txtTimeout.Text, out seconds))
+                {
+                    seconds = 4;
+                }
+
                 IPAddress ip = (IPAddress)state;
                 if (chkNormalPort.Checked)
                 {
-                    DoPortScan(ip, true);
+                    DoPortScan(ip, true, seconds);
                 }
                 else if (chkPortAll.Checked)
                 {
-                    DoPortScan(ip, false);
+                    DoPortScan(ip, false, seconds);
                 }
             }
             Interlocked.Decrement(ref _threads);
@@ -206,7 +212,7 @@ namespace Beinet.cn.Tools.Others
             }
         }
 
-        private void DoPortScan(IPAddress ip, bool normal)
+        private void DoPortScan(IPAddress ip, bool normal, int seconds)
         {
             if (_stop) return;
             if (normal)
@@ -218,7 +224,7 @@ namespace Beinet.cn.Tools.Others
                     var port1 = port;
                     ThreadPool.UnsafeQueueUserWorkItem(state =>
                     {
-                        PerPortCheck(ip, port1);
+                        PerPortCheck(ip, port1, seconds);
                     }, null);
                     while (_threads > 300)
                     {
@@ -234,7 +240,7 @@ namespace Beinet.cn.Tools.Others
                     var port1 = port;
                     ThreadPool.UnsafeQueueUserWorkItem(state =>
                     {
-                        PerPortCheck(ip, port1);
+                        PerPortCheck(ip, port1, seconds);
                     }, null);
                     while (_threads > 300)
                     {
@@ -244,10 +250,13 @@ namespace Beinet.cn.Tools.Others
             }
         }
 
-        private void PerPortCheck(IPAddress ip, int port)
+        private void PerPortCheck(IPAddress ip, int port, int seconds)
         {
             if (_stop)
+            {
+                Interlocked.Decrement(ref _threads);
                 return;
+            }
             var begin = DateTime.Now;
             string txt = "";
             bool isok = false;
@@ -256,17 +265,21 @@ namespace Beinet.cn.Tools.Others
                 IPEndPoint serverInfo = new IPEndPoint(ip, port);
                 using (Socket socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
                 {
-                    // 单位毫秒
-                    socket.SendTimeout = 2000;
-                    socket.ReceiveTimeout = 2000;
 
-                    //socket.BeginConnect(serverInfo, CallBackMethod, socket);
-                    socket.Connect(serverInfo);
-                    if (socket.Connected)
+                    // 单位毫秒
+                    // socket.SendTimeout = 2000;
+                    // socket.ReceiveTimeout = 2000;
+                    //socket.Connect(serverInfo);
+
+                    IAsyncResult connResult = socket.BeginConnect(serverInfo, null, null);
+                    connResult.AsyncWaitHandle.WaitOne(1000 * seconds, true); //等待4秒
+
+                    if (connResult.IsCompleted && socket.Connected)
                     {
                         // ok
                         isok = true;
-                        var tmptxt = "(" + (DateTime.Now - begin).TotalSeconds.ToString("N2") + "秒)" + txtResult.Text + ip + " : " + port + " 开放 \r\n";
+                        var tmptxt = txtResult.Text +
+                                     "(" + (DateTime.Now - begin).TotalSeconds.ToString("N2") + "秒)" + ip + " : " + port + " 开放 \r\n";
                         Utility.InvokeControl(txtResult, () => txtResult.Text = tmptxt);
                     }
                     else
@@ -281,6 +294,10 @@ namespace Beinet.cn.Tools.Others
             {
                 // err
                 txt = ip + " : " + port + " 未开放:" + exp.Message + " \r\n";
+            }
+            finally
+            {
+                Interlocked.Decrement(ref _threads);
             }
             if (!isok)
             {

@@ -30,6 +30,7 @@
         {
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.labTh = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -43,7 +44,8 @@
             this.labStatus = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.label2 = new System.Windows.Forms.Label();
+            this.txtTimeout = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -53,8 +55,10 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.txtTimeout);
             this.tabPage1.Controls.Add(this.labTh);
             this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.label3);
             this.tabPage1.Controls.Add(this.label8);
             this.tabPage1.Controls.Add(this.tabControl2);
             this.tabPage1.Controls.Add(this.chkPortAll);
@@ -74,16 +78,25 @@
             // labTh
             // 
             this.labTh.AutoSize = true;
-            this.labTh.Location = new System.Drawing.Point(540, 66);
+            this.labTh.Location = new System.Drawing.Point(540, 91);
             this.labTh.Name = "labTh";
             this.labTh.Size = new System.Drawing.Size(11, 12);
             this.labTh.TabIndex = 12;
             this.labTh.Text = "0";
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(39, 38);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(377, 12);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "多个IP以半角逗号分隔，且支持 - 的IP段，如：10.2.0.1-10.2.0.100";
+            // 
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(469, 66);
+            this.label8.Location = new System.Drawing.Point(469, 91);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(71, 12);
             this.label8.TabIndex = 0;
@@ -96,10 +109,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Location = new System.Drawing.Point(3, 81);
+            this.tabControl2.Location = new System.Drawing.Point(3, 107);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(590, 358);
+            this.tabControl2.Size = new System.Drawing.Size(590, 332);
             this.tabControl2.TabIndex = 10;
             // 
             // tabPage3
@@ -108,7 +121,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(582, 332);
+            this.tabPage3.Size = new System.Drawing.Size(582, 306);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "成功记录";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -120,7 +133,7 @@
             this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
             this.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtResult.Size = new System.Drawing.Size(576, 326);
+            this.txtResult.Size = new System.Drawing.Size(576, 300);
             this.txtResult.TabIndex = 8;
             this.txtResult.WordWrap = false;
             // 
@@ -149,7 +162,7 @@
             // chkPortAll
             // 
             this.chkPortAll.AutoSize = true;
-            this.chkPortAll.Location = new System.Drawing.Point(220, 41);
+            this.chkPortAll.Location = new System.Drawing.Point(220, 66);
             this.chkPortAll.Name = "chkPortAll";
             this.chkPortAll.Size = new System.Drawing.Size(144, 16);
             this.chkPortAll.TabIndex = 6;
@@ -162,7 +175,7 @@
             this.chkNormalPort.AutoSize = true;
             this.chkNormalPort.Checked = true;
             this.chkNormalPort.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkNormalPort.Location = new System.Drawing.Point(118, 41);
+            this.chkNormalPort.Location = new System.Drawing.Point(118, 66);
             this.chkNormalPort.Name = "chkNormalPort";
             this.chkNormalPort.Size = new System.Drawing.Size(96, 16);
             this.chkNormalPort.TabIndex = 5;
@@ -193,7 +206,7 @@
             // 
             this.labStatus.AutoSize = true;
             this.labStatus.ForeColor = System.Drawing.Color.Red;
-            this.labStatus.Location = new System.Drawing.Point(5, 66);
+            this.labStatus.Location = new System.Drawing.Point(5, 91);
             this.labStatus.Name = "labStatus";
             this.labStatus.Size = new System.Drawing.Size(65, 12);
             this.labStatus.TabIndex = 0;
@@ -201,11 +214,11 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(10, 37);
+            this.btnSearch.Location = new System.Drawing.Point(10, 62);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(97, 23);
             this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "扫描";
+            this.btnSearch.Text = "开始扫描";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
@@ -219,14 +232,25 @@
             this.tabControl1.Size = new System.Drawing.Size(609, 468);
             this.tabControl1.TabIndex = 1;
             // 
-            // label2
+            // txtTimeout
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(388, 42);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(203, 12);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "多个IP以逗号分隔，并支持 - 的IP段";
+            this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTimeout.Location = new System.Drawing.Point(542, 35);
+            this.txtTimeout.Name = "txtTimeout";
+            this.txtTimeout.Size = new System.Drawing.Size(44, 21);
+            this.txtTimeout.TabIndex = 2;
+            this.txtTimeout.Text = "4";
+            this.txtTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(456, 38);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(89, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "超时等待秒数：";
             // 
             // ScanPort
             // 
@@ -265,5 +289,7 @@
         private System.Windows.Forms.Label labTh;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtTimeout;
+        private System.Windows.Forms.Label label3;
     }
 }

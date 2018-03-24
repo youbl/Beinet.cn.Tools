@@ -37,15 +37,11 @@
             this.txtResult = new System.Windows.Forms.TextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.txtErr = new System.Windows.Forms.TextBox();
-            this.chkMac = new System.Windows.Forms.CheckBox();
-            this.chkPortAll = new System.Windows.Forms.CheckBox();
-            this.chkNormalPort = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.txtIp1 = new System.Windows.Forms.TextBox();
             this.txtIp2 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.labStatus = new System.Windows.Forms.Label();
-            this.btnPort = new System.Windows.Forms.Button();
             this.btnSearch = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabScanPort = new System.Windows.Forms.TabPage();
@@ -71,15 +67,11 @@
             this.tabPage1.Controls.Add(this.labTh);
             this.tabPage1.Controls.Add(this.label8);
             this.tabPage1.Controls.Add(this.tabControl2);
-            this.tabPage1.Controls.Add(this.chkMac);
-            this.tabPage1.Controls.Add(this.chkPortAll);
-            this.tabPage1.Controls.Add(this.chkNormalPort);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.txtIp1);
             this.tabPage1.Controls.Add(this.txtIp2);
             this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.labStatus);
-            this.tabPage1.Controls.Add(this.btnPort);
             this.tabPage1.Controls.Add(this.btnSearch);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -114,10 +106,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl2.Controls.Add(this.tabPage3);
             this.tabControl2.Controls.Add(this.tabPage4);
-            this.tabControl2.Location = new System.Drawing.Point(3, 81);
+            this.tabControl2.Location = new System.Drawing.Point(3, 57);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(590, 358);
+            this.tabControl2.Size = new System.Drawing.Size(590, 382);
             this.tabControl2.TabIndex = 10;
             // 
             // tabPage3
@@ -126,7 +118,7 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(582, 332);
+            this.tabPage3.Size = new System.Drawing.Size(582, 356);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "成功记录";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -138,7 +130,7 @@
             this.txtResult.Multiline = true;
             this.txtResult.Name = "txtResult";
             this.txtResult.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtResult.Size = new System.Drawing.Size(576, 326);
+            this.txtResult.Size = new System.Drawing.Size(576, 350);
             this.txtResult.TabIndex = 8;
             this.txtResult.WordWrap = false;
             // 
@@ -164,40 +156,6 @@
             this.txtErr.TabIndex = 0;
             this.txtErr.TabStop = false;
             // 
-            // chkMac
-            // 
-            this.chkMac.AutoSize = true;
-            this.chkMac.Location = new System.Drawing.Point(452, 12);
-            this.chkMac.Name = "chkMac";
-            this.chkMac.Size = new System.Drawing.Size(108, 16);
-            this.chkMac.TabIndex = 7;
-            this.chkMac.Text = "扫描MAC-仅内网";
-            this.chkMac.UseVisualStyleBackColor = true;
-            // 
-            // chkPortAll
-            // 
-            this.chkPortAll.AutoSize = true;
-            this.chkPortAll.Location = new System.Drawing.Point(303, 42);
-            this.chkPortAll.Name = "chkPortAll";
-            this.chkPortAll.Size = new System.Drawing.Size(144, 16);
-            this.chkPortAll.TabIndex = 6;
-            this.chkPortAll.Text = "扫描全部端口:1~65535";
-            this.chkPortAll.UseVisualStyleBackColor = true;
-            this.chkPortAll.CheckedChanged += new System.EventHandler(this.chkPortAll_CheckedChanged);
-            // 
-            // chkNormalPort
-            // 
-            this.chkNormalPort.AutoSize = true;
-            this.chkNormalPort.Checked = true;
-            this.chkNormalPort.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkNormalPort.Location = new System.Drawing.Point(303, 12);
-            this.chkNormalPort.Name = "chkNormalPort";
-            this.chkNormalPort.Size = new System.Drawing.Size(96, 16);
-            this.chkNormalPort.TabIndex = 5;
-            this.chkNormalPort.Text = "扫描常用端口";
-            this.chkNormalPort.UseVisualStyleBackColor = true;
-            this.chkNormalPort.CheckedChanged += new System.EventHandler(this.chkPortAll_CheckedChanged);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -217,7 +175,7 @@
             // 
             // txtIp2
             // 
-            this.txtIp2.Location = new System.Drawing.Point(41, 37);
+            this.txtIp2.Location = new System.Drawing.Point(202, 10);
             this.txtIp2.Name = "txtIp2";
             this.txtIp2.Size = new System.Drawing.Size(113, 21);
             this.txtIp2.TabIndex = 2;
@@ -226,7 +184,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(5, 39);
+            this.label2.Location = new System.Drawing.Point(166, 12);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(35, 12);
             this.label2.TabIndex = 0;
@@ -236,29 +194,19 @@
             // 
             this.labStatus.AutoSize = true;
             this.labStatus.ForeColor = System.Drawing.Color.Red;
-            this.labStatus.Location = new System.Drawing.Point(5, 66);
+            this.labStatus.Location = new System.Drawing.Point(6, 42);
             this.labStatus.Name = "labStatus";
             this.labStatus.Size = new System.Drawing.Size(65, 12);
             this.labStatus.TabIndex = 0;
             this.labStatus.Text = "未开始扫描";
             // 
-            // btnPort
-            // 
-            this.btnPort.Location = new System.Drawing.Point(161, 37);
-            this.btnPort.Name = "btnPort";
-            this.btnPort.Size = new System.Drawing.Size(137, 23);
-            this.btnPort.TabIndex = 4;
-            this.btnPort.Text = "单IP多线程扫描端口";
-            this.btnPort.UseVisualStyleBackColor = true;
-            this.btnPort.Click += new System.EventHandler(this.btnPort_Click);
-            // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(161, 8);
+            this.btnSearch.Location = new System.Drawing.Point(332, 8);
             this.btnSearch.Name = "btnSearch";
             this.btnSearch.Size = new System.Drawing.Size(137, 23);
             this.btnSearch.TabIndex = 3;
-            this.btnSearch.Text = "扫描";
+            this.btnSearch.Text = "扫描Mac-仅支持内网";
             this.btnSearch.UseVisualStyleBackColor = true;
             this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click);
             // 
@@ -308,9 +256,6 @@
 
         private System.Windows.Forms.TabPage tabQQWry;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.CheckBox chkMac;
-        private System.Windows.Forms.CheckBox chkPortAll;
-        private System.Windows.Forms.CheckBox chkNormalPort;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtResult;
         private System.Windows.Forms.TextBox txtIp1;
@@ -323,7 +268,6 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.TextBox txtErr;
-        private System.Windows.Forms.Button btnPort;
         private System.Windows.Forms.Label labTh;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TabPage tabScanPort;

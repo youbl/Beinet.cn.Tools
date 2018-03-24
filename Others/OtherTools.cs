@@ -132,36 +132,24 @@ namespace Beinet.cn.Tools.Others
         {
             if (!_stop)
             {
-                IPAddress ip = (IPAddress)state;
-                // 获取mac地址
-                if (chkMac.Checked)
+                IPAddress ip = (IPAddress) state;
+                try
                 {
-                    try
+                    string mac = GetMac(ip);
+                    if (!mac.StartsWith("err"))
                     {
-                        string mac = GetMac(ip);
-                        if (!mac.StartsWith("err"))
-                        {
-                            var msg1 = txtResult.Text + ip + " : " + mac + "\r\n";
-                            Utility.InvokeControl(txtResult, () => txtResult.Text = msg1);
-                        }
-                        else
-                        {
-                            AddErrMsg(ip + " : " + mac + "\r\n");
-                        }
+                        var msg1 = txtResult.Text + ip + " : " + mac + "\r\n";
+                        Utility.InvokeControl(txtResult, () => txtResult.Text = msg1);
                     }
-                    catch (Exception exp)
+                    else
                     {
-                        var msg1 = exp + "\r\n\r\n";
-                        AddErrMsg(msg1);
+                        AddErrMsg(ip + " : " + mac + "\r\n");
                     }
                 }
-                if (chkNormalPort.Checked)
+                catch (Exception exp)
                 {
-                    DoPortScan(ip, true);
-                }
-                else if (chkPortAll.Checked)
-                {
-                    DoPortScan(ip, false);
+                    var msg1 = exp + "\r\n\r\n";
+                    AddErrMsg(msg1);
                 }
             }
             Interlocked.Decrement(ref _threads);
@@ -285,121 +273,7 @@ namespace Beinet.cn.Tools.Others
 
             return totalDay.ToString() + "天" + ret;
         }
-
-       private void chkPortAll_CheckedChanged(object sender, EventArgs e)
-        {
-            var chkbox = (CheckBox) sender;
-            if (chkbox.Checked)
-            {
-                if (chkbox == chkNormalPort)
-                    chkPortAll.Checked = false;
-                else if (chkbox == chkPortAll)
-                    chkNormalPort.Checked = false;
-            }
-        }
-
-        private void DoPortScan(IPAddress ip, bool normal)
-        {
-            if (_stop) return;
-            if (normal)
-            {
-                int[] arrPort = new[] { 80, 8080, 3128, 8081, 9080, 1080, 21, 23, 443, 69, 22, 25, 110, 7001, 9090, 3389, 1521, 1158, 2100, 1433, 3306 };
-                foreach (var port in arrPort)
-                {
-                    PerPortCheck(ip, port);
-                }
-            }
-            else
-            {
-                for (var port = 1; port < 65535; port++)
-                {
-                    PerPortCheck(ip, port);
-                }
-            }
-        }
-
-        private void PerPortCheck(IPAddress ip, int port)
-        {
-            if (_stop)
-                return;
-            try
-            {
-                IPEndPoint serverInfo = new IPEndPoint(ip, port);
-                using (Socket socket = new Socket(ip.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
-                {
-                    //socket.BeginConnect(serverInfo, CallBackMethod, socket);
-                    socket.Connect(serverInfo);
-                    if (socket.Connected)
-                    {
-                        // ok
-                        var txt = txtResult.Text + ip + " : " + port + " 开放 \r\n";
-                        Utility.InvokeControl(txtResult, () => txtResult.Text = txt);
-                    }
-                    else
-                    {
-                        // fail
-                        var txt = ip + " : " + port + " 未开放 \r\n";
-                        AddErrMsg(txt);
-                    }
-                    socket.Close();
-                }
-            }
-            catch (Exception exp)
-            {
-                // err
-                var txt = ip + " : " + port + " 未开放:" + exp.Message + " \r\n";
-                AddErrMsg(txt);
-            }
-        }
-
-        private void btnPort_Click(object sender, EventArgs e)
-        {
-            if (!Init(sender as Button))
-            {
-                return;
-            }
-
-            ThreadPool.UnsafeQueueUserWorkItem(state =>
-            {
-                if (chkPortAll.Checked)
-                {
-                    for (var port = 1; port < 65535; port++)
-                    {
-                        if (_stop)
-                            break;
-                        var prot1 = port;
-                        ThreadPool.UnsafeQueueUserWorkItem(aaa =>
-                        {
-                            PerPortCheck(beginIp, prot1);
-                            Interlocked.Decrement(ref _threads);
-                        }, null);
-                        Interlocked.Increment(ref _threads);
-                    }
-                }
-                else
-                {
-                    int[] arrPort = new[]
-                    {
-                        80, 8080, 3128, 8081, 9080, 1080, 21, 23, 443, 69, 22, 25, 110, 7001, 9090, 3389, 1521, 1158,
-                        2100, 1433, 3306
-                    };
-                    foreach (var port in arrPort)
-                    {
-                        if (_stop)
-                            break;
-                        var prot1 = port;
-                        ThreadPool.UnsafeQueueUserWorkItem(aaa =>
-                        {
-                            PerPortCheck(beginIp, prot1);
-                            Interlocked.Decrement(ref _threads);
-                        }, null);
-                        Interlocked.Increment(ref _threads);
-                    }
-                }
-                EndCheck();
-            }, null);
-        }
-
+                
         private void EndCheck()
         {
             // 等待全部线程完成
