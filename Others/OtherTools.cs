@@ -49,6 +49,15 @@ namespace Beinet.cn.Tools.Others
             tabQQWry.Controls.Clear();
             tabQQWry.Controls.Add(frm);
             frm.Show();
+
+            // 添加ip端口扫描窗体
+            frm = new ScanPort();
+            frm.FormBorderStyle = FormBorderStyle.None;
+            frm.Dock = DockStyle.Fill;
+            frm.TopLevel = false;
+            tabScanPort.Controls.Clear();
+            tabScanPort.Controls.Add(frm);
+            frm.Show();
         }
 
 

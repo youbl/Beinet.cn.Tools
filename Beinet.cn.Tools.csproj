@@ -156,6 +156,12 @@
     <Compile Include="FileHash\FileHash.designer.cs">
       <DependentUpon>FileHash.cs</DependentUpon>
     </Compile>
+    <Compile Include="Others\ScanPort.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Others\ScanPort.Designer.cs">
+      <DependentUpon>ScanPort.cs</DependentUpon>
+    </Compile>
     <Compile Include="Others\QrCodeTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -515,6 +521,9 @@
     <EmbeddedResource Include="FileHash\FileHash.resx">
       <DependentUpon>FileHash.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Others\ScanPort.resx">
+      <DependentUpon>ScanPort.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Others\QrCodeTool.resx">
       <DependentUpon>QrCodeTool.cs</DependentUpon>
     </EmbeddedResource>
@@ -578,9 +587,6 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="b.ico" />
-    <Content Include="CheckIPInfo.aspx">
-      <SubType>ASPXCodeBehind</SubType>
-    </Content>
     <Content Include="DataSync\sync.xml" />
     <Content Include="LvsManager\CheckIPInfo.aspx">
       <SubType>ASPXCodeBehind</SubType>
