@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -300,13 +301,17 @@ namespace Beinet.cn.Tools.LvsManager
                     {
                         //var selectedItem = GetValue(lvServers, "SelectedItems") as
                         //    ListView.SelectedListViewItemCollection;
-                        str = DoGetPage(url, null, serverIP); 
+                        str = DoGetPage(url, null, serverIP);
+                    }
+                    catch (WebException webExp)
+                    {
+                        str = webExp.ToString();
                     }
                     catch (Exception ex)
                     {
                         str = ex.ToString();
                     }
-                    webBrowser1.DocumentText = str;
+                    webBrowser1.DocumentText = url + "<br/>\r\n" + str;
                 }, null);
             }
         }
@@ -624,7 +629,7 @@ namespace Beinet.cn.Tools.LvsManager
         }
 
 
-        static string DoGetPage(string url, string para = null, string proxy = null)
+        static string DoGetPage(string url, string para = null, string proxy = null, bool showHeader = false)
         {
             // 10网段的ip代理，要切换为外网ip
             if (proxy != null && proxy.StartsWith("10.", StringComparison.Ordinal))
@@ -642,7 +647,7 @@ namespace Beinet.cn.Tools.LvsManager
                 }
             }
 
-            return Utility.GetPage(url, para, proxy);
+            return Utility.GetPage(url, para, proxy, showHeader: showHeader, allowRedirect: true);
         }
     }
 }

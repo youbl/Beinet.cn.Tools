@@ -33,6 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitMain = new System.Windows.Forms.SplitContainer();
             this.split1 = new System.Windows.Forms.SplitContainer();
+            this.label1 = new System.Windows.Forms.Label();
             this.btnGroupBy0 = new System.Windows.Forms.Button();
             this.btnGroupBy3 = new System.Windows.Forms.Button();
             this.btnGroupBy2 = new System.Windows.Forms.Button();
@@ -57,6 +58,7 @@
             this.mnuSaveReg = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuRegCommon = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuRegSave = new System.Windows.Forms.ToolStripMenuItem();
             this.txtOld = new System.Windows.Forms.RichTextBox();
             this.split2 = new System.Windows.Forms.SplitContainer();
             this.txtReplace = new System.Windows.Forms.RichTextBox();
@@ -66,17 +68,20 @@
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.menuRegSave = new System.Windows.Forms.ToolStripMenuItem();
+            ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
             this.splitMain.Panel1.SuspendLayout();
             this.splitMain.Panel2.SuspendLayout();
             this.splitMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.split1)).BeginInit();
             this.split1.Panel1.SuspendLayout();
             this.split1.Panel2.SuspendLayout();
             this.split1.SuspendLayout();
             this.menuReg.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.split2)).BeginInit();
             this.split2.Panel1.SuspendLayout();
             this.split2.Panel2.SuspendLayout();
             this.split2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitResult)).BeginInit();
             this.splitResult.Panel1.SuspendLayout();
             this.splitResult.Panel2.SuspendLayout();
             this.splitResult.SuspendLayout();
@@ -112,6 +117,7 @@
             // 
             // split1.Panel1
             // 
+            this.split1.Panel1.Controls.Add(this.label1);
             this.split1.Panel1.Controls.Add(this.btnGroupBy0);
             this.split1.Panel1.Controls.Add(this.btnGroupBy3);
             this.split1.Panel1.Controls.Add(this.btnGroupBy2);
@@ -136,6 +142,18 @@
             this.split1.SplitterWidth = 1;
             this.split1.TabIndex = 0;
             this.split1.TabStop = false;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.label1.ForeColor = System.Drawing.Color.Red;
+            this.label1.Location = new System.Drawing.Point(416, 90);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(161, 12);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "正则框内按右键可保存正则";
             // 
             // btnGroupBy0
             // 
@@ -332,7 +350,7 @@
             this.menuRegCommon,
             this.menuRegSave});
             this.menuReg.Name = "menuReg";
-            this.menuReg.Size = new System.Drawing.Size(161, 192);
+            this.menuReg.Size = new System.Drawing.Size(161, 170);
             // 
             // menuRegCut
             // 
@@ -385,6 +403,12 @@
             this.menuRegCommon.Size = new System.Drawing.Size(160, 22);
             this.menuRegCommon.Text = "插入常用正则";
             // 
+            // menuRegSave
+            // 
+            this.menuRegSave.Name = "menuRegSave";
+            this.menuRegSave.Size = new System.Drawing.Size(160, 22);
+            this.menuRegSave.Text = "插入自定义正则";
+            // 
             // txtOld
             // 
             this.txtOld.ContextMenuStrip = this.menuReg;
@@ -421,7 +445,7 @@
             // 
             this.split2.Panel2.Controls.Add(this.splitResult);
             this.split2.Size = new System.Drawing.Size(926, 368);
-            this.split2.SplitterDistance = 0;
+            this.split2.SplitterDistance = 25;
             this.split2.SplitterWidth = 1;
             this.split2.TabIndex = 0;
             this.split2.TabStop = false;
@@ -437,7 +461,7 @@
             this.txtReplace.Name = "txtReplace";
             this.txtReplace.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.txtReplace.ShowSelectionMargin = true;
-            this.txtReplace.Size = new System.Drawing.Size(926, 0);
+            this.txtReplace.Size = new System.Drawing.Size(926, 25);
             this.txtReplace.TabIndex = 17;
             this.txtReplace.Text = "";
             this.txtReplace.WordWrap = false;
@@ -461,8 +485,8 @@
             // 
             this.splitResult.Panel2.Controls.Add(this.txtStatus);
             this.splitResult.Panel2MinSize = 15;
-            this.splitResult.Size = new System.Drawing.Size(926, 367);
-            this.splitResult.SplitterDistance = 348;
+            this.splitResult.Size = new System.Drawing.Size(926, 342);
+            this.splitResult.SplitterDistance = 313;
             this.splitResult.SplitterWidth = 1;
             this.splitResult.TabIndex = 0;
             this.splitResult.TabStop = false;
@@ -480,7 +504,7 @@
             this.dgvResult.Name = "dgvResult";
             this.dgvResult.RowHeadersWidth = 60;
             this.dgvResult.RowTemplate.Height = 23;
-            this.dgvResult.Size = new System.Drawing.Size(926, 348);
+            this.dgvResult.Size = new System.Drawing.Size(926, 313);
             this.dgvResult.TabIndex = 0;
             this.dgvResult.TabStop = false;
             this.dgvResult.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvResult_CellClick);
@@ -505,7 +529,7 @@
             this.txtResult.Name = "txtResult";
             this.txtResult.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
             this.txtResult.ShowSelectionMargin = true;
-            this.txtResult.Size = new System.Drawing.Size(926, 348);
+            this.txtResult.Size = new System.Drawing.Size(926, 313);
             this.txtResult.TabIndex = 18;
             this.txtResult.Text = "";
             this.txtResult.WordWrap = false;
@@ -531,12 +555,6 @@
             this.toolTip1.ReshowDelay = 20;
             this.toolTip1.ShowAlways = true;
             // 
-            // menuRegSave
-            // 
-            this.menuRegSave.Name = "menuRegSave";
-            this.menuRegSave.Size = new System.Drawing.Size(160, 22);
-            this.menuRegSave.Text = "插入自定义正则";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -550,18 +568,22 @@
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.MainForm_KeyDown);
             this.splitMain.Panel1.ResumeLayout(false);
             this.splitMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitMain)).EndInit();
             this.splitMain.ResumeLayout(false);
             this.split1.Panel1.ResumeLayout(false);
             this.split1.Panel1.PerformLayout();
             this.split1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.split1)).EndInit();
             this.split1.ResumeLayout(false);
             this.menuReg.ResumeLayout(false);
             this.split2.Panel1.ResumeLayout(false);
             this.split2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.split2)).EndInit();
             this.split2.ResumeLayout(false);
             this.splitResult.Panel1.ResumeLayout(false);
             this.splitResult.Panel2.ResumeLayout(false);
             this.splitResult.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitResult)).EndInit();
             this.splitResult.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvResult)).EndInit();
             this.ResumeLayout(false);
@@ -606,6 +628,7 @@
         private System.Windows.Forms.ToolStripMenuItem mnuSaveReg;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem menuRegSave;
+        private System.Windows.Forms.Label label1;
     }
 }
 

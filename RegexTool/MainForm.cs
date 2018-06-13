@@ -178,6 +178,7 @@ namespace Beinet.cn.Tools.RegexTool
                     }
                 }
             }
+            menuRegSave.Visible = menuRegSave.DropDownItems.Count > 0;
         }
 
         #region 字段与属性

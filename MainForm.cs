@@ -334,10 +334,12 @@ namespace Beinet.cn.Tools
                     return null;
                 }
 
+                // 参考https://docs.microsoft.com/zh-cn/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed#net_b
                 string[] subKeyNames = registryKey.GetSubKeyNames();
                 foreach (string verKey in subKeyNames)
                 {
-                    if (verKey[0] != 'v')
+                    // v4才是4.x的版本，v4.0跳过
+                    if (verKey[0] != 'v' || verKey == "v4.0")
                     {
                         continue;
                     }
@@ -372,6 +374,17 @@ namespace Beinet.cn.Tools
                         {
                             continue;
                         }
+                        var releaseVer = "";
+                        if (text4.Equals("Full", StringComparison.OrdinalIgnoreCase))
+                        {
+                            var release = Convert.ToString(registryKey3.GetValue("Release", ""));
+                            releaseVer = CheckFor45PlusVersion(release);
+                            if (!string.IsNullOrEmpty(releaseVer))
+                            {
+                                releaseVer = " (" + release + " - .Net FrameWork " + releaseVer + ")";
+                            }
+
+                        }
                         ver = Convert.ToString(registryKey3.GetValue("Version", ""));
                         if (ver != "")
                         {
@@ -380,20 +393,53 @@ namespace Beinet.cn.Tools
                         install = Convert.ToString(registryKey3.GetValue("Install", ""));
                         if (install == "")
                         {
-                            sb.AppendFormat("{0}{1}\r\n", verKey.PadRight(12), ver);
+                            sb.AppendFormat("{0}{1}{2}\r\n", verKey.PadRight(12), ver, releaseVer);
                         }
                         else if (sp != "" && install == "1")
                         {
-                            sb.AppendFormat("            {0}  {1}  SP{2}\r\n", text4, ver, sp);
+                            sb.AppendFormat("            {0}  {1}{3}  SP{2}\r\n", text4, ver, sp, releaseVer);
                         }
                         else if (install == "1")
                         {
-                            sb.AppendFormat("            {0}  {1}\r\n", text4, ver);
+                            sb.AppendFormat("            {0}  {1}{2}\r\n", text4, ver, releaseVer);
                         }
                     }
                 }
             }
             return sb.ToString();
+        }
+
+        // Checking the version using >= will enable forward compatibility.
+        private static string CheckFor45PlusVersion(string strReleaseKey)
+        {
+            // https://docs.microsoft.com/zh-cn/dotnet/framework/migration-guide/how-to-determine-which-versions-are-installed#net_b
+            if (!int.TryParse(strReleaseKey,  out var releaseKey))
+            {
+                return null;
+                // return "No 4.5 or later version detected";
+            }
+            if (releaseKey >= 461808)
+                return "4.7.2 or later";
+            if (releaseKey >= 461308)
+                return "4.7.1";
+            if (releaseKey >= 460798)
+                return "4.7";
+            if (releaseKey >= 394802)
+                return "4.6.2";
+            if (releaseKey >= 394254)
+                return "4.6.1";
+            if (releaseKey >= 393295)
+                return "4.6";
+            if (releaseKey >= 379893)
+                return "4.5.2";
+            if (releaseKey >= 378675)
+                return "4.5.1";
+            if (releaseKey >= 378389)
+                return "4.5";
+
+            // This code should never execute. A non-null release key should mean
+            // that 4.5 or later is installed.
+            return null;
         }
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
