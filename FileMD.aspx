@@ -28,7 +28,8 @@
             string proxyurl;
             if (tmp.Length >= 2)
             {
-                proxyurl = "http://" + tmp[1] + "/";
+                if (!tmp[1].StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    proxyurl = "http://" + tmp[1] + "/";
                 if (tmp.Length >= 3)
                     proxyurl += tmp[2];
                 else

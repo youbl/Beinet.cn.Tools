@@ -44,7 +44,7 @@ namespace Beinet.cn.Tools
                 tabControl1.TabPages.RemoveAt(i);
 
             Encoding encoding;
-            if (!this.txtUrl.Text.StartsWith("http://", StringComparison.OrdinalIgnoreCase))
+            if (!this.txtUrl.Text.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
                 this.txtUrl.Text = "http://" + this.txtUrl.Text;
             }

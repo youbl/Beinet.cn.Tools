@@ -43,18 +43,6 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
-            this.tabLvs = new System.Windows.Forms.TabPage();
-            this.tabEncrypt = new System.Windows.Forms.TabPage();
-            this.tabMd5File = new System.Windows.Forms.TabPage();
-            this.tabWebCompare = new System.Windows.Forms.TabPage();
-            this.tabRegex = new System.Windows.Forms.TabPage();
-            this.tabSqlInject = new System.Windows.Forms.TabPage();
-            this.tabDataSync = new System.Windows.Forms.TabPage();
-            this.tabQr = new System.Windows.Forms.TabPage();
-            this.tabGZip = new System.Windows.Forms.TabPage();
-            this.tabIpTools = new System.Windows.Forms.TabPage();
-            this.tabImgTool = new System.Windows.Forms.TabPage();
-            this.tabIIS = new System.Windows.Forms.TabPage();
             this.tabControl1.SuspendLayout();
             this.tabDllAnlyse.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -75,18 +63,6 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabDllAnlyse);
-            this.tabControl1.Controls.Add(this.tabLvs);
-            this.tabControl1.Controls.Add(this.tabRegex);
-            this.tabControl1.Controls.Add(this.tabEncrypt);
-            this.tabControl1.Controls.Add(this.tabMd5File);
-            this.tabControl1.Controls.Add(this.tabWebCompare);
-            this.tabControl1.Controls.Add(this.tabGZip);
-            this.tabControl1.Controls.Add(this.tabIIS);
-            this.tabControl1.Controls.Add(this.tabDataSync);
-            this.tabControl1.Controls.Add(this.tabSqlInject);
-            this.tabControl1.Controls.Add(this.tabQr);
-            this.tabControl1.Controls.Add(this.tabImgTool);
-            this.tabControl1.Controls.Add(this.tabIpTools);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -267,126 +243,7 @@
             this.button1.Text = "选择文件...";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // tabLvs
-            // 
-            this.tabLvs.Location = new System.Drawing.Point(4, 22);
-            this.tabLvs.Name = "tabLvs";
-            this.tabLvs.Padding = new System.Windows.Forms.Padding(3);
-            this.tabLvs.Size = new System.Drawing.Size(776, 536);
-            this.tabLvs.TabIndex = 4;
-            this.tabLvs.Text = "上线控制";
-            this.tabLvs.UseVisualStyleBackColor = true;
-            // 
-            // tabEncrypt
-            // 
-            this.tabEncrypt.Location = new System.Drawing.Point(4, 22);
-            this.tabEncrypt.Name = "tabEncrypt";
-            this.tabEncrypt.Padding = new System.Windows.Forms.Padding(3);
-            this.tabEncrypt.Size = new System.Drawing.Size(776, 536);
-            this.tabEncrypt.TabIndex = 5;
-            this.tabEncrypt.Text = "加解密";
-            this.tabEncrypt.UseVisualStyleBackColor = true;
-            // 
-            // tabMd5File
-            // 
-            this.tabMd5File.Location = new System.Drawing.Point(4, 22);
-            this.tabMd5File.Name = "tabMd5File";
-            this.tabMd5File.Padding = new System.Windows.Forms.Padding(3);
-            this.tabMd5File.Size = new System.Drawing.Size(776, 536);
-            this.tabMd5File.TabIndex = 2;
-            this.tabMd5File.Text = "文件MD5";
-            this.tabMd5File.UseVisualStyleBackColor = true;
-            // 
-            // tabWebCompare
-            // 
-            this.tabWebCompare.Location = new System.Drawing.Point(4, 22);
-            this.tabWebCompare.Name = "tabWebCompare";
-            this.tabWebCompare.Padding = new System.Windows.Forms.Padding(3);
-            this.tabWebCompare.Size = new System.Drawing.Size(776, 536);
-            this.tabWebCompare.TabIndex = 10;
-            this.tabWebCompare.Text = "Web对比";
-            this.tabWebCompare.UseVisualStyleBackColor = true;
-            // 
-            // tabRegex
-            // 
-            this.tabRegex.Location = new System.Drawing.Point(4, 22);
-            this.tabRegex.Name = "tabRegex";
-            this.tabRegex.Padding = new System.Windows.Forms.Padding(3);
-            this.tabRegex.Size = new System.Drawing.Size(776, 536);
-            this.tabRegex.TabIndex = 6;
-            this.tabRegex.Text = "正则";
-            this.tabRegex.UseVisualStyleBackColor = true;
-            // 
-            // tabSqlInject
-            // 
-            this.tabSqlInject.Location = new System.Drawing.Point(4, 22);
-            this.tabSqlInject.Name = "tabSqlInject";
-            this.tabSqlInject.Padding = new System.Windows.Forms.Padding(3);
-            this.tabSqlInject.Size = new System.Drawing.Size(776, 536);
-            this.tabSqlInject.TabIndex = 3;
-            this.tabSqlInject.Text = "查SQL拼接";
-            this.tabSqlInject.UseVisualStyleBackColor = true;
-            // 
-            // tabDataSync
-            // 
-            this.tabDataSync.Location = new System.Drawing.Point(4, 22);
-            this.tabDataSync.Name = "tabDataSync";
-            this.tabDataSync.Padding = new System.Windows.Forms.Padding(3);
-            this.tabDataSync.Size = new System.Drawing.Size(776, 536);
-            this.tabDataSync.TabIndex = 7;
-            this.tabDataSync.Text = "SQLServer";
-            this.tabDataSync.UseVisualStyleBackColor = true;
-            // 
-            // tabQr
-            // 
-            this.tabQr.Location = new System.Drawing.Point(4, 22);
-            this.tabQr.Name = "tabQr";
-            this.tabQr.Padding = new System.Windows.Forms.Padding(3);
-            this.tabQr.Size = new System.Drawing.Size(776, 536);
-            this.tabQr.TabIndex = 9;
-            this.tabQr.Text = "二维码";
-            this.tabQr.UseVisualStyleBackColor = true;
-            // 
-            // tabGZip
-            // 
-            this.tabGZip.Location = new System.Drawing.Point(4, 22);
-            this.tabGZip.Name = "tabGZip";
-            this.tabGZip.Padding = new System.Windows.Forms.Padding(3);
-            this.tabGZip.Size = new System.Drawing.Size(776, 536);
-            this.tabGZip.TabIndex = 1;
-            this.tabGZip.Text = "GZip";
-            this.tabGZip.UseVisualStyleBackColor = true;
-            // 
-            // tabIpTools
-            // 
-            this.tabIpTools.Location = new System.Drawing.Point(4, 22);
-            this.tabIpTools.Name = "tabIpTools";
-            this.tabIpTools.Padding = new System.Windows.Forms.Padding(3);
-            this.tabIpTools.Size = new System.Drawing.Size(776, 536);
-            this.tabIpTools.TabIndex = 11;
-            this.tabIpTools.Text = "IP相关";
-            this.tabIpTools.UseVisualStyleBackColor = true;
-            // 
-            // tabImgTool
-            // 
-            this.tabImgTool.Location = new System.Drawing.Point(4, 22);
-            this.tabImgTool.Name = "tabImgTool";
-            this.tabImgTool.Padding = new System.Windows.Forms.Padding(3);
-            this.tabImgTool.Size = new System.Drawing.Size(776, 536);
-            this.tabImgTool.TabIndex = 12;
-            this.tabImgTool.Text = "图片工具";
-            this.tabImgTool.UseVisualStyleBackColor = true;
-            // 
-            // tabIIS
-            // 
-            this.tabIIS.Location = new System.Drawing.Point(4, 22);
-            this.tabIIS.Name = "tabIIS";
-            this.tabIIS.Padding = new System.Windows.Forms.Padding(3);
-            this.tabIIS.Size = new System.Drawing.Size(776, 536);
-            this.tabIIS.TabIndex = 13;
-            this.tabIIS.Text = "IIS日志";
-            this.tabIIS.UseVisualStyleBackColor = true;
+           
             // 
             // MainForm
             // 
@@ -438,23 +295,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabPage tabGZip;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.RadioButton rad1Debug;
         private System.Windows.Forms.RadioButton rad1Bit;
-        private System.Windows.Forms.TabPage tabMd5File;
-        private System.Windows.Forms.TabPage tabSqlInject;
-        private System.Windows.Forms.TabPage tabLvs;
-        private System.Windows.Forms.TabPage tabEncrypt;
-        private System.Windows.Forms.TabPage tabRegex;
-        private System.Windows.Forms.TabPage tabDataSync;
-        private System.Windows.Forms.TabPage tabQr;
-        private System.Windows.Forms.TabPage tabWebCompare;
-        private System.Windows.Forms.TabPage tabIpTools;
-        private System.Windows.Forms.TabPage tabImgTool;
-        private System.Windows.Forms.TabPage tabIIS;
-
-
     }
 }
 

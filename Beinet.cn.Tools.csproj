@@ -46,26 +46,37 @@
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Release\</OutputPath>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\assembly\GAC_MSIL\Microsoft.Web.Administration\7.0.0.0__31bf3856ad364e35\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConnectTest\ConTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ConnectTest\ConTest.Designer.cs">
+      <DependentUpon>ConTest.cs</DependentUpon>
+    </Compile>
     <Compile Include="FileHash\FileHashConfig.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="FileHash\FileHashConfig.designer.cs">
       <DependentUpon>FileHashConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="IISAbout\IISOperation.cs" />
     <Compile Include="Others\CryptTool.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -405,10 +416,10 @@
     <Compile Include="Others\qrcode\rsc66.cs" />
     <Compile Include="Others\qrcode\rsc68.cs" />
     <Compile Include="Others\qrcode\rsc7.cs" />
-    <Compile Include="Others\IIStool.cs">
+    <Compile Include="IISAbout\IIStool.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Others\IIStool.Designer.cs">
+    <Compile Include="IISAbout\IIStool.Designer.cs">
       <DependentUpon>IIStool.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -526,7 +537,7 @@
     <EmbeddedResource Include="Others\OtherTools.resx">
       <DependentUpon>OtherTools.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Others\IIStool.resx">
+    <EmbeddedResource Include="IISAbout\IIStool.resx">
       <DependentUpon>IIStool.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Util\PromptWin.resx">
@@ -566,6 +577,9 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="app.manifest">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -584,6 +598,9 @@
   <ItemGroup>
     <Content Include="b.ico" />
     <Content Include="DataSync\sync.xml" />
+    <Content Include="IISAbout\root.jpg" />
+    <Content Include="IISAbout\start.jpg" />
+    <Content Include="IISAbout\stop.jpg" />
     <Content Include="LvsManager\CheckIPInfo.aspx">
       <SubType>ASPXCodeBehind</SubType>
     </Content>

@@ -6,6 +6,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
+using Beinet.cn.Tools.ConnectTest;
 using Beinet.cn.Tools.Others;
 using Microsoft.Win32;
 
@@ -15,10 +16,8 @@ namespace Beinet.cn.Tools
     {
         /// <summary>
         /// 指定哪个TabPage要显示什么工具窗体.
-        /// 1、在主界面添加一个tab，并修改name，假设是tabNewTool；
-        /// 2、在MainForm的构造函数里，添加一个对应关系，完成
         /// </summary>
-        Dictionary<TabPage, Type> _tabForms; 
+        readonly Dictionary<TabPage, Type> _tabForms = new Dictionary<TabPage, Type>();
 
         public MainForm()
             : this(-1)
@@ -32,19 +31,19 @@ namespace Beinet.cn.Tools
             // 暂时不处理合并dll功能，有bug
 
             #region 添加TabPage跟窗体类型的对应关系
-            _tabForms = new Dictionary<TabPage, Type>();
-            _tabForms.Add(tabGZip, typeof(GzipTest));
-            _tabForms.Add(tabMd5File, typeof(FileHash.FileHash));
-            _tabForms.Add(tabSqlInject, typeof(SqlInjectForm.SqlInject));
-            _tabForms.Add(tabLvs, typeof(LvsManager.LVSControl));
-            _tabForms.Add(tabEncrypt, typeof(CryptTool));
-            _tabForms.Add(tabRegex, typeof(RegexTool.MainForm));
-            _tabForms.Add(tabDataSync, typeof(DataSync.SqlServerTabForm));
-            _tabForms.Add(tabQr, typeof(QrCodeTool));
-            _tabForms.Add(tabWebCompare, typeof(WebContentCompare.Compare));
-            _tabForms.Add(tabIpTools, typeof(Others.OtherTools));
-            _tabForms.Add(tabImgTool, typeof(ImgTools.ImgTool));
-            _tabForms.Add(tabIIS, typeof(Others.IIStool));
+            AddTabPage("tabGZip", typeof(GzipTest), "GZip");
+            AddTabPage("tabMd5File", typeof(FileHash.FileHash), "文件MD5");
+            AddTabPage("tabSqlInject", typeof(SqlInjectForm.SqlInject), "查SQL拼接");
+            AddTabPage("tabLvs", typeof(LvsManager.LVSControl), "上下线");
+            AddTabPage("tabEncrypt", typeof(CryptTool), "加解密");
+            AddTabPage("tabRegex", typeof(RegexTool.MainForm), "正则");
+            AddTabPage("tabDataSync", typeof(DataSync.SqlServerTabForm), "SQLServer");
+            AddTabPage("tabQr", typeof(QrCodeTool), "二维码");
+            AddTabPage("tabWebCompare", typeof(WebContentCompare.Compare), "Web对比");
+            AddTabPage("tabIpTools", typeof(Others.OtherTools), "IP相关");
+            AddTabPage("tabImgTool", typeof(ImgTools.ImgTool), "图片工具");
+            AddTabPage("tabIIS", typeof(IISAbout.IIStool), "IIS");
+            // AddTabPage("tabContest", typeof(ConTest), "连接测试");
             #endregion
 
 
@@ -446,6 +445,23 @@ namespace Beinet.cn.Tools
         {
             // e.Cancel = true;
             Utility.SetConfigValue("StartIndex", tabControl1.SelectedIndex.ToString());
+        }
+
+        private void AddTabPage(string name, Type type, string txt = null)
+        {
+            txt = txt ?? name;
+
+            var tabNew = new TabPage();
+            tabControl1.Controls.Add(tabNew);
+            tabNew.Location = new System.Drawing.Point(4, 22);
+            tabNew.Name = name;
+            tabNew.Padding = new System.Windows.Forms.Padding(3);
+            tabNew.Size = new System.Drawing.Size(776, 536);
+            tabNew.TabIndex = 13;
+            tabNew.Text = txt;
+            tabNew.UseVisualStyleBackColor = true;
+
+            _tabForms.Add(tabNew, type);
         }
     }
 }

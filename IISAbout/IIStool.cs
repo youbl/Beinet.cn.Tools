@@ -2,17 +2,18 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace Beinet.cn.Tools.Others
+namespace Beinet.cn.Tools.IISAbout
 {
     public partial class IIStool : Form
     {
-        private const string IDLE_TXT = "启动导入";
-        private const string WORK_TXT = "导入中...";
         public IIStool()
         {
             InitializeComponent();
@@ -27,7 +28,350 @@ namespace Beinet.cn.Tools.Others
             txtDbTarget.KeyUp += Utility.txt_KeyDownUp;
             txtLogFile.KeyUp += Utility.txt_KeyDownUp;
             txtTbName.KeyUp += Utility.txt_KeyDownUp;
+
+            // 初始化IIS树的右键菜单
+            InitContextMenuStripIIS();
         }
+
+        #region IIS操作相关方法
+
+        private IISOperation _operation;
+        // 收集所有站点列表
+        private Dictionary<string, Site> _arrSites;
+        // 收集所有右键菜单操作方法
+        Dictionary<string, Action<object>> _arrMenuActions;
+
+        private void btnListSite_Click(object sender, EventArgs e)
+        {
+            var root = treeIISSite.TopNode;
+            root.Nodes.Clear();
+
+            _operation = new IISOperation(txtIISIP.Text);
+            var sites = _operation.ListSite();
+            _arrSites = sites.ToDictionary(item => item.Name);
+            foreach (var site in sites)
+            {
+                var node = new TreeNode(site.Name);
+                node.ImageIndex = site.State == 1 ? 0 : 1;
+                node.SelectedImageIndex = node.ImageIndex;
+                root.Nodes.Add(node);
+            }
+            root.ExpandAll();
+        }
+
+        private void treeIISSite_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+            if (sender != treeIISSite || treeIISSite.SelectedNode == null)
+            {
+                return;
+            }
+            ClearSiteTxt();
+            var node = treeIISSite.SelectedNode;
+            switch (node.Level)
+            {
+                case 1:
+                    ShowSite(node.Text);
+                    break;
+            }
+        }
+
+        Site FindSite(string siteName)
+        {
+            if (_arrSites == null || !_arrSites.TryGetValue(siteName, out var site))
+                return null;
+            return site;
+        }
+
+        void ShowSite(string siteName)
+        {
+            var site = FindSite(siteName);
+            SetSiteTxt(site);
+        }
+
+        void ClearSiteTxt()
+        {
+            txtSiteBind.Text = "";
+            txtSiteDir.Text = "";
+            labSiteId.Text = "";
+            txtSiteName.Text = "";
+            txtSitePoolName.Text = "";
+            labSiteStatus.Text = "";
+            labLogDir.Text = "";
+            txtTimeout.Text = "";
+        }
+
+        void SetSiteTxt(Site site)
+        {
+            if (site == null)
+                return;
+            txtSiteBind.Text = site.Bindings;
+            txtSiteDir.Text = site.Dir;
+            labSiteId.Text = site.Id.ToString();
+            txtSiteName.Text = site.Name;
+            txtSitePoolName.Text = site.PoolName;
+            labSiteStatus.Text = site.StateText;
+            labLogDir.Text = site.LogDir;
+            txtTimeout.Text = site.ConnectionTimeOut.ToString();
+        }
+
+        private void treeIISSite_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var clickPoint = new Point(e.X, e.Y);
+                var node = treeIISSite.GetNodeAt(clickPoint);
+                if (node != null && node.Level == 1)
+                {
+                    node.ContextMenuStrip = contextMenuStripIIS;
+                    treeIISSite.SelectedNode = node;
+                }
+            }
+        }
+
+        void InitContextMenuStripIIS()
+        {
+            _arrMenuActions = new Dictionary<string, Action<object>>
+            {
+                {"复制配置到剪切板", CopySite},
+                {"停止站点和应用程序池", StopSite},
+                {"重启站点和应用程序池", RestartSite}
+            };
+
+            foreach (var item in _arrMenuActions)
+            {
+                contextMenuStripIIS.Items.Add(item.Key);
+            }
+        }
+
+        // 右键菜单点击事件
+        private void contextMenuStripIIS_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (_arrMenuActions.TryGetValue(e.ClickedItem.Text, out var action))
+            {
+                action(treeIISSite.SelectedNode.Text);
+            }
+        }
+
+        // 复制站点配置
+        void CopySite(object data)
+        {
+            var siteName = data.ToString();
+            var site = FindSite(siteName);
+            if (site == null)
+            {
+                Alert("未找到站点:" + siteName);
+                return;
+            }
+            Clipboard.SetText(site.ToString());
+        }
+        // 重启站点和应用程序池
+        void RestartSite(object data)
+        {
+            var begin = DateTime.Now;
+            var siteName = data.ToString();
+            var site = FindSite(siteName);
+            if (site == null)
+            {
+                Alert("未找到站点:" + siteName);
+                return;
+            }
+            if (!int.TryParse(txtRestartSecond.Text, out var restartSecond))
+                restartSecond = 10;
+            var ret = _operation.RestartSite(site.Name, restartSecond);
+            if (ret != 0)
+            {
+                if (ret == 1)
+                {
+                    Alert("站点停止失败:" + siteName, begin);
+                }
+                else if (ret == 2)
+                {
+                    Alert("站点启动失败:" + siteName, begin);
+                }
+                else
+                {
+                    Alert("站点其它失败:" + siteName, begin);
+                }
+                return;
+            }
+            ret = _operation.RestartPool(site.PoolName, restartSecond);
+            if (ret != 0)
+            {
+                if (ret == 1)
+                {
+                    Alert("程序池停止失败:" + siteName, begin);
+                }
+                else if (ret == 2)
+                {
+                    Alert("程序池启动失败:" + siteName, begin);
+                }
+                else
+                {
+                    Alert("程序池其它失败:" + siteName, begin);
+                }
+                return;
+            }
+            Alert("站点和程序池重启成功:" + siteName, begin);
+        }
+        // 重启站点和应用程序池
+        void StopSite(object data)
+        {
+            var begin = DateTime.Now;
+            var siteName = data.ToString();
+            var site = FindSite(siteName);
+            if (site == null)
+            {
+                Alert("未找到站点:" + siteName);
+                return;
+            }
+            if (!int.TryParse(txtRestartSecond.Text, out var restartSecond))
+                restartSecond = 10;
+            var ret = _operation.StopSite(site.Name, restartSecond);
+            if (!ret)
+            {
+                Alert("站点停止失败:" + siteName, begin);
+                return;
+            }
+
+            ret = _operation.StopPool(site.PoolName, restartSecond);
+            if (!ret)
+            {
+                Alert("程序池停止失败:" + siteName, begin);
+                return;
+            }
+
+            Alert("站点和程序池停止成功: " + siteName, begin);
+        }
+
+        private void btnRefreshIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(0);
+        }
+
+        private void btnRestartIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(1);
+        }
+
+        private void btnStopIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(2);
+        }
+ 
+        private void btnCopyIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(0);
+        }
+        void OperationSite(int flg)
+        {
+            var siteName = txtSiteName.Text.Trim();
+            if (siteName.Length <= 0)
+            {
+                Alert("要先选择站点");
+                return;
+            }
+            var site = FindSite(siteName);
+            if (site == null)
+            {
+                Alert("站点未找到：" + siteName);
+                return;
+            }
+            switch (flg)
+            {
+                case 0:
+                    CopySite(siteName);
+                    return;
+                case 1:
+                    RestartSite(siteName);
+                    break;
+                case 2:
+                    StopSite(siteName);
+                    break;
+            }
+            // 刷新
+            RefreshSiteFromServer(siteName);
+        }
+
+        void RefreshSiteFromServer(string siteName)
+        {
+            var site = _operation.FindSite(siteName);
+            _arrSites[siteName] = site;
+            SetSiteTxt(site);
+        }
+
+        private void labLogDir_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // %SystemDrive%环境变量转换
+            var dir = Environment.ExpandEnvironmentVariables(labLogDir.Text);
+            if (!Directory.Exists(dir))
+            {
+                Alert("目录不存在：" + dir);
+                return;
+            }
+            Process.Start("explorer", dir);
+        }
+       
+        private void btnNewSite_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+            var name = txtSiteName.Text.Trim();
+            if (name.Length == 0)
+            {
+                Alert("请输入网站名");
+                return;
+            }
+            var poolName = txtSitePoolName.Text.Trim();
+            var dir = txtSiteDir.Text.Trim();
+            dir = Environment.ExpandEnvironmentVariables(dir);
+            if (!Directory.Exists(dir))
+            {
+                try
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                catch (Exception exp)
+                {
+                    Alert("目录创建失败：" + dir);
+                    return;
+                }
+            }
+            var binding = txtSiteBind.Text.Trim();
+            var ret = _operation.CreateSite(name, dir, binding, poolName);
+            Alert(ret);
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("确认要重启本机的IIS？", "危险操作",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2)
+                == DialogResult.OK)
+            {
+                Process.Start("IISReset");
+            }
+        }
+        private void txtSiteName_KeyUp(object sender, KeyEventArgs e)
+        {
+            var name = txtSiteName.Text.Trim();
+            if (name.Length <= 0)
+                return;
+            txtSitePoolName.Text = name;
+            txtSiteDir.Text = "d:\\wwwroot\\" + name;
+            txtSiteBind.Text = "http:*:80:" + name;
+        }
+
+
+        #endregion
+
+
+        #region IIS日志导入相关属性方法
+
+        private const string IDLE_TXT = "启动导入";
+        private const string WORK_TXT = "导入中...";
+
 
         private void btnLogFile_Click(object sender, EventArgs e)
         {
@@ -49,31 +393,31 @@ namespace Beinet.cn.Tools.Others
         {
             if (btnImport.Text.StartsWith(WORK_TXT, StringComparison.Ordinal))
             {
-                MessageBox.Show("导入中，请稍候");
+                Alert("导入中，请稍候");
                 return;
             }
             string logfile = txtLogFile.Text.Trim();
-            if (logfile == string.Empty)// || !File.Exists(logfile))
+            if (logfile == string.Empty) // || !File.Exists(logfile))
             {
-                MessageBox.Show("请选择正确的IIS日志文件");
+                Alert("请选择正确的IIS日志文件");
                 return;
             }
             //if (!IsTextFile(logfile))
             //{
-            //    MessageBox.Show("请选择文本格式的文件");
+            //    Alert("请选择文本格式的文件");
             //    return;
             //}
 
             string constr = txtDbTarget.Text.Trim();
             if (constr == string.Empty)
             {
-                MessageBox.Show("请输入数据库连接字符串");
+                Alert("请输入数据库连接字符串");
                 return;
             }
             string tbname = txtTbName.Text.Trim();
             if (tbname == string.Empty)
             {
-                MessageBox.Show("请输入新表表名");
+                Alert("请输入新表表名");
                 return;
             }
 
@@ -96,7 +440,7 @@ namespace Beinet.cn.Tools.Others
                 }
                 catch (Exception exp)
                 {
-                    MessageBox.Show("导入错误：" + exp.Message);
+                    Alert("导入错误：" + exp.Message);
                 }
                 Utility.InvokeControl(btnImport, () => btnImport.Text = IDLE_TXT);
             }, null);
@@ -106,10 +450,12 @@ namespace Beinet.cn.Tools.Others
         /// 用于给小时加8用
         /// </summary>
         static int __dateColIdx = -1;
+
         /// <summary>
         /// 用于给小时加8用
         /// </summary>
         static int __timeColIdx = -1;
+
         static void ImportLog(string logfile, string constr, string tbname, bool add8, TextBox txt)
         {
             var totalBegin = DateTime.Now;
@@ -126,17 +472,18 @@ namespace Beinet.cn.Tools.Others
                 {
                     continue;
                 }
-                insertNum +=  ImportPerLog(file, constr, tbname, add8, txt, dt, ref isTbAdded);
+                insertNum += ImportPerLog(file, constr, tbname, add8, txt, dt, ref isTbAdded);
             }
-            
+
             var totalEnd = DateTime.Now;
             var totalTime = (totalEnd - totalBegin).TotalSeconds;
-            var msg2 = totalEnd.ToString("HH:mm:ss.fff") +" " + insertNum.ToString() + 
-                "行完成，总过程耗时:" + totalTime.ToString("N2") + "\r\n" + txt.Text;
+            var msg2 = totalEnd.ToString("HH:mm:ss.fff") + " " + insertNum.ToString() +
+                       "行完成，总过程耗时:" + totalTime.ToString("N2") + "\r\n" + txt.Text;
             Utility.InvokeControl(txt, () => txt.Text = msg2);
         }
 
-        static int ImportPerLog(string logfile, string constr, string tbname, bool add8, TextBox txt, DataTable dt, ref bool isTbAdded)
+        static int ImportPerLog(string logfile, string constr, string tbname, bool add8, TextBox txt, DataTable dt,
+            ref bool isTbAdded)
         {
             var totalBegin = DateTime.Now;
             double totalInsert = 0;
@@ -145,7 +492,7 @@ namespace Beinet.cn.Tools.Others
 
             var insertNum = 0;
             var arrData = new List<string[]>();
-            
+
             using (var sr = new StreamReader(logfile, Encoding.UTF8))
             {
                 while (!sr.EndOfStream)
@@ -164,7 +511,7 @@ namespace Beinet.cn.Tools.Others
                         if (arrFields.Length <= 1)
                         {
                             // 字段长度小于2个，忽略不导入
-                            MessageBox.Show("字段个数少于2个：" + line);
+                            Alert("字段个数少于2个：" + line);
                             return insertNum;
                         }
                         isTbAdded = CreateTable(arrFields, constr, tbname);
@@ -190,7 +537,7 @@ namespace Beinet.cn.Tools.Others
                         continue;
                     }
                     string[] linedata = line.Split(' ');
-                    if (add8 && __dateColIdx >=0 && __timeColIdx >= 0)
+                    if (add8 && __dateColIdx >= 0 && __timeColIdx >= 0)
                     {
                         Add8Hour(linedata, __dateColIdx, __timeColIdx);
                     }
@@ -225,9 +572,9 @@ namespace Beinet.cn.Tools.Others
             totalInsert += ts2;
             var totalTime = (totalEnd - totalBegin).TotalSeconds;
             var msg2 = logfile + "\r\n  " + totalEnd.ToString("HH:mm:ss.fff") + " " + insertNum
-                         + "行完成，总过程耗时:" + totalTime.ToString("N2") + "秒，"
-                         + "本次插入耗时:" + ts2.ToString("N2") + "秒，"
-                         + "总插入耗时:" + totalInsert.ToString("N2") + "秒\r\n" + txt.Text;
+                       + "行完成，总过程耗时:" + totalTime.ToString("N2") + "秒，"
+                       + "本次插入耗时:" + ts2.ToString("N2") + "秒，"
+                       + "总插入耗时:" + totalInsert.ToString("N2") + "秒\r\n" + txt.Text;
             Utility.InvokeControl(txt, () => txt.Text = msg2);
             return insertNum;
         }
@@ -271,7 +618,7 @@ namespace Beinet.cn.Tools.Others
         {
             // [id] [bigint] IDENTITY(1,1) NOT NULL PRIMARY KEY
             var sql = new StringBuilder(@"CREATE TABLE [" + tbname
-                + @"](");
+                                        + @"](");
             var idx = 0;
             foreach (string field in arrFields)
             {
@@ -353,7 +700,8 @@ namespace Beinet.cn.Tools.Others
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var sql = @"select top 100 count(1) [次数],avg([time-taken]) [平均毫秒],sum([time-taken]) [累计毫秒],[cs-method],[cs-uri-stem],[cs-uri-query]
+            var sql =
+                @"select top 100 count(1) [次数],avg([time-taken]) [平均毫秒],sum([time-taken]) [累计毫秒],[cs-method],[cs-uri-stem],[cs-uri-query]
  from iislog2017
 where [time] > '10:30:30'
  group by  [cs-method],[cs-uri-stem],[cs-uri-query] having(count(1)>300)
@@ -376,5 +724,19 @@ order by logtime
         {
             txtDbTarget.Text = ConfigurationManager.AppSettings["DefalutConn"];
         }
+
+        #endregion
+
+
+        static void Alert(string msg, DateTime? beginTime = null)
+        {
+            if (beginTime != null)
+            {
+                var time = (DateTime.Now - beginTime.Value).TotalSeconds.ToString("N2");
+                msg += " 耗时:" + time + "秒";
+            }
+            MessageBox.Show(msg);
+        }
+
     }
 }
