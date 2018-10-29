@@ -34,12 +34,19 @@ namespace Beinet.cn.Tools.IISAbout
         }
 
         #region IIS操作相关方法
+        // 停止或重启站点的等待时间
+        private const int _stopWaitSecond = 30;
+        
 
-        private IISOperation _operation;
+        private IISOperation _operation { get; set; }
+
         // 收集所有站点列表
         private Dictionary<string, Site> _arrSites;
         // 收集所有右键菜单操作方法
         Dictionary<string, Action<object>> _arrMenuActions;
+
+
+        #region 事件方法集
 
         private void btnListSite_Click(object sender, EventArgs e)
         {
@@ -75,6 +82,279 @@ namespace Beinet.cn.Tools.IISAbout
             }
         }
 
+
+        private void treeIISSite_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var clickPoint = new Point(e.X, e.Y);
+                var node = treeIISSite.GetNodeAt(clickPoint);
+                if (node != null && node.Level == 1)
+                {
+                    node.ContextMenuStrip = contextMenuStripIIS;
+                    treeIISSite.SelectedNode = node;
+                }
+            }
+        }
+
+
+        // 右键菜单点击事件
+        private void contextMenuStripIIS_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (_arrMenuActions.TryGetValue(e.ClickedItem.Text, out var action))
+            {
+                action(treeIISSite.SelectedNode.Text);
+            }
+        }
+
+        private void btnRefreshIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(-1);
+        }
+
+        private void btnRestartIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(1);
+        }
+
+        private void btnStopIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(2);
+        }
+ 
+        private void btnCopyIIS_Click(object sender, EventArgs e)
+        {
+            OperationSite(0);
+        }
+
+
+        private void labLogDir_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // %SystemDrive%环境变量转换
+            var dir = Environment.ExpandEnvironmentVariables(labLogDir.Text);
+            if (!Directory.Exists(dir))
+            {
+                Alert("目录不存在：" + dir);
+                return;
+            }
+            Process.Start("explorer", dir);
+        }
+       
+        private void btnNewSite_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+            var name = txtSiteName.Text.Trim();
+            if (name.Length == 0)
+            {
+                Alert("请输入网站名");
+                return;
+            }
+            var poolName = txtSitePoolName.Text.Trim();
+            var dir = txtSiteDir.Text.Trim();
+            dir = Environment.ExpandEnvironmentVariables(dir);
+            if (!Directory.Exists(dir))
+            {
+                if (!Confirm(dir + "目录不存在，是否创建?"))
+                {
+                    return;
+                }
+                try
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                catch (Exception exp)
+                {
+                    Alert(dir + "目录创建失败：" + exp.Message);
+                    return;
+                }
+            }
+            var binding = txtSiteBind.Text.Trim();
+            var preload = lstPreView.Text == "启用";
+            if (!int.TryParse(txtTimeout.Text, out var timeout))
+            {
+                timeout = 10;
+            }
+            var ret = _operation.CreateSite(name, dir, binding, poolName, preload, timeout, txtGcTime.Text);
+            Alert(ret);
+        }
+
+        private void btnUpdate_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+            var name = txtSiteName.Text.Trim();
+            if (name.Length == 0)
+            {
+                Alert("请输入网站名");
+                return;
+            }
+            var poolName = txtSitePoolName.Text.Trim();
+            var dir = txtSiteDir.Text.Trim();
+            dir = Environment.ExpandEnvironmentVariables(dir);
+            if (!Directory.Exists(dir))
+            {
+                if (!Confirm(dir + "目录不存在，是否创建?"))
+                {
+                    return;
+                }
+                try
+                {
+                    Directory.CreateDirectory(dir);
+                }
+                catch (Exception exp)
+                {
+                    Alert(dir + "目录创建失败：" + exp.Message);
+                    return;
+                }
+            }
+            var binding = txtSiteBind.Text.Trim();
+            var preload = lstPreView.Text == "启用";
+            if (!int.TryParse(txtTimeout.Text, out var timeout))
+            {
+                timeout = 10;
+            }
+            var ret = _operation.UpdateSite(name, dir, binding, poolName, preload, timeout, txtGcTime.Text);
+            Alert(ret);
+        }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("确认要重启本机的IIS？", "危险操作",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2)
+                == DialogResult.OK)
+            {
+                Process.Start("IISReset");
+            }
+        }
+        private void txtSiteName_KeyUp(object sender, KeyEventArgs e)
+        {
+            var name = txtSiteName.Text.Trim();
+            if (name.Length <= 0)
+                return;
+            txtSitePoolName.Text = name;
+            txtSiteDir.Text = "d:\\wwwroot\\" + name;
+            txtSiteBind.Text = "http:*:80:" + name;
+        }
+
+
+        private void btnCopyAll_Click(object sender, EventArgs e)
+        {
+            if (_arrSites == null)
+            {
+                Alert("你还 没连接服务器呢");
+                return;
+            }
+            var sb = new StringBuilder();
+            foreach (var site in _arrSites)
+            {
+                sb.AppendFormat("{0}\r\n", site.Value);
+            }
+            Clipboard.SetText(sb.ToString());
+            Alert("已复制到剪贴板");
+        }
+
+        private void btnDelAllGc_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+            if (!Confirm("将删除所有程序池的特定时间回收配置，此操作无法恢复，确认吗？？？"))
+            {
+                return;
+            }
+            var ret = _operation.RemovePoolGc();
+            Alert("下列程序池已取消特定时间回收配置：\n" + ret);
+        }
+        
+        private void btnStopAll_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+
+            if (!Confirm("确认要停止所有站点和程序池吗？？？"))
+            {
+                return;
+            }
+            var begin = DateTime.Now;
+            var ret = _operation.StopSite(false);
+            if (ret.Length == 0)
+            {
+                Alert("全部停止完成", begin);
+            }
+            else
+            {
+                Alert("下列站点或程序池停止失败：\n" + ret, begin);
+            }
+        }
+
+
+        private void btnRestartAll_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+
+            if (!Confirm("确认要重启所有站点和程序池吗？？？\n注：已停止站点也会启动"))
+            {
+                return;
+            }
+            var begin = DateTime.Now;
+            var ret = _operation.StopSite(true);
+            if (ret.Length == 0)
+            {
+                Alert("全部重启完成", begin);
+            }
+            else
+            {
+                Alert("下列站点或程序池重启失败：\n" + ret, begin);
+            }
+        }
+
+
+
+        private void btnEnableAllPreload_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+
+            if (!Confirm("确认要开启所有站点的预加载吗？？？\n注：站点启动时会自动执行Application_Start"))
+            {
+                return;
+            }
+            var begin = DateTime.Now;
+            var ret = _operation.StartSitePreload();
+            if (ret.Length == 0)
+            {
+                Alert("全部开启完成", begin);
+            }
+            else
+            {
+                Alert("下列站点开启失败：\n" + ret, begin);
+            }
+        }
+        #endregion
+
+
+
+        #region 非事件方法集
+
         Site FindSite(string siteName)
         {
             if (_arrSites == null || !_arrSites.TryGetValue(siteName, out var site))
@@ -98,6 +378,8 @@ namespace Beinet.cn.Tools.IISAbout
             labSiteStatus.Text = "";
             labLogDir.Text = "";
             txtTimeout.Text = "";
+            txtGcTime.Text = "";
+            lstPreView.Text = "禁用";
         }
 
         void SetSiteTxt(Site site)
@@ -112,22 +394,9 @@ namespace Beinet.cn.Tools.IISAbout
             labSiteStatus.Text = site.StateText;
             labLogDir.Text = site.LogDir;
             txtTimeout.Text = site.ConnectionTimeOut.ToString();
+            txtGcTime.Text = site.GcTimeStr;
+            lstPreView.Text = site.Preload ? "启用" : "禁用";
         }
-
-        private void treeIISSite_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Right)
-            {
-                var clickPoint = new Point(e.X, e.Y);
-                var node = treeIISSite.GetNodeAt(clickPoint);
-                if (node != null && node.Level == 1)
-                {
-                    node.ContextMenuStrip = contextMenuStripIIS;
-                    treeIISSite.SelectedNode = node;
-                }
-            }
-        }
-
         void InitContextMenuStripIIS()
         {
             _arrMenuActions = new Dictionary<string, Action<object>>
@@ -140,15 +409,6 @@ namespace Beinet.cn.Tools.IISAbout
             foreach (var item in _arrMenuActions)
             {
                 contextMenuStripIIS.Items.Add(item.Key);
-            }
-        }
-
-        // 右键菜单点击事件
-        private void contextMenuStripIIS_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (_arrMenuActions.TryGetValue(e.ClickedItem.Text, out var action))
-            {
-                action(treeIISSite.SelectedNode.Text);
             }
         }
 
@@ -175,8 +435,7 @@ namespace Beinet.cn.Tools.IISAbout
                 Alert("未找到站点:" + siteName);
                 return;
             }
-            if (!int.TryParse(txtRestartSecond.Text, out var restartSecond))
-                restartSecond = 10;
+            var restartSecond = _stopWaitSecond;
             var ret = _operation.RestartSite(site.Name, restartSecond);
             if (ret != 0)
             {
@@ -224,8 +483,7 @@ namespace Beinet.cn.Tools.IISAbout
                 Alert("未找到站点:" + siteName);
                 return;
             }
-            if (!int.TryParse(txtRestartSecond.Text, out var restartSecond))
-                restartSecond = 10;
+            var restartSecond = _stopWaitSecond;
             var ret = _operation.StopSite(site.Name, restartSecond);
             if (!ret)
             {
@@ -243,25 +501,6 @@ namespace Beinet.cn.Tools.IISAbout
             Alert("站点和程序池停止成功: " + siteName, begin);
         }
 
-        private void btnRefreshIIS_Click(object sender, EventArgs e)
-        {
-            OperationSite(0);
-        }
-
-        private void btnRestartIIS_Click(object sender, EventArgs e)
-        {
-            OperationSite(1);
-        }
-
-        private void btnStopIIS_Click(object sender, EventArgs e)
-        {
-            OperationSite(2);
-        }
- 
-        private void btnCopyIIS_Click(object sender, EventArgs e)
-        {
-            OperationSite(0);
-        }
         void OperationSite(int flg)
         {
             var siteName = txtSiteName.Text.Trim();
@@ -299,69 +538,10 @@ namespace Beinet.cn.Tools.IISAbout
             SetSiteTxt(site);
         }
 
-        private void labLogDir_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-        {
-            // %SystemDrive%环境变量转换
-            var dir = Environment.ExpandEnvironmentVariables(labLogDir.Text);
-            if (!Directory.Exists(dir))
-            {
-                Alert("目录不存在：" + dir);
-                return;
-            }
-            Process.Start("explorer", dir);
-        }
-       
-        private void btnNewSite_Click(object sender, EventArgs e)
-        {
-            if (_operation == null)
-            {
-                Alert("请先连接服务器");
-                return;
-            }
-            var name = txtSiteName.Text.Trim();
-            if (name.Length == 0)
-            {
-                Alert("请输入网站名");
-                return;
-            }
-            var poolName = txtSitePoolName.Text.Trim();
-            var dir = txtSiteDir.Text.Trim();
-            dir = Environment.ExpandEnvironmentVariables(dir);
-            if (!Directory.Exists(dir))
-            {
-                try
-                {
-                    Directory.CreateDirectory(dir);
-                }
-                catch (Exception exp)
-                {
-                    Alert("目录创建失败：" + dir);
-                    return;
-                }
-            }
-            var binding = txtSiteBind.Text.Trim();
-            var ret = _operation.CreateSite(name, dir, binding, poolName);
-            Alert(ret);
-        }
 
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("确认要重启本机的IIS？", "危险操作",
-                    MessageBoxButtons.OKCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2)
-                == DialogResult.OK)
-            {
-                Process.Start("IISReset");
-            }
-        }
-        private void txtSiteName_KeyUp(object sender, KeyEventArgs e)
-        {
-            var name = txtSiteName.Text.Trim();
-            if (name.Length <= 0)
-                return;
-            txtSitePoolName.Text = name;
-            txtSiteDir.Text = "d:\\wwwroot\\" + name;
-            txtSiteBind.Text = "http:*:80:" + name;
-        }
+
+        #endregion
+
 
 
         #endregion
@@ -738,5 +918,11 @@ order by logtime
             MessageBox.Show(msg);
         }
 
+        static bool Confirm(string msg)
+        {
+            var ret = MessageBox.Show(msg, "", MessageBoxButtons.YesNo, MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+            return ret == DialogResult.Yes;
+        }
     }
 }

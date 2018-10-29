@@ -45,9 +45,18 @@
             this.chkTimeAdd8 = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.btnRestartAll = new System.Windows.Forms.Button();
+            this.btnStopAll = new System.Windows.Forms.Button();
+            this.btnCopyAll = new System.Windows.Forms.Button();
+            this.btnReset = new System.Windows.Forms.Button();
+            this.btnEnableAllPreload = new System.Windows.Forms.Button();
+            this.btnDelAllGc = new System.Windows.Forms.Button();
+            this.lstPreView = new System.Windows.Forms.ComboBox();
             this.labLogDir = new System.Windows.Forms.LinkLabel();
             this.txtTimeout = new System.Windows.Forms.TextBox();
             this.txtSitePoolName = new System.Windows.Forms.TextBox();
+            this.txtGcTime = new System.Windows.Forms.TextBox();
             this.txtSiteBind = new System.Windows.Forms.TextBox();
             this.txtSiteDir = new System.Windows.Forms.TextBox();
             this.labSiteId = new System.Windows.Forms.Label();
@@ -56,28 +65,30 @@
             this.label11 = new System.Windows.Forms.Label();
             this.label13 = new System.Windows.Forms.Label();
             this.txtSiteName = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.treeIISSite = new System.Windows.Forms.TreeView();
+            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.label7 = new System.Windows.Forms.Label();
             this.btnRestartIIS = new System.Windows.Forms.Button();
             this.btnStopIIS = new System.Windows.Forms.Button();
             this.btnCopyIIS = new System.Windows.Forms.Button();
             this.btnRefreshIIS = new System.Windows.Forms.Button();
-            this.btnReset = new System.Windows.Forms.Button();
+            this.btnUpdate = new System.Windows.Forms.Button();
             this.btnNewSite = new System.Windows.Forms.Button();
             this.btnListSite = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
-            this.txtRestartSecond = new System.Windows.Forms.TextBox();
             this.txtIISIP = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.contextMenuStripIIS = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.label15 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.groupBox1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -213,34 +224,38 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.groupBox1);
+            this.tabPage2.Controls.Add(this.lstPreView);
             this.tabPage2.Controls.Add(this.labLogDir);
             this.tabPage2.Controls.Add(this.txtTimeout);
             this.tabPage2.Controls.Add(this.txtSitePoolName);
+            this.tabPage2.Controls.Add(this.txtGcTime);
             this.tabPage2.Controls.Add(this.txtSiteBind);
             this.tabPage2.Controls.Add(this.txtSiteDir);
             this.tabPage2.Controls.Add(this.labSiteId);
             this.tabPage2.Controls.Add(this.labSiteStatus);
-            this.tabPage2.Controls.Add(this.label10);
-            this.tabPage2.Controls.Add(this.label11);
-            this.tabPage2.Controls.Add(this.label13);
             this.tabPage2.Controls.Add(this.txtSiteName);
-            this.tabPage2.Controls.Add(this.label9);
-            this.tabPage2.Controls.Add(this.label8);
             this.tabPage2.Controls.Add(this.treeIISSite);
-            this.tabPage2.Controls.Add(this.label7);
             this.tabPage2.Controls.Add(this.btnRestartIIS);
             this.tabPage2.Controls.Add(this.btnStopIIS);
             this.tabPage2.Controls.Add(this.btnCopyIIS);
             this.tabPage2.Controls.Add(this.btnRefreshIIS);
-            this.tabPage2.Controls.Add(this.btnReset);
+            this.tabPage2.Controls.Add(this.btnUpdate);
             this.tabPage2.Controls.Add(this.btnNewSite);
             this.tabPage2.Controls.Add(this.btnListSite);
-            this.tabPage2.Controls.Add(this.label6);
-            this.tabPage2.Controls.Add(this.txtRestartSecond);
             this.tabPage2.Controls.Add(this.txtIISIP);
-            this.tabPage2.Controls.Add(this.label12);
-            this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Controls.Add(this.label4);
+            this.tabPage2.Controls.Add(this.label10);
+            this.tabPage2.Controls.Add(this.label11);
+            this.tabPage2.Controls.Add(this.label13);
+            this.tabPage2.Controls.Add(this.label12);
+            this.tabPage2.Controls.Add(this.label14);
+            this.tabPage2.Controls.Add(this.label9);
+            this.tabPage2.Controls.Add(this.label15);
+            this.tabPage2.Controls.Add(this.label8);
+            this.tabPage2.Controls.Add(this.label7);
+            this.tabPage2.Controls.Add(this.label6);
+            this.tabPage2.Controls.Add(this.label5);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -249,57 +264,156 @@
             this.tabPage2.Text = "IIS操作";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // groupBox1
+            // 
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.groupBox1.Controls.Add(this.btnRestartAll);
+            this.groupBox1.Controls.Add(this.btnStopAll);
+            this.groupBox1.Controls.Add(this.btnCopyAll);
+            this.groupBox1.Controls.Add(this.btnReset);
+            this.groupBox1.Controls.Add(this.btnEnableAllPreload);
+            this.groupBox1.Controls.Add(this.btnDelAllGc);
+            this.groupBox1.Location = new System.Drawing.Point(227, 399);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(505, 116);
+            this.groupBox1.TabIndex = 0;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "所有站点操作";
+            // 
+            // btnRestartAll
+            // 
+            this.btnRestartAll.Location = new System.Drawing.Point(122, 67);
+            this.btnRestartAll.Name = "btnRestartAll";
+            this.btnRestartAll.Size = new System.Drawing.Size(110, 43);
+            this.btnRestartAll.TabIndex = 21;
+            this.btnRestartAll.Text = "重启全部\r\n站点程序池";
+            this.btnRestartAll.UseVisualStyleBackColor = true;
+            this.btnRestartAll.Click += new System.EventHandler(this.btnRestartAll_Click);
+            // 
+            // btnStopAll
+            // 
+            this.btnStopAll.Location = new System.Drawing.Point(6, 67);
+            this.btnStopAll.Name = "btnStopAll";
+            this.btnStopAll.Size = new System.Drawing.Size(110, 43);
+            this.btnStopAll.TabIndex = 20;
+            this.btnStopAll.Text = "停止全部\r\n站点程序池";
+            this.btnStopAll.UseVisualStyleBackColor = true;
+            this.btnStopAll.Click += new System.EventHandler(this.btnStopAll_Click);
+            // 
+            // btnCopyAll
+            // 
+            this.btnCopyAll.Location = new System.Drawing.Point(6, 14);
+            this.btnCopyAll.Name = "btnCopyAll";
+            this.btnCopyAll.Size = new System.Drawing.Size(110, 43);
+            this.btnCopyAll.TabIndex = 17;
+            this.btnCopyAll.TabStop = false;
+            this.btnCopyAll.Text = "复制全部配置";
+            this.btnCopyAll.UseVisualStyleBackColor = true;
+            this.btnCopyAll.Click += new System.EventHandler(this.btnCopyAll_Click);
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(412, 14);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(87, 43);
+            this.btnReset.TabIndex = 22;
+            this.btnReset.Text = "IISReset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            // 
+            // btnEnableAllPreload
+            // 
+            this.btnEnableAllPreload.Location = new System.Drawing.Point(238, 14);
+            this.btnEnableAllPreload.Name = "btnEnableAllPreload";
+            this.btnEnableAllPreload.Size = new System.Drawing.Size(110, 43);
+            this.btnEnableAllPreload.TabIndex = 19;
+            this.btnEnableAllPreload.Text = "启用全部\r\n预加载";
+            this.btnEnableAllPreload.UseVisualStyleBackColor = true;
+            this.btnEnableAllPreload.Click += new System.EventHandler(this.btnEnableAllPreload_Click);
+            // 
+            // btnDelAllGc
+            // 
+            this.btnDelAllGc.Location = new System.Drawing.Point(122, 14);
+            this.btnDelAllGc.Name = "btnDelAllGc";
+            this.btnDelAllGc.Size = new System.Drawing.Size(110, 43);
+            this.btnDelAllGc.TabIndex = 18;
+            this.btnDelAllGc.Text = "删除全部\r\n回收时间配置";
+            this.btnDelAllGc.UseVisualStyleBackColor = true;
+            this.btnDelAllGc.Click += new System.EventHandler(this.btnDelAllGc_Click);
+            // 
+            // lstPreView
+            // 
+            this.lstPreView.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.lstPreView.FormattingEnabled = true;
+            this.lstPreView.Items.AddRange(new object[] {
+            "禁用",
+            "启用"});
+            this.lstPreView.Location = new System.Drawing.Point(319, 176);
+            this.lstPreView.Name = "lstPreView";
+            this.lstPreView.Size = new System.Drawing.Size(75, 20);
+            this.lstPreView.TabIndex = 12;
+            // 
             // labLogDir
             // 
             this.labLogDir.AutoSize = true;
-            this.labLogDir.Location = new System.Drawing.Point(299, 209);
+            this.labLogDir.Location = new System.Drawing.Point(317, 257);
             this.labLogDir.Name = "labLogDir";
-            this.labLogDir.Size = new System.Drawing.Size(0, 12);
-            this.labLogDir.TabIndex = 9;
+            this.labLogDir.Size = new System.Drawing.Size(11, 12);
+            this.labLogDir.TabIndex = 0;
+            this.labLogDir.Text = "-";
             this.labLogDir.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labLogDir_LinkClicked);
             // 
             // txtTimeout
             // 
             this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTimeout.Location = new System.Drawing.Point(301, 177);
+            this.txtTimeout.Location = new System.Drawing.Point(319, 149);
             this.txtTimeout.Name = "txtTimeout";
-            this.txtTimeout.Size = new System.Drawing.Size(62, 21);
-            this.txtTimeout.TabIndex = 8;
+            this.txtTimeout.Size = new System.Drawing.Size(75, 21);
+            this.txtTimeout.TabIndex = 11;
             // 
             // txtSitePoolName
             // 
             this.txtSitePoolName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSitePoolName.Location = new System.Drawing.Point(301, 150);
+            this.txtSitePoolName.Location = new System.Drawing.Point(318, 204);
             this.txtSitePoolName.Name = "txtSitePoolName";
-            this.txtSitePoolName.Size = new System.Drawing.Size(436, 21);
-            this.txtSitePoolName.TabIndex = 8;
+            this.txtSitePoolName.Size = new System.Drawing.Size(413, 21);
+            this.txtSitePoolName.TabIndex = 13;
+            // 
+            // txtGcTime
+            // 
+            this.txtGcTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGcTime.Location = new System.Drawing.Point(318, 231);
+            this.txtGcTime.Name = "txtGcTime";
+            this.txtGcTime.Size = new System.Drawing.Size(413, 21);
+            this.txtGcTime.TabIndex = 14;
             // 
             // txtSiteBind
             // 
             this.txtSiteBind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSiteBind.Location = new System.Drawing.Point(301, 123);
+            this.txtSiteBind.Location = new System.Drawing.Point(319, 122);
             this.txtSiteBind.Name = "txtSiteBind";
-            this.txtSiteBind.Size = new System.Drawing.Size(436, 21);
-            this.txtSiteBind.TabIndex = 7;
+            this.txtSiteBind.Size = new System.Drawing.Size(413, 21);
+            this.txtSiteBind.TabIndex = 10;
             // 
             // txtSiteDir
             // 
             this.txtSiteDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSiteDir.Location = new System.Drawing.Point(301, 96);
+            this.txtSiteDir.Location = new System.Drawing.Point(319, 95);
             this.txtSiteDir.Name = "txtSiteDir";
-            this.txtSiteDir.Size = new System.Drawing.Size(436, 21);
-            this.txtSiteDir.TabIndex = 6;
+            this.txtSiteDir.Size = new System.Drawing.Size(413, 21);
+            this.txtSiteDir.TabIndex = 9;
             // 
             // labSiteId
             // 
             this.labSiteId.AutoSize = true;
             this.labSiteId.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labSiteId.ForeColor = System.Drawing.Color.Red;
-            this.labSiteId.Location = new System.Drawing.Point(299, 45);
+            this.labSiteId.Location = new System.Drawing.Point(317, 45);
             this.labSiteId.Name = "labSiteId";
             this.labSiteId.Size = new System.Drawing.Size(0, 12);
             this.labSiteId.TabIndex = 0;
@@ -308,15 +422,16 @@
             // 
             this.labSiteStatus.AutoSize = true;
             this.labSiteStatus.ForeColor = System.Drawing.Color.Red;
-            this.labSiteStatus.Location = new System.Drawing.Point(301, 239);
+            this.labSiteStatus.Location = new System.Drawing.Point(317, 279);
             this.labSiteStatus.Name = "labSiteStatus";
-            this.labSiteStatus.Size = new System.Drawing.Size(0, 12);
+            this.labSiteStatus.Size = new System.Drawing.Size(11, 12);
             this.labSiteStatus.TabIndex = 0;
+            this.labSiteStatus.Text = "-";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(231, 239);
+            this.label10.Location = new System.Drawing.Point(255, 279);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(65, 12);
             this.label10.TabIndex = 0;
@@ -325,7 +440,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(231, 209);
+            this.label11.Location = new System.Drawing.Point(255, 257);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(65, 12);
             this.label11.TabIndex = 0;
@@ -334,7 +449,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(219, 180);
+            this.label13.Location = new System.Drawing.Point(237, 152);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(83, 12);
             this.label13.TabIndex = 0;
@@ -344,16 +459,34 @@
             // 
             this.txtSiteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSiteName.Location = new System.Drawing.Point(301, 69);
+            this.txtSiteName.Location = new System.Drawing.Point(319, 68);
             this.txtSiteName.Name = "txtSiteName";
-            this.txtSiteName.Size = new System.Drawing.Size(436, 21);
-            this.txtSiteName.TabIndex = 5;
+            this.txtSiteName.Size = new System.Drawing.Size(413, 21);
+            this.txtSiteName.TabIndex = 8;
             this.txtSiteName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSiteName_KeyUp);
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(267, 179);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(53, 12);
+            this.label12.TabIndex = 0;
+            this.label12.Text = "预加载：";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(230, 234);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(89, 12);
+            this.label14.TabIndex = 0;
+            this.label14.Text = "特定回收时间：";
             // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(219, 153);
+            this.label9.Location = new System.Drawing.Point(242, 207);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(77, 12);
             this.label9.TabIndex = 0;
@@ -362,7 +495,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(255, 126);
+            this.label8.Location = new System.Drawing.Point(279, 125);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 0;
@@ -383,14 +516,21 @@
             this.treeIISSite.SelectedImageIndex = 0;
             this.treeIISSite.Size = new System.Drawing.Size(210, 473);
             this.treeIISSite.TabIndex = 3;
-            this.treeIISSite.TabStop = false;
             this.treeIISSite.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeIISSite_AfterSelect);
             this.treeIISSite.MouseDown += new System.Windows.Forms.MouseEventHandler(this.treeIISSite_MouseDown);
+            // 
+            // imageList1
+            // 
+            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
+            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
+            this.imageList1.Images.SetKeyName(0, "start.jpg");
+            this.imageList1.Images.SetKeyName(1, "stop.jpg");
+            this.imageList1.Images.SetKeyName(2, "root.jpg");
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(255, 99);
+            this.label7.Location = new System.Drawing.Point(279, 98);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 12);
             this.label7.TabIndex = 0;
@@ -398,64 +538,60 @@
             // 
             // btnRestartIIS
             // 
-            this.btnRestartIIS.Location = new System.Drawing.Point(627, 40);
+            this.btnRestartIIS.Location = new System.Drawing.Point(620, 40);
             this.btnRestartIIS.Name = "btnRestartIIS";
-            this.btnRestartIIS.Size = new System.Drawing.Size(110, 23);
-            this.btnRestartIIS.TabIndex = 2;
-            this.btnRestartIIS.TabStop = false;
+            this.btnRestartIIS.Size = new System.Drawing.Size(112, 23);
+            this.btnRestartIIS.TabIndex = 7;
             this.btnRestartIIS.Text = "重启站点和程序池";
             this.btnRestartIIS.UseVisualStyleBackColor = true;
             this.btnRestartIIS.Click += new System.EventHandler(this.btnRestartIIS_Click);
             // 
             // btnStopIIS
             // 
-            this.btnStopIIS.Location = new System.Drawing.Point(503, 40);
+            this.btnStopIIS.Location = new System.Drawing.Point(490, 40);
             this.btnStopIIS.Name = "btnStopIIS";
-            this.btnStopIIS.Size = new System.Drawing.Size(118, 23);
-            this.btnStopIIS.TabIndex = 2;
-            this.btnStopIIS.TabStop = false;
+            this.btnStopIIS.Size = new System.Drawing.Size(121, 23);
+            this.btnStopIIS.TabIndex = 6;
             this.btnStopIIS.Text = "停止站点和程序池";
             this.btnStopIIS.UseVisualStyleBackColor = true;
             this.btnStopIIS.Click += new System.EventHandler(this.btnStopIIS_Click);
             // 
             // btnCopyIIS
             // 
-            this.btnCopyIIS.Location = new System.Drawing.Point(405, 40);
+            this.btnCopyIIS.Location = new System.Drawing.Point(417, 40);
             this.btnCopyIIS.Name = "btnCopyIIS";
             this.btnCopyIIS.Size = new System.Drawing.Size(64, 23);
-            this.btnCopyIIS.TabIndex = 2;
-            this.btnCopyIIS.TabStop = false;
+            this.btnCopyIIS.TabIndex = 5;
             this.btnCopyIIS.Text = "复制配置";
             this.btnCopyIIS.UseVisualStyleBackColor = true;
             this.btnCopyIIS.Click += new System.EventHandler(this.btnCopyIIS_Click);
             // 
             // btnRefreshIIS
             // 
-            this.btnRefreshIIS.Location = new System.Drawing.Point(335, 40);
+            this.btnRefreshIIS.Location = new System.Drawing.Point(344, 40);
             this.btnRefreshIIS.Name = "btnRefreshIIS";
             this.btnRefreshIIS.Size = new System.Drawing.Size(64, 23);
-            this.btnRefreshIIS.TabIndex = 2;
-            this.btnRefreshIIS.TabStop = false;
+            this.btnRefreshIIS.TabIndex = 4;
             this.btnRefreshIIS.Text = "刷新状态";
             this.btnRefreshIIS.UseVisualStyleBackColor = true;
             this.btnRefreshIIS.Click += new System.EventHandler(this.btnRefreshIIS_Click);
             // 
-            // btnReset
+            // btnUpdate
             // 
-            this.btnReset.Location = new System.Drawing.Point(382, 7);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(87, 23);
-            this.btnReset.TabIndex = 2;
-            this.btnReset.Text = "IISReset";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            this.btnUpdate.Location = new System.Drawing.Point(349, 326);
+            this.btnUpdate.Name = "btnUpdate";
+            this.btnUpdate.Size = new System.Drawing.Size(87, 23);
+            this.btnUpdate.TabIndex = 16;
+            this.btnUpdate.Text = "更新站点";
+            this.btnUpdate.UseVisualStyleBackColor = true;
+            this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
             // 
             // btnNewSite
             // 
-            this.btnNewSite.Location = new System.Drawing.Point(276, 9);
+            this.btnNewSite.Location = new System.Drawing.Point(239, 326);
             this.btnNewSite.Name = "btnNewSite";
             this.btnNewSite.Size = new System.Drawing.Size(87, 23);
-            this.btnNewSite.TabIndex = 2;
+            this.btnNewSite.TabIndex = 15;
             this.btnNewSite.Text = "创建站点";
             this.btnNewSite.UseVisualStyleBackColor = true;
             this.btnNewSite.Click += new System.EventHandler(this.btnNewSite_Click);
@@ -473,43 +609,25 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(243, 72);
+            this.label6.Location = new System.Drawing.Point(267, 71);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
             this.label6.TabIndex = 0;
             this.label6.Text = "网站名：";
             // 
-            // txtRestartSecond
-            // 
-            this.txtRestartSecond.Location = new System.Drawing.Point(674, 9);
-            this.txtRestartSecond.Name = "txtRestartSecond";
-            this.txtRestartSecond.Size = new System.Drawing.Size(49, 21);
-            this.txtRestartSecond.TabIndex = 1;
-            this.txtRestartSecond.TabStop = false;
-            this.txtRestartSecond.Text = "10";
-            // 
             // txtIISIP
             // 
             this.txtIISIP.Location = new System.Drawing.Point(67, 9);
             this.txtIISIP.Name = "txtIISIP";
+            this.txtIISIP.ReadOnly = true;
             this.txtIISIP.Size = new System.Drawing.Size(100, 21);
             this.txtIISIP.TabIndex = 1;
             this.txtIISIP.Text = "127.0.0.1";
-            this.txtIISIP.Visible = false;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(571, 12);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(107, 12);
-            this.label12.TabIndex = 0;
-            this.label12.Text = "重启等待时间-秒：";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(243, 45);
+            this.label5.Location = new System.Drawing.Point(267, 45);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 0;
@@ -523,7 +641,6 @@
             this.label4.Size = new System.Drawing.Size(65, 12);
             this.label4.TabIndex = 0;
             this.label4.Text = "服务器IP：";
-            this.label4.Visible = false;
             // 
             // tabPage1
             // 
@@ -553,13 +670,16 @@
             this.contextMenuStripIIS.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStripIIS.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripIIS_ItemClicked);
             // 
-            // imageList1
+            // label15
             // 
-            this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
-            this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageList1.Images.SetKeyName(0, "start.jpg");
-            this.imageList1.Images.SetKeyName(1, "stop.jpg");
-            this.imageList1.Images.SetKeyName(2, "root.jpg");
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.Color.Red;
+            this.label15.Location = new System.Drawing.Point(414, 149);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(215, 48);
+            this.label15.TabIndex = 0;
+            this.label15.Text = "绑定格式：协议:IP:端口:主机名，如：\r\nhttp:*:80:a.1.com\r\nhttp:*:80:;\r\nhttps:10.8.0.18:443:cc.dd.e" +
+    "e.com";
             // 
             // IIStool
             // 
@@ -573,6 +693,7 @@
             this.tabControl1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.tabPage2.PerformLayout();
+            this.groupBox1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage1.PerformLayout();
             this.ResumeLayout(false);
@@ -613,8 +734,6 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.TextBox txtRestartSecond;
-        private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button btnRefreshIIS;
         private System.Windows.Forms.Button btnRestartIIS;
         private System.Windows.Forms.Button btnStopIIS;
@@ -626,5 +745,17 @@
         private System.Windows.Forms.TextBox txtTimeout;
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.TextBox txtGcTime;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Button btnCopyAll;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox lstPreView;
+        private System.Windows.Forms.Button btnDelAllGc;
+        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.Button btnStopAll;
+        private System.Windows.Forms.Button btnRestartAll;
+        private System.Windows.Forms.Button btnUpdate;
+        private System.Windows.Forms.Button btnEnableAllPreload;
+        private System.Windows.Forms.Label label15;
     }
 }
