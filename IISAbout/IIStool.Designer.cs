@@ -393,11 +393,13 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(307, 9);
+            this.btnReset.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.btnReset.ForeColor = System.Drawing.Color.Red;
+            this.btnReset.Location = new System.Drawing.Point(605, 9);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(129, 23);
             this.btnReset.TabIndex = 25;
-            this.btnReset.Text = "IISReset";
+            this.btnReset.Text = "IISReset 重启IIS";
             this.btnReset.UseVisualStyleBackColor = true;
             this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
@@ -622,11 +624,11 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(267, 179);
+            this.label12.Location = new System.Drawing.Point(234, 179);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(53, 12);
+            this.label12.Size = new System.Drawing.Size(83, 12);
             this.label12.TabIndex = 0;
-            this.label12.Text = "预加载：";
+            this.label12.Text = "预加载-IIS8：";
             // 
             // label14
             // 
@@ -651,12 +653,12 @@
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
             this.label15.ForeColor = System.Drawing.Color.Red;
-            this.label15.Location = new System.Drawing.Point(422, 149);
+            this.label15.Location = new System.Drawing.Point(488, 149);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(215, 48);
+            this.label15.Size = new System.Drawing.Size(233, 48);
             this.label15.TabIndex = 0;
-            this.label15.Text = "绑定格式：协议:IP:端口:主机名，如：\r\nhttp:*:80:a.1.com\r\nhttp:*:80:;\r\nhttps:10.8.0.18:443:cc.dd.e" +
-    "e.com";
+            this.label15.Text = "绑定格式：协议:IP:端口:主机名，如：\r\n      http:*:80:a.1.com\r\n      http:*:80:;\r\n      https:10." +
+    "8.0.18:443:cc.dd.ee.com";
             // 
             // label8
             // 

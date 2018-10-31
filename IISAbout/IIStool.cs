@@ -55,7 +55,7 @@ namespace Beinet.cn.Tools.IISAbout
             root.Nodes.Clear();
 
             _operation = new IISOperation(txtIISIP.Text);
-            root.Text = "IIS-" + _operation.GetIisVersion().ToString();
+            root.Text = "IIS-" + _operation.GetIisVersion();
 
             var sites = _operation.ListSite();
             _arrSites = sites.ToDictionary(item => item.Name);
@@ -176,6 +176,7 @@ namespace Beinet.cn.Tools.IISAbout
             }
             var ret = _operation.CreateSite(name, dir, binding, poolName, preload, timeout, txtGcTime.Text);
             Alert(ret);
+            RefreshSiteFromServer(name);
         }
 
         private void btnUpdate_Click(object sender, EventArgs e)
@@ -218,6 +219,7 @@ namespace Beinet.cn.Tools.IISAbout
             }
             var ret = _operation.UpdateSite(name, dir, binding, poolName, preload, timeout, txtGcTime.Text);
             Alert(ret);
+            RefreshSiteFromServer(name);
         }
 
         private void btnReset_Click(object sender, EventArgs e)
@@ -226,7 +228,16 @@ namespace Beinet.cn.Tools.IISAbout
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Error, MessageBoxDefaultButton.Button2)
                 == DialogResult.OK)
             {
-                Process.Start("IISReset");
+                var process = Process.Start("IISReset");
+                if (process == null)
+                {
+                    return;
+                }
+                while (!process.HasExited)
+                {
+                    Thread.Sleep(1000);
+                }
+                RefreshSiteFromServer();
             }
         }
         private void txtSiteName_KeyUp(object sender, KeyEventArgs e)
@@ -269,8 +280,9 @@ namespace Beinet.cn.Tools.IISAbout
             }
             var ret = _operation.RemovePoolGc();
             Alert(ret);
+            RefreshSiteFromServer();
         }
-        
+
         private void btnStopAll_Click(object sender, EventArgs e)
         {
             if (_operation == null)
@@ -286,6 +298,7 @@ namespace Beinet.cn.Tools.IISAbout
             var begin = DateTime.Now;
             var ret = _operation.StopSite(false);
             Alert(ret, begin);
+            RefreshSiteFromServer();
         }
 
 
@@ -303,14 +316,8 @@ namespace Beinet.cn.Tools.IISAbout
             }
             var begin = DateTime.Now;
             var ret = _operation.StopSite(true);
-            if (ret.Length == 0)
-            {
-                Alert("全部重启完成", begin);
-            }
-            else
-            {
-                Alert("下列站点或程序池重启失败：\n" + ret, begin);
-            }
+            Alert(ret, begin);
+            RefreshSiteFromServer();
         }
 
 
@@ -330,6 +337,7 @@ namespace Beinet.cn.Tools.IISAbout
             var begin = DateTime.Now;
             var ret = _operation.StartSitePreload();
             Alert(ret, begin);
+            RefreshSiteFromServer();
         }
         private void btnModifyPool_Click(object sender, EventArgs e)
         {
@@ -345,6 +353,7 @@ namespace Beinet.cn.Tools.IISAbout
             var begin = DateTime.Now;
             var ret = _operation.ModiSitesPool();
             Alert(ret, begin);
+            RefreshSiteFromServer();
         }
 
         private void btnSetGCTime_Click(object sender, EventArgs e)
@@ -378,6 +387,7 @@ namespace Beinet.cn.Tools.IISAbout
             var begin = DateTime.Now;
             var ret = _operation.SetPoolsRecyleTime(hour, minute, deffMinute);
             Alert(ret, begin);
+            RefreshSiteFromServer();
         }
 
 
@@ -577,10 +587,17 @@ namespace Beinet.cn.Tools.IISAbout
             RefreshSiteFromServer(siteName);
         }
 
-        void RefreshSiteFromServer(string siteName)
+        void RefreshSiteFromServer(string siteName = null)
         {
-            var site = _operation.FindSite(siteName);
-            _arrSites[siteName] = site;
+            btnListSite_Click(null, null);
+            if (string.IsNullOrEmpty(siteName))
+                return;
+            if (!_arrSites.TryGetValue(siteName, out var site))
+            {
+                Alert(siteName + "站点不存在，可能已删除？");
+                ClearSiteTxt();
+                return;
+            }
             SetSiteTxt(site);
         }
 

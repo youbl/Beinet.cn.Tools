@@ -22,6 +22,12 @@ namespace Beinet.cn.Tools.IISAbout
         /// 要操作的IIS服务器IP,默认为本机
         /// </summary>
         public string ServerIp { get; private set; }
+
+        private static ParallelOptions options = new ParallelOptions
+        {
+            MaxDegreeOfParallelism = 100
+        };
+
         public IISOperation(string serverIp = "127.0.0.1")
         {
             if (string.IsNullOrEmpty(serverIp))
@@ -64,15 +70,23 @@ namespace Beinet.cn.Tools.IISAbout
             var ret = new List<Site>();
             using (var sm = ServerManager.OpenRemote(ServerIp))
             {
-                foreach (Microsoft.Web.Administration.Site iissite in sm.Sites.OrderBy(item => item.Name))
+                Parallel.ForEach(sm.Sites, options, iissite =>
                 {
+                    // ReSharper disable AccessToDisposedClosure
                     var site = BindSite(iissite, sm);
                     if (site != null)
                     {
-                        ret.Add(site);
+                        // ReSharper disable AccessToModifiedClosure
+                        lock (ret)
+                        {
+                            ret.Add(site);
+                        }
+                        // ReSharper restore AccessToModifiedClosure
                     }
-                }
+                    // ReSharper restore AccessToDisposedClosure
+                });
             }
+            ret = ret.OrderBy(item => item.Name).ToList();
             return ret;
         }
 
@@ -336,8 +350,6 @@ namespace Beinet.cn.Tools.IISAbout
             var waitSecond = 30;
             using (var sm = ServerManager.OpenRemote(ServerIp))
             {
-                var options = new ParallelOptions();
-                options.MaxDegreeOfParallelism = 100;
                 var pools = new HashSet<string>();
                 // 循环停止所有站点
                 Parallel.ForEach(sm.Sites, options, state =>
