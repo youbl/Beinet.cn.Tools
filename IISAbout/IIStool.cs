@@ -7,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 
@@ -54,6 +55,8 @@ namespace Beinet.cn.Tools.IISAbout
             root.Nodes.Clear();
 
             _operation = new IISOperation(txtIISIP.Text);
+            root.Text = "IIS-" + _operation.GetIisVersion().ToString();
+
             var sites = _operation.ListSite();
             _arrSites = sites.ToDictionary(item => item.Name);
             foreach (var site in sites)
@@ -130,14 +133,7 @@ namespace Beinet.cn.Tools.IISAbout
 
         private void labLogDir_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            // %SystemDrive%环境变量转换
-            var dir = Environment.ExpandEnvironmentVariables(labLogDir.Text);
-            if (!Directory.Exists(dir))
-            {
-                Alert("目录不存在：" + dir);
-                return;
-            }
-            Process.Start("explorer", dir);
+            Utility.OpenDir(labLogDir.Text);
         }
        
         private void btnNewSite_Click(object sender, EventArgs e)
@@ -272,7 +268,7 @@ namespace Beinet.cn.Tools.IISAbout
                 return;
             }
             var ret = _operation.RemovePoolGc();
-            Alert("下列程序池已取消特定时间回收配置：\n" + ret);
+            Alert(ret);
         }
         
         private void btnStopAll_Click(object sender, EventArgs e)
@@ -289,14 +285,7 @@ namespace Beinet.cn.Tools.IISAbout
             }
             var begin = DateTime.Now;
             var ret = _operation.StopSite(false);
-            if (ret.Length == 0)
-            {
-                Alert("全部停止完成", begin);
-            }
-            else
-            {
-                Alert("下列站点或程序池停止失败：\n" + ret, begin);
-            }
+            Alert(ret, begin);
         }
 
 
@@ -340,14 +329,61 @@ namespace Beinet.cn.Tools.IISAbout
             }
             var begin = DateTime.Now;
             var ret = _operation.StartSitePreload();
-            if (ret.Length == 0)
+            Alert(ret, begin);
+        }
+        private void btnModifyPool_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
             {
-                Alert("全部开启完成", begin);
+                Alert("请先连接服务器");
+                return;
             }
-            else
+            if (!Confirm("按每个网站名创建程序池，并把网站绑定到该程序池，确认要继续吗？\r\n已存在的程序池不会新建，直接使用。"))
             {
-                Alert("下列站点开启失败：\n" + ret, begin);
+                return;
             }
+            var begin = DateTime.Now;
+            var ret = _operation.ModiSitesPool();
+            Alert(ret, begin);
+        }
+
+        private void btnSetGCTime_Click(object sender, EventArgs e)
+        {
+            if (_operation == null)
+            {
+                Alert("请先连接服务器");
+                return;
+            }
+            if (!PromptWin.GetPrompt(out var strTime, "请输入第一个站点的回收时间, 格式必须是：HH:mm", "04:30", this))
+            {
+                return;
+            }
+            if (!Regex.IsMatch(strTime, @"^([01]\d|2[0-3]):[0-5]\d$"))
+            {
+                Alert("回收时间格式必须是小时分钟：HH:mm");
+                return;
+            }
+            if (!PromptWin.GetPrompt(out var strMinute, "请输入每2个站点的回收间隔时间, 单位分钟", "1", this))
+            {
+                return;
+            }
+            if (!int.TryParse(strMinute, out var deffMinute) || deffMinute > 30 || deffMinute < 1)
+            {
+                Alert("时间间隔必须是1~30之间的数字");
+                return;
+            }
+            var tmpArr = strTime.Split(':');
+            int hour = int.Parse(tmpArr[0]);
+            int minute = int.Parse(tmpArr[1]);
+            var begin = DateTime.Now;
+            var ret = _operation.SetPoolsRecyleTime(hour, minute, deffMinute);
+            Alert(ret, begin);
+        }
+
+
+        private void btnOpen_Click(object sender, EventArgs e)
+        {
+            Utility.OpenDir(txtSiteDir.Text);
         }
         #endregion
 
@@ -472,7 +508,7 @@ namespace Beinet.cn.Tools.IISAbout
             }
             Alert("站点和程序池重启成功:" + siteName, begin);
         }
-        // 重启站点和应用程序池
+        // 停止站点和应用程序池
         void StopSite(object data)
         {
             var begin = DateTime.Now;
@@ -521,9 +557,19 @@ namespace Beinet.cn.Tools.IISAbout
                     CopySite(siteName);
                     return;
                 case 1:
+                    if (!site.IsHttp)
+                    {
+                        Alert("不支持ftp站点");
+                        return;
+                    }
                     RestartSite(siteName);
                     break;
                 case 2:
+                    if (!site.IsHttp)
+                    {
+                        Alert("不支持ftp站点");
+                        return;
+                    }
                     StopSite(siteName);
                     break;
             }
@@ -924,5 +970,6 @@ order by logtime
                 MessageBoxDefaultButton.Button2);
             return ret == DialogResult.Yes;
         }
+
     }
 }

@@ -12,6 +12,7 @@ namespace Beinet.cn.Tools
     public partial class PromptWin : Form
     {
         public string PromptText { get; set; }
+        private string _title { get; set; }
 
         //public PromptWin()
         //    : this(null)
@@ -21,16 +22,17 @@ namespace Beinet.cn.Tools
         public PromptWin(string title)
         {
             InitializeComponent();
-            if (!string.IsNullOrEmpty(title))
-            {
-                Text = title;
-            }
+            _title = title;
             ShowInTaskbar = false;// 不能放到OnLoad里，会导致窗体消失
         }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
+            if (!string.IsNullOrEmpty(_title))
+            {
+                Text = _title;
+            }
 
             if (Owner != null)
             {
@@ -43,35 +45,70 @@ namespace Beinet.cn.Tools
 
         private void button1_Click(object sender, EventArgs e)
         {
+            Ok();
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Cancel();
+        }
+
+        void Ok()
+        {
             this.DialogResult = DialogResult.OK;
             PromptText = textBox1.Text;
             Close();
         }
-
-        private void button2_Click(object sender, EventArgs e)
+        void Cancel()
         {
             this.DialogResult = DialogResult.Cancel;
             PromptText = null;
             Close();
         }
 
+        private void PromptWin_KeyDown(object sender, KeyEventArgs e)
+        {
+            switch (e.KeyCode)
+            {
+                case Keys.Escape:
+                    Cancel();
+                    break;
+                case Keys.Enter:
+                    Ok();
+                    break;
+            }
+        }
+
+
+
         /// <summary>
         /// 弹出模态窗口，获取返回值
         /// </summary>
-        /// <param name="msg"></param>
-        /// <param name="title"></param>
-        /// <param name="window"></param>
         /// <returns></returns>
-        public static bool GetPrompt(out string msg, string title = null, IWin32Window window = null)
+        public static bool GetPrompt(out string msg, string title = null, 
+            string defaultVal = null, IWin32Window window = null)
         {
-            var win = new PromptWin(title);
-            DialogResult ret = win.ShowDialog(window);
-            if(ret == DialogResult.OK)
+            try
             {
-                msg = win.PromptText;
-                return true;
+                using (var win = new PromptWin(title))
+                {
+                    if (!string.IsNullOrEmpty(defaultVal))
+                    {
+                        win.textBox1.Text = defaultVal;
+                    }
+                    DialogResult ret = win.ShowDialog(window);
+                    if (ret == DialogResult.OK)
+                    {
+                        msg = win.PromptText;
+                        return true;
+                    }
+                }
+                msg = null;
             }
-            msg = null;
+            catch
+            {
+                msg = null;
+            }
             return false;
         }
     }

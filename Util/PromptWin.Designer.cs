@@ -79,10 +79,12 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.label1);
+            this.KeyPreview = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "PromptWin";
             this.Text = "PromptWin";
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.PromptWin_KeyDown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

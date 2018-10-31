@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("网站列表");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("网站列表", 2, 2);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IIStool));
             this.label1 = new System.Windows.Forms.Label();
             this.txtLogFile = new System.Windows.Forms.TextBox();
@@ -45,15 +45,18 @@
             this.chkTimeAdd8 = new System.Windows.Forms.CheckBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnOpen = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.btnRestartAll = new System.Windows.Forms.Button();
             this.btnStopAll = new System.Windows.Forms.Button();
             this.btnCopyAll = new System.Windows.Forms.Button();
-            this.btnReset = new System.Windows.Forms.Button();
+            this.btnSetGCTime = new System.Windows.Forms.Button();
+            this.btnModifyPool = new System.Windows.Forms.Button();
             this.btnEnableAllPreload = new System.Windows.Forms.Button();
             this.btnDelAllGc = new System.Windows.Forms.Button();
             this.lstPreView = new System.Windows.Forms.ComboBox();
             this.labLogDir = new System.Windows.Forms.LinkLabel();
+            this.btnReset = new System.Windows.Forms.Button();
             this.txtTimeout = new System.Windows.Forms.TextBox();
             this.txtSitePoolName = new System.Windows.Forms.TextBox();
             this.txtGcTime = new System.Windows.Forms.TextBox();
@@ -61,17 +64,9 @@
             this.txtSiteDir = new System.Windows.Forms.TextBox();
             this.labSiteId = new System.Windows.Forms.Label();
             this.labSiteStatus = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
             this.txtSiteName = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
             this.treeIISSite = new System.Windows.Forms.TreeView();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.label7 = new System.Windows.Forms.Label();
             this.btnRestartIIS = new System.Windows.Forms.Button();
             this.btnStopIIS = new System.Windows.Forms.Button();
             this.btnCopyIIS = new System.Windows.Forms.Button();
@@ -79,13 +74,21 @@
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnNewSite = new System.Windows.Forms.Button();
             this.btnListSite = new System.Windows.Forms.Button();
-            this.label6 = new System.Windows.Forms.Label();
             this.txtIISIP = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.contextMenuStripIIS = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.label15 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -224,9 +227,11 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.btnOpen);
             this.tabPage2.Controls.Add(this.groupBox1);
             this.tabPage2.Controls.Add(this.lstPreView);
             this.tabPage2.Controls.Add(this.labLogDir);
+            this.tabPage2.Controls.Add(this.btnReset);
             this.tabPage2.Controls.Add(this.txtTimeout);
             this.tabPage2.Controls.Add(this.txtSitePoolName);
             this.tabPage2.Controls.Add(this.txtGcTime);
@@ -264,13 +269,25 @@
             this.tabPage2.Text = "IIS操作";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnOpen
+            // 
+            this.btnOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnOpen.Location = new System.Drawing.Point(663, 93);
+            this.btnOpen.Name = "btnOpen";
+            this.btnOpen.Size = new System.Drawing.Size(69, 23);
+            this.btnOpen.TabIndex = 26;
+            this.btnOpen.Text = "打开目录";
+            this.btnOpen.UseVisualStyleBackColor = true;
+            this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
+            // 
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.groupBox1.Controls.Add(this.btnRestartAll);
             this.groupBox1.Controls.Add(this.btnStopAll);
             this.groupBox1.Controls.Add(this.btnCopyAll);
-            this.groupBox1.Controls.Add(this.btnReset);
+            this.groupBox1.Controls.Add(this.btnSetGCTime);
+            this.groupBox1.Controls.Add(this.btnModifyPool);
             this.groupBox1.Controls.Add(this.btnEnableAllPreload);
             this.groupBox1.Controls.Add(this.btnDelAllGc);
             this.groupBox1.Location = new System.Drawing.Point(227, 399);
@@ -282,9 +299,9 @@
             // 
             // btnRestartAll
             // 
-            this.btnRestartAll.Location = new System.Drawing.Point(122, 67);
+            this.btnRestartAll.Location = new System.Drawing.Point(370, 14);
             this.btnRestartAll.Name = "btnRestartAll";
-            this.btnRestartAll.Size = new System.Drawing.Size(110, 43);
+            this.btnRestartAll.Size = new System.Drawing.Size(87, 43);
             this.btnRestartAll.TabIndex = 21;
             this.btnRestartAll.Text = "重启全部\r\n站点程序池";
             this.btnRestartAll.UseVisualStyleBackColor = true;
@@ -292,9 +309,9 @@
             // 
             // btnStopAll
             // 
-            this.btnStopAll.Location = new System.Drawing.Point(6, 67);
+            this.btnStopAll.Location = new System.Drawing.Point(280, 14);
             this.btnStopAll.Name = "btnStopAll";
-            this.btnStopAll.Size = new System.Drawing.Size(110, 43);
+            this.btnStopAll.Size = new System.Drawing.Size(84, 43);
             this.btnStopAll.TabIndex = 20;
             this.btnStopAll.Text = "停止全部\r\n站点程序池";
             this.btnStopAll.UseVisualStyleBackColor = true;
@@ -304,28 +321,38 @@
             // 
             this.btnCopyAll.Location = new System.Drawing.Point(6, 14);
             this.btnCopyAll.Name = "btnCopyAll";
-            this.btnCopyAll.Size = new System.Drawing.Size(110, 43);
+            this.btnCopyAll.Size = new System.Drawing.Size(84, 43);
             this.btnCopyAll.TabIndex = 17;
             this.btnCopyAll.TabStop = false;
-            this.btnCopyAll.Text = "复制全部配置";
+            this.btnCopyAll.Text = "复制\r\n全部配置";
             this.btnCopyAll.UseVisualStyleBackColor = true;
             this.btnCopyAll.Click += new System.EventHandler(this.btnCopyAll_Click);
             // 
-            // btnReset
+            // btnSetGCTime
             // 
-            this.btnReset.Location = new System.Drawing.Point(412, 14);
-            this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(87, 43);
-            this.btnReset.TabIndex = 22;
-            this.btnReset.Text = "IISReset";
-            this.btnReset.UseVisualStyleBackColor = true;
-            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
+            this.btnSetGCTime.Location = new System.Drawing.Point(99, 67);
+            this.btnSetGCTime.Name = "btnSetGCTime";
+            this.btnSetGCTime.Size = new System.Drawing.Size(87, 43);
+            this.btnSetGCTime.TabIndex = 23;
+            this.btnSetGCTime.Text = "回收时间\r\n【批量设置】";
+            this.btnSetGCTime.UseVisualStyleBackColor = true;
+            this.btnSetGCTime.Click += new System.EventHandler(this.btnSetGCTime_Click);
+            // 
+            // btnModifyPool
+            // 
+            this.btnModifyPool.Location = new System.Drawing.Point(6, 67);
+            this.btnModifyPool.Name = "btnModifyPool";
+            this.btnModifyPool.Size = new System.Drawing.Size(87, 43);
+            this.btnModifyPool.TabIndex = 22;
+            this.btnModifyPool.Text = "批量按网站名设置程序池";
+            this.btnModifyPool.UseVisualStyleBackColor = true;
+            this.btnModifyPool.Click += new System.EventHandler(this.btnModifyPool_Click);
             // 
             // btnEnableAllPreload
             // 
-            this.btnEnableAllPreload.Location = new System.Drawing.Point(238, 14);
+            this.btnEnableAllPreload.Location = new System.Drawing.Point(187, 14);
             this.btnEnableAllPreload.Name = "btnEnableAllPreload";
-            this.btnEnableAllPreload.Size = new System.Drawing.Size(110, 43);
+            this.btnEnableAllPreload.Size = new System.Drawing.Size(87, 43);
             this.btnEnableAllPreload.TabIndex = 19;
             this.btnEnableAllPreload.Text = "启用全部\r\n预加载";
             this.btnEnableAllPreload.UseVisualStyleBackColor = true;
@@ -333,11 +360,11 @@
             // 
             // btnDelAllGc
             // 
-            this.btnDelAllGc.Location = new System.Drawing.Point(122, 14);
+            this.btnDelAllGc.Location = new System.Drawing.Point(95, 14);
             this.btnDelAllGc.Name = "btnDelAllGc";
-            this.btnDelAllGc.Size = new System.Drawing.Size(110, 43);
+            this.btnDelAllGc.Size = new System.Drawing.Size(87, 43);
             this.btnDelAllGc.TabIndex = 18;
-            this.btnDelAllGc.Text = "删除全部\r\n回收时间配置";
+            this.btnDelAllGc.Text = "回收时间\r\n【批量删除】";
             this.btnDelAllGc.UseVisualStyleBackColor = true;
             this.btnDelAllGc.Click += new System.EventHandler(this.btnDelAllGc_Click);
             // 
@@ -360,8 +387,19 @@
             this.labLogDir.Name = "labLogDir";
             this.labLogDir.Size = new System.Drawing.Size(11, 12);
             this.labLogDir.TabIndex = 0;
+            this.labLogDir.TabStop = true;
             this.labLogDir.Text = "-";
             this.labLogDir.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labLogDir_LinkClicked);
+            // 
+            // btnReset
+            // 
+            this.btnReset.Location = new System.Drawing.Point(307, 9);
+            this.btnReset.Name = "btnReset";
+            this.btnReset.Size = new System.Drawing.Size(129, 23);
+            this.btnReset.TabIndex = 25;
+            this.btnReset.Text = "IISReset";
+            this.btnReset.UseVisualStyleBackColor = true;
+            this.btnReset.Click += new System.EventHandler(this.btnReset_Click);
             // 
             // txtTimeout
             // 
@@ -405,7 +443,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSiteDir.Location = new System.Drawing.Point(319, 95);
             this.txtSiteDir.Name = "txtSiteDir";
-            this.txtSiteDir.Size = new System.Drawing.Size(413, 21);
+            this.txtSiteDir.Size = new System.Drawing.Size(338, 21);
             this.txtSiteDir.TabIndex = 9;
             // 
             // labSiteId
@@ -428,33 +466,6 @@
             this.labSiteStatus.TabIndex = 0;
             this.labSiteStatus.Text = "-";
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(255, 279);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(65, 12);
-            this.label10.TabIndex = 0;
-            this.label10.Text = "站点状态：";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(255, 257);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(65, 12);
-            this.label11.TabIndex = 0;
-            this.label11.Text = "日志目录：";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(237, 152);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(83, 12);
-            this.label13.TabIndex = 0;
-            this.label13.Text = "连接超时-秒：";
-            // 
             // txtSiteName
             // 
             this.txtSiteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -465,42 +476,6 @@
             this.txtSiteName.TabIndex = 8;
             this.txtSiteName.KeyUp += new System.Windows.Forms.KeyEventHandler(this.txtSiteName_KeyUp);
             // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(267, 179);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(53, 12);
-            this.label12.TabIndex = 0;
-            this.label12.Text = "预加载：";
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(230, 234);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(89, 12);
-            this.label14.TabIndex = 0;
-            this.label14.Text = "特定回收时间：";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(242, 207);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(77, 12);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "应用程序池：";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(279, 125);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(41, 12);
-            this.label8.TabIndex = 0;
-            this.label8.Text = "绑定：";
-            // 
             // treeIISSite
             // 
             this.treeIISSite.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -509,7 +484,9 @@
             this.treeIISSite.ImageList = this.imageList1;
             this.treeIISSite.Location = new System.Drawing.Point(9, 42);
             this.treeIISSite.Name = "treeIISSite";
+            treeNode1.ImageIndex = 2;
             treeNode1.Name = "iisRootNode";
+            treeNode1.SelectedImageIndex = 2;
             treeNode1.Text = "网站列表";
             this.treeIISSite.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
             treeNode1});
@@ -526,15 +503,6 @@
             this.imageList1.Images.SetKeyName(0, "start.jpg");
             this.imageList1.Images.SetKeyName(1, "stop.jpg");
             this.imageList1.Images.SetKeyName(2, "root.jpg");
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(279, 98);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(41, 12);
-            this.label7.TabIndex = 0;
-            this.label7.Text = "目录：";
             // 
             // btnRestartIIS
             // 
@@ -600,20 +568,11 @@
             // 
             this.btnListSite.Location = new System.Drawing.Point(173, 9);
             this.btnListSite.Name = "btnListSite";
-            this.btnListSite.Size = new System.Drawing.Size(87, 23);
+            this.btnListSite.Size = new System.Drawing.Size(124, 23);
             this.btnListSite.TabIndex = 2;
-            this.btnListSite.Text = "获取站点列表";
+            this.btnListSite.Text = "获取or刷新站点列表";
             this.btnListSite.UseVisualStyleBackColor = true;
             this.btnListSite.Click += new System.EventHandler(this.btnListSite_Click);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(267, 71);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(53, 12);
-            this.label6.TabIndex = 0;
-            this.label6.Text = "网站名：";
             // 
             // txtIISIP
             // 
@@ -624,15 +583,6 @@
             this.txtIISIP.TabIndex = 1;
             this.txtIISIP.Text = "127.0.0.1";
             // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(267, 45);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 12);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "网站ID：";
-            // 
             // label4
             // 
             this.label4.AutoSize = true;
@@ -641,6 +591,108 @@
             this.label4.Size = new System.Drawing.Size(65, 12);
             this.label4.TabIndex = 0;
             this.label4.Text = "服务器IP：";
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(255, 279);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(65, 12);
+            this.label10.TabIndex = 0;
+            this.label10.Text = "站点状态：";
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(255, 257);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(65, 12);
+            this.label11.TabIndex = 0;
+            this.label11.Text = "日志目录：";
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(237, 152);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(83, 12);
+            this.label13.TabIndex = 0;
+            this.label13.Text = "连接超时-秒：";
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(267, 179);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(53, 12);
+            this.label12.TabIndex = 0;
+            this.label12.Text = "预加载：";
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(230, 234);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(89, 12);
+            this.label14.TabIndex = 0;
+            this.label14.Text = "特定回收时间：";
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(242, 207);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(77, 12);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "应用程序池：";
+            // 
+            // label15
+            // 
+            this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label15.AutoSize = true;
+            this.label15.ForeColor = System.Drawing.Color.Red;
+            this.label15.Location = new System.Drawing.Point(422, 149);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(215, 48);
+            this.label15.TabIndex = 0;
+            this.label15.Text = "绑定格式：协议:IP:端口:主机名，如：\r\nhttp:*:80:a.1.com\r\nhttp:*:80:;\r\nhttps:10.8.0.18:443:cc.dd.e" +
+    "e.com";
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(279, 125);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(41, 12);
+            this.label8.TabIndex = 0;
+            this.label8.Text = "绑定：";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(279, 98);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(41, 12);
+            this.label7.TabIndex = 0;
+            this.label7.Text = "目录：";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(267, 71);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(53, 12);
+            this.label6.TabIndex = 0;
+            this.label6.Text = "网站名：";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(267, 45);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(53, 12);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "网站ID：";
             // 
             // tabPage1
             // 
@@ -669,17 +721,6 @@
             this.contextMenuStripIIS.Name = "contextMenuStripIIS";
             this.contextMenuStripIIS.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStripIIS.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripIIS_ItemClicked);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.ForeColor = System.Drawing.Color.Red;
-            this.label15.Location = new System.Drawing.Point(414, 149);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(215, 48);
-            this.label15.TabIndex = 0;
-            this.label15.Text = "绑定格式：协议:IP:端口:主机名，如：\r\nhttp:*:80:a.1.com\r\nhttp:*:80:;\r\nhttps:10.8.0.18:443:cc.dd.e" +
-    "e.com";
             // 
             // IIStool
             // 
@@ -757,5 +798,8 @@
         private System.Windows.Forms.Button btnUpdate;
         private System.Windows.Forms.Button btnEnableAllPreload;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Button btnModifyPool;
+        private System.Windows.Forms.Button btnSetGCTime;
+        private System.Windows.Forms.Button btnOpen;
     }
 }

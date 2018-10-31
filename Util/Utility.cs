@@ -1077,5 +1077,21 @@ namespace Beinet.cn.Tools
         }
 
 
+        public static void OpenDir(string dir)
+        {
+            if (string.IsNullOrEmpty(dir))
+            {
+                MessageBox.Show("目录不能为空");
+                return;
+            }
+            // %SystemDrive%环境变量转换
+            dir = Environment.ExpandEnvironmentVariables(dir);
+            if (!Directory.Exists(dir))
+            {
+                MessageBox.Show("目录不存在：" + dir);
+                return;
+            }
+            Process.Start("explorer", dir);
+        }
     }
 }

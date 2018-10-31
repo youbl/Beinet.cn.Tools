@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Web.Administration;
+using Microsoft.Win32;
 
 namespace Beinet.cn.Tools.IISAbout
 {
@@ -31,6 +32,30 @@ namespace Beinet.cn.Tools.IISAbout
         }
 
         /// <summary>
+        /// 获取IIS版本
+        /// </summary>
+        /// <returns></returns>
+        public Version GetIisVersion()
+        {
+            using (var componentsKey = Registry.LocalMachine.OpenSubKey(@"Software\Microsoft\InetStp", false))
+            {
+                if (componentsKey != null)
+                {
+                    int majorVersion = (int)componentsKey.GetValue("MajorVersion", -1);
+                    int minorVersion = (int)componentsKey.GetValue("MinorVersion", -1);
+
+                    if (majorVersion != -1 && minorVersion != -1)
+                    {
+                        return new Version(majorVersion, minorVersion);
+                    }
+                }
+
+                return new Version(0, 0);
+            }
+        }
+
+
+        /// <summary>
         /// 获取所有站点列表返回
         /// </summary>
         /// <returns></returns>
@@ -39,7 +64,7 @@ namespace Beinet.cn.Tools.IISAbout
             var ret = new List<Site>();
             using (var sm = ServerManager.OpenRemote(ServerIp))
             {
-                foreach (Microsoft.Web.Administration.Site iissite in sm.Sites)
+                foreach (Microsoft.Web.Administration.Site iissite in sm.Sites.OrderBy(item => item.Name))
                 {
                     var site = BindSite(iissite, sm);
                     if (site != null)
@@ -69,17 +94,28 @@ namespace Beinet.cn.Tools.IISAbout
             }
             var defaultApp = iissite.Applications[SITE_KEY];
             var defaultVirDir = defaultApp.VirtualDirectories[SITE_KEY];
+            int state;
+            try
+            {
+                state = (int) iissite.State;
+            }
+            catch
+            {
+                // 注意：ftp站点会抛异常，ftp状态要用 iissite.GetChildElement("ftpServer")["state"]  
+                state = -1;
+            }
             var site = new Site()
             {
                 Id = iissite.Id,
                 Name = iissite.Name,
-                State = (int)iissite.State,
+                State = state,
                 Dir = defaultVirDir.PhysicalPath,
-                Bindings = GetBinding(iissite.Bindings),
+                Bindings = GetBinding(iissite.Bindings, out var isHttp),
                 PoolName = defaultApp.ApplicationPoolName,
                 ConnectionTimeOut = (int)iissite.Limits.ConnectionTimeout.TotalSeconds,
             };
             site.LogDir = iissite.LogFile.Enabled ? iissite.LogFile.Directory + "\\W3SVC" + site.Id.ToString() : "";
+            site.IsHttp = isHttp;
             try
             {
                 // 读取是否启用预加载
@@ -112,6 +148,7 @@ namespace Beinet.cn.Tools.IISAbout
                 if (site.State == ObjectState.Stopped)
                     return true;
                 site.Stop();
+                Utility.Log("stop site:" + name);
                 return (CheckState(site, ObjectState.Stopped, waitSecond));
             }
         }
@@ -130,6 +167,7 @@ namespace Beinet.cn.Tools.IISAbout
                 if (site.State == ObjectState.Started)
                     return true;
                 site.Start();
+                Utility.Log("start site:" + name);
                 return (CheckState(site, ObjectState.Started, waitSecond));
             }
         }
@@ -158,6 +196,7 @@ namespace Beinet.cn.Tools.IISAbout
                         return 2;
                 }
             }
+            Utility.Log("restart site:" + name);
             return 0;
         }
 
@@ -203,6 +242,8 @@ namespace Beinet.cn.Tools.IISAbout
                 SetPoolRecyleTime(pool, recyleTimes);
                 sm.CommitChanges();
             }
+            Utility.Log($"create site:{name}，{sitePath}，{binding}，{poolname}，{preloadEnabled}，" +
+                        $"{timeoutSeconds}，{recyleTimes}");
             return "OK";
         }
 
@@ -244,6 +285,8 @@ namespace Beinet.cn.Tools.IISAbout
                 SetPoolRecyleTime(pool, recyleTimes);
                 sm.CommitChanges();
             }
+            Utility.Log($"update site:{name}，{sitePath}，{binding}，{poolname}，{preloadEnabled}，" +
+                        $"{timeoutSeconds}，{recyleTimes}");
             return "OK";
         }
 
@@ -288,6 +331,7 @@ namespace Beinet.cn.Tools.IISAbout
         /// <returns></returns>
         public string StopSite(bool startLater, params string[] siteNames)
         {
+            int ok = 0, fail = 0, noop = 0;
             var ret = new StringBuilder();
             var waitSecond = 30;
             using (var sm = ServerManager.OpenRemote(ServerIp))
@@ -314,7 +358,16 @@ namespace Beinet.cn.Tools.IISAbout
                                 if (!CheckState(site, ObjectState.Stopped, waitSecond))
                                 {
                                     ret.AppendFormat("site:{0},", site.Name);
+                                    fail++;
                                 }
+                                else
+                                {
+                                    ok++;
+                                }
+                            }
+                            else
+                            {
+                                noop++;
                             }
                         }
                         catch (Exception)
@@ -339,7 +392,16 @@ namespace Beinet.cn.Tools.IISAbout
                             if (!CheckState(pool, ObjectState.Stopped, waitSecond))
                             {
                                 ret.AppendFormat("pool:{0},", pool.Name);
+                                fail++;
                             }
+                            else
+                            {
+                                ok++;
+                            }
+                        }
+                        else
+                        {
+                            noop++;
                         }
                     }
                     catch (Exception)
@@ -352,6 +414,13 @@ namespace Beinet.cn.Tools.IISAbout
                     }
                 });
             }
+            if (ret.Length > 0)
+            {
+                ret.Insert(0, "操作失败列表：\r\n");
+            }
+            var strCnt = $"成功/失败/无操作:{ok.ToString()}/{fail.ToString()}/{noop.ToString()}\r\n";
+            ret.Insert(0, strCnt);
+            Utility.Log("StopSite:" + startLater + "\r\n" + ret);
             return ret.ToString();
         }
 
@@ -362,10 +431,10 @@ namespace Beinet.cn.Tools.IISAbout
         /// <returns></returns>
         public string StartSitePreload(params string[] sites)
         {
+            int ok = 0, fail = 0, noop = 0;
             var ret = new StringBuilder();
             using (var sm = ServerManager.OpenRemote(ServerIp))
             {
-                
                 foreach (var site in sm.Sites)
                 {
                     if (sites == null || sites.Length == 0 || sites.Contains(site.Name))
@@ -373,16 +442,80 @@ namespace Beinet.cn.Tools.IISAbout
                         try
                         {
                             var defaultApp = site.Applications[SITE_KEY];
-                            defaultApp.SetAttributeValue("preloadEnabled", true);
+                            if ((bool) defaultApp.GetAttributeValue("preloadEnabled"))
+                            {
+                                noop++;
+                            }
+                            else
+                            {
+                                defaultApp.SetAttributeValue("preloadEnabled", true);
+                                ok++;
+                            }
                         }
                         catch
                         {
+                            fail++;
                             ret.AppendFormat("{0},", site.Name);
                         }
                     }
                 }
                 sm.CommitChanges();
             }
+            if (ret.Length > 0)
+            {
+                ret.Insert(0, "操作失败列表：\r\n");
+            }
+            var strCnt = $"成功/失败/无操作:{ok.ToString()}/{fail.ToString()}/{noop.ToString()}\r\n";
+            ret.Insert(0, strCnt);
+            Utility.Log("批量启动站点预加载:\r\n" + ret);
+            return ret.ToString();
+        }
+
+        /// <summary>
+        /// 根据站点名创建程序池，并修改站点的程序池
+        /// </summary>
+        /// <param name="sites"></param>
+        /// <returns></returns>
+        public string ModiSitesPool(params string[] sites)
+        {
+            int ok = 0, fail = 0, noop = 0;
+            var ret = new StringBuilder();
+            using (var sm = ServerManager.OpenRemote(ServerIp))
+            {
+                foreach (var site in sm.Sites)
+                {
+                    if (sites == null || sites.Length == 0 || sites.Contains(site.Name))
+                    {
+                        try
+                        {
+                            var defaultApp = site.Applications[SITE_KEY];
+                            if (defaultApp.ApplicationPoolName == site.Name)
+                            {
+                                noop++;
+                            }
+                            else
+                            {
+                                CreatePool(site.Name, sm);
+                                defaultApp.ApplicationPoolName = site.Name;
+                                ok++;
+                            }
+                        }
+                        catch(Exception)
+                        {
+                            fail++;
+                            ret.AppendFormat("{0},", site.Name);
+                        }
+                    }
+                }
+                sm.CommitChanges();
+            }
+            if (ret.Length > 0)
+            {
+                ret.Insert(0, "操作失败列表：\r\n");
+            }
+            var strCnt = $"成功/失败/无操作:{ok.ToString()}/{fail.ToString()}/{noop.ToString()}\r\n";
+            ret.Insert(0, strCnt);
+            Utility.Log("修改站点为同名程序池:\r\n" + ret);
             return ret.ToString();
         }
         #endregion
@@ -390,7 +523,59 @@ namespace Beinet.cn.Tools.IISAbout
 
         #region 程序池操作
 
-        void SetPoolRecyleTime(ApplicationPool pool, string times)
+        /// <summary>
+        /// 批量设置站点对应的程序池回收时间
+        /// </summary>
+        /// <param name="hour"></param>
+        /// <param name="minute"></param>
+        /// <param name="diffMinute"></param>
+        /// <param name="sites"></param>
+        /// <returns></returns>
+        public string SetPoolsRecyleTime(int hour, int minute, int diffMinute, params string[] sites)
+        {
+            int ok = 0, fail = 0;
+            var ret = new StringBuilder();
+            var logMsg = new StringBuilder("批量设置程序池回收时间：\r\n");
+            var ts = new TimeSpan(hour, minute, 0);
+            var addTs = TimeSpan.FromMinutes(diffMinute);
+            using (var sm = ServerManager.OpenRemote(ServerIp))
+            {
+                foreach (var site in sm.Sites.OrderBy(item => item.Name))
+                {
+                    if (sites == null || sites.Length == 0 || sites.Contains(site.Name))
+                    {
+                        try
+                        {
+                            var poolName = site.Applications[SITE_KEY].ApplicationPoolName;
+                            var pool = sm.ApplicationPools[poolName];
+                            logMsg.AppendFormat("{0}-Pool:{1} :{2}\r\n", site.Name, pool.Name, ts.ToString());
+                            pool.Recycling.PeriodicRestart.Schedule.Clear();
+                            pool.Recycling.PeriodicRestart.Schedule.Add(ts);
+                            ok++;
+                        }
+                        catch
+                        {
+                            fail++;
+                            ret.AppendFormat("{0},", site.Name);
+                        }
+                    }
+                    ts = ts.Add(addTs);
+                }
+                sm.CommitChanges();
+            }
+
+            if (ret.Length > 0)
+            {
+                ret.Insert(0, "操作失败列表：\r\n");
+            }
+            var strCnt = $"成功/失败:{ok.ToString()}/{fail.ToString()}\r\n";
+            ret.Insert(0, strCnt);
+            Utility.Log(logMsg + "\r\n" + ret);
+            return ret.ToString();
+        }
+
+
+        private void SetPoolRecyleTime(ApplicationPool pool, string times)
         {
             pool.Recycling.PeriodicRestart.Schedule.Clear();
             foreach (var item in times.Split(';'))
@@ -402,7 +587,7 @@ namespace Beinet.cn.Tools.IISAbout
             }
         }
 
-        ApplicationPool CreatePool(string name, ServerManager sm)
+        private ApplicationPool CreatePool(string name, ServerManager sm)
         {
             //创建应用程序池
             ApplicationPool appPool = sm.ApplicationPools.FirstOrDefault(x => x.Name == name);
@@ -441,6 +626,7 @@ namespace Beinet.cn.Tools.IISAbout
                 if (pool.State == ObjectState.Stopped)
                     return true;
                 pool.Stop();
+                Utility.Log("stop pool:" + name);
                 return (CheckState(pool, ObjectState.Stopped, waitSecond));
             }
         }
@@ -459,6 +645,7 @@ namespace Beinet.cn.Tools.IISAbout
                 if (pool.State == ObjectState.Started)
                     return true;
                 pool.Start();
+                Utility.Log("start pool:" + name);
                 return (CheckState(pool, ObjectState.Started, waitSecond));
             }
         }
@@ -488,6 +675,7 @@ namespace Beinet.cn.Tools.IISAbout
                         return 2;
                 }
             }
+            Utility.Log("restart pool:" + name);
             return 0;
         }
 
@@ -499,6 +687,7 @@ namespace Beinet.cn.Tools.IISAbout
         /// <returns></returns>
         public string RemovePoolGc(params string[] poolNames)
         {
+            int ok = 0, fail = 0, noop = 0;
             var ret = new StringBuilder();
             using (var sm = ServerManager.OpenRemote(ServerIp))
             {
@@ -506,12 +695,34 @@ namespace Beinet.cn.Tools.IISAbout
                 {
                     if (poolNames == null || poolNames.Length == 0 || poolNames.Contains(pool.Name))
                     {
-                        pool.Recycling.PeriodicRestart.Schedule.Clear();
-                        ret.AppendFormat("{0},", pool.Name);
+                        try
+                        {
+                            if (pool.Recycling.PeriodicRestart.Schedule.Count > 0)
+                            {
+                                noop++;
+                            }
+                            else
+                            {
+                                ok++;
+                                pool.Recycling.PeriodicRestart.Schedule.Clear();
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            fail++;
+                            ret.AppendFormat("{0},", pool.Name);
+                        }
                     }
                 }
                 sm.CommitChanges();
             }
+            if (ret.Length > 0)
+            {
+                ret.Insert(0, "下列程序池操作失败：\r\n");
+            }
+            var strCnt = $"成功/失败/无操作:{ok.ToString()}/{fail.ToString()}/{noop.ToString()}\r\n";
+            ret.Insert(0, strCnt);
+            Utility.Log("批量删除程序池回收时间设置:\r\n" + ret);
             return ret.ToString();
         }
         #endregion
@@ -552,8 +763,9 @@ namespace Beinet.cn.Tools.IISAbout
         }
 
 
-        string GetBinding(BindingCollection bindings)
+        string GetBinding(BindingCollection bindings, out bool haveHttp)
         {
+            haveHttp = false;
             if (bindings == null)
             {
                 return "";
@@ -561,6 +773,8 @@ namespace Beinet.cn.Tools.IISAbout
             var sb = new StringBuilder();
             foreach (var binding in bindings)
             {
+                if (binding.Protocol.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+                    haveHttp = true;
                 sb.AppendFormat("{0}:{1};", binding.Protocol, binding.BindingInformation);
             }
             return sb.ToString();
@@ -645,11 +859,15 @@ namespace Beinet.cn.Tools.IISAbout
         /// </summary>
         public bool Preload { get; set; }
 
+        /// <summary>
+        /// 当前站点是否允许http协议（比如ftp站点就不允许）
+        /// </summary>
+        public bool IsHttp { get; set; }
+
         public override string ToString()
         {
             var sb = new StringBuilder();
-            sb.AppendFormat(@"站点ID：{0}
-站点名称：{1}
+            sb.AppendFormat(@"ID与名称：{0} {1}
 物理目录：{2}
 绑定域名：{3}
 程序池名：{4}
@@ -667,6 +885,7 @@ namespace Beinet.cn.Tools.IISAbout
 
 
 /**
+ * https://www.cnblogs.com/jjg0519/p/7277971.html
 Microsoft.Web.Administration.ServerManager sm = new Microsoft.Web.Administration.ServerManager();
 
 System.Console.WriteLine("应用程序池默认设置：");
