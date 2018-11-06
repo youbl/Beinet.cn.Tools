@@ -395,6 +395,58 @@ namespace Beinet.cn.Tools.IISAbout
         {
             Utility.OpenDir(txtSiteDir.Text);
         }
+
+
+        private void btnOpenLog_Click(object sender, EventArgs e)
+        {
+            var name = txtSiteName.Text.Trim();
+            if (name.Length == 0)
+            {
+                Alert("请输入网站名");
+                return;
+            }
+
+            if (!Confirm($"真要的{btnOpenLog.Text}吗？"))
+            {
+                return;
+            }
+            try
+            {
+                _operation.ChangeSiteLogStatus(name);
+                RefreshSiteFromServer(name);
+            }
+            catch (Exception exp)
+            {
+                Alert("出错了：" + exp.Message);
+            }
+        }
+
+
+        private void btnDisableAllLog_Click(object sender, EventArgs e)
+        {
+            if (!Confirm($"真要的禁用所有站点日志吗？"))
+            {
+                return;
+            }
+            try
+            {
+                var ret = _operation.ChangeSiteLogStatus(false);
+                Alert(ret);
+                RefreshSiteFromServer();
+            }
+            catch (Exception exp)
+            {
+                Alert("出错了：" + exp.Message);
+            }
+        }
+
+
+        private void btnOpenIIS_Click(object sender, EventArgs e)
+        {
+            Process.Start("inetmgr");
+        }
+
+
         #endregion
 
 
@@ -423,6 +475,9 @@ namespace Beinet.cn.Tools.IISAbout
             txtSitePoolName.Text = "";
             labSiteStatus.Text = "";
             labLogDir.Text = "";
+            labLogDir.LinkClicked -= labLogDir_LinkClicked;
+            btnOpenLog.Visible = false;
+
             txtTimeout.Text = "";
             txtGcTime.Text = "";
             lstPreView.Text = "禁用";
@@ -438,7 +493,18 @@ namespace Beinet.cn.Tools.IISAbout
             txtSiteName.Text = site.Name;
             txtSitePoolName.Text = site.PoolName;
             labSiteStatus.Text = site.StateText;
-            labLogDir.Text = site.LogDir;
+            btnOpenLog.Visible = true;
+            if (string.IsNullOrEmpty(site.LogDir))
+            {
+                labLogDir.Text = "日志已禁用";
+                btnOpenLog.Text = "启用站点日志";
+            }
+            else
+            {
+                labLogDir.Text = site.LogDir;
+                labLogDir.LinkClicked += labLogDir_LinkClicked;
+                btnOpenLog.Text = "禁止站点日志";
+            }
             txtTimeout.Text = site.ConnectionTimeOut.ToString();
             txtGcTime.Text = site.GcTimeStr;
             lstPreView.Text = site.Preload ? "启用" : "禁用";
@@ -592,10 +658,10 @@ namespace Beinet.cn.Tools.IISAbout
             btnListSite_Click(null, null);
             if (string.IsNullOrEmpty(siteName))
                 return;
+            ClearSiteTxt();
             if (!_arrSites.TryGetValue(siteName, out var site))
             {
                 Alert(siteName + "站点不存在，可能已删除？");
-                ClearSiteTxt();
                 return;
             }
             SetSiteTxt(site);

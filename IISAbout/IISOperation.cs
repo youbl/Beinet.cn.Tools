@@ -530,6 +530,74 @@ namespace Beinet.cn.Tools.IISAbout
             Utility.Log("修改站点为同名程序池:\r\n" + ret);
             return ret.ToString();
         }
+
+        /// <summary>
+        /// 修改指定站点的日志状态
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public bool ChangeSiteLogStatus(string name)
+        {
+            using (var sm = ServerManager.OpenRemote(ServerIp))
+            {
+                var site = sm.Sites.FirstOrDefault(x => x.Name == name);
+                if (site == null)
+                {
+                    throw new Exception(name + "站点未找到，无法更新");
+                }
+                site.LogFile.Enabled = !site.LogFile.Enabled;
+                sm.CommitChanges();
+            }
+            return true;
+        }
+
+
+        /// <summary>
+        /// 批量修改站点的日志状态
+        /// </summary>
+        /// <param name="enable"></param>
+        /// <param name="sites"></param>
+        /// <returns></returns>
+        public string ChangeSiteLogStatus(bool enable, params string[] sites)
+        {
+            int ok = 0, fail = 0, noop = 0;
+            var ret = new StringBuilder();
+            using (var sm = ServerManager.OpenRemote(ServerIp))
+            {
+                foreach (var site in sm.Sites)
+                {
+                    if (sites == null || sites.Length == 0 || sites.Contains(site.Name))
+                    {
+                        try
+                        {
+                            if (site.LogFile.Enabled == enable)
+                            {
+                                noop++;
+                            }
+                            else
+                            {
+                                site.LogFile.Enabled = enable;
+                                ok++;
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            fail++;
+                            ret.AppendFormat("{0},", site.Name);
+                        }
+                    }
+                }
+                sm.CommitChanges();
+            }
+            if (ret.Length > 0)
+            {
+                ret.Insert(0, "操作失败列表：\r\n");
+            }
+            var strCnt = $"成功/失败/无操作:{ok.ToString()}/{fail.ToString()}/{noop.ToString()}\r\n";
+            ret.Insert(0, strCnt);
+            Utility.Log($"修改站点日志状态:{enable.ToString()}\r\n{ret}");
+            return ret.ToString();
+        }
         #endregion
 
 

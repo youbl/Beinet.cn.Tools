@@ -48,6 +48,14 @@ namespace Beinet.cn.Tools.DataSync
             var begintime = DateTime.Now;
             try
             {
+                if (Regex.IsMatch(sql, @"(?i)\b(insert|update|delete)\s"))
+                {
+                    var rows = SqlHelper.ExecuteNonQuery(txtConstr.Text, sql);
+                    var usetime2 = (DateTime.Now - begintime).TotalMilliseconds;
+                    labStatus.Text = "耗时:" + usetime2.ToString("N0") + "毫秒";
+                    MessageBox.Show("影响行数：" + rows.ToString());
+                    return;
+                }
                 var ds = SqlHelper.ExecuteDataSet(txtConstr.Text, sql);
                 var usetime = (DateTime.Now - begintime).TotalMilliseconds;
                 labStatus.Text = "耗时:" + usetime.ToString("N0") + "毫秒";

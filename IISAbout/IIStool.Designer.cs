@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("网站列表", 2, 2);
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("网站列表", 2, 2);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IIStool));
             this.label1 = new System.Windows.Forms.Label();
             this.txtLogFile = new System.Windows.Forms.TextBox();
@@ -89,6 +89,9 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.contextMenuStripIIS = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.btnOpenLog = new System.Windows.Forms.Button();
+            this.btnDisableAllLog = new System.Windows.Forms.Button();
+            this.btnOpenIIS = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -245,8 +248,10 @@
             this.tabPage2.Controls.Add(this.btnStopIIS);
             this.tabPage2.Controls.Add(this.btnCopyIIS);
             this.tabPage2.Controls.Add(this.btnRefreshIIS);
+            this.tabPage2.Controls.Add(this.btnOpenLog);
             this.tabPage2.Controls.Add(this.btnUpdate);
             this.tabPage2.Controls.Add(this.btnNewSite);
+            this.tabPage2.Controls.Add(this.btnOpenIIS);
             this.tabPage2.Controls.Add(this.btnListSite);
             this.tabPage2.Controls.Add(this.txtIISIP);
             this.tabPage2.Controls.Add(this.label4);
@@ -286,6 +291,7 @@
             this.groupBox1.Controls.Add(this.btnRestartAll);
             this.groupBox1.Controls.Add(this.btnStopAll);
             this.groupBox1.Controls.Add(this.btnCopyAll);
+            this.groupBox1.Controls.Add(this.btnDisableAllLog);
             this.groupBox1.Controls.Add(this.btnSetGCTime);
             this.groupBox1.Controls.Add(this.btnModifyPool);
             this.groupBox1.Controls.Add(this.btnEnableAllPreload);
@@ -389,7 +395,6 @@
             this.labLogDir.TabIndex = 0;
             this.labLogDir.TabStop = true;
             this.labLogDir.Text = "-";
-            this.labLogDir.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.labLogDir_LinkClicked);
             // 
             // btnReset
             // 
@@ -486,12 +491,12 @@
             this.treeIISSite.ImageList = this.imageList1;
             this.treeIISSite.Location = new System.Drawing.Point(9, 42);
             this.treeIISSite.Name = "treeIISSite";
-            treeNode1.ImageIndex = 2;
-            treeNode1.Name = "iisRootNode";
-            treeNode1.SelectedImageIndex = 2;
-            treeNode1.Text = "网站列表";
+            treeNode2.ImageIndex = 2;
+            treeNode2.Name = "iisRootNode";
+            treeNode2.SelectedImageIndex = 2;
+            treeNode2.Text = "网站列表";
             this.treeIISSite.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode2});
             this.treeIISSite.SelectedImageIndex = 0;
             this.treeIISSite.Size = new System.Drawing.Size(210, 473);
             this.treeIISSite.TabIndex = 3;
@@ -724,6 +729,37 @@
             this.contextMenuStripIIS.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStripIIS.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripIIS_ItemClicked);
             // 
+            // btnOpenLog
+            // 
+            this.btnOpenLog.Location = new System.Drawing.Point(465, 326);
+            this.btnOpenLog.Name = "btnOpenLog";
+            this.btnOpenLog.Size = new System.Drawing.Size(87, 23);
+            this.btnOpenLog.TabIndex = 16;
+            this.btnOpenLog.Text = "日志";
+            this.btnOpenLog.UseVisualStyleBackColor = true;
+            this.btnOpenLog.Visible = false;
+            this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
+            // 
+            // btnDisableAllLog
+            // 
+            this.btnDisableAllLog.Location = new System.Drawing.Point(192, 67);
+            this.btnDisableAllLog.Name = "btnDisableAllLog";
+            this.btnDisableAllLog.Size = new System.Drawing.Size(87, 43);
+            this.btnDisableAllLog.TabIndex = 23;
+            this.btnDisableAllLog.Text = "站点日志\r\n【批量禁用】";
+            this.btnDisableAllLog.UseVisualStyleBackColor = true;
+            this.btnDisableAllLog.Click += new System.EventHandler(this.btnDisableAllLog_Click);
+            // 
+            // btnOpenIIS
+            // 
+            this.btnOpenIIS.Location = new System.Drawing.Point(382, 9);
+            this.btnOpenIIS.Name = "btnOpenIIS";
+            this.btnOpenIIS.Size = new System.Drawing.Size(124, 23);
+            this.btnOpenIIS.TabIndex = 2;
+            this.btnOpenIIS.Text = "打开IIS控制台";
+            this.btnOpenIIS.UseVisualStyleBackColor = true;
+            this.btnOpenIIS.Click += new System.EventHandler(this.btnOpenIIS_Click);
+            // 
             // IIStool
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -803,5 +839,8 @@
         private System.Windows.Forms.Button btnModifyPool;
         private System.Windows.Forms.Button btnSetGCTime;
         private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.Button btnOpenLog;
+        private System.Windows.Forms.Button btnDisableAllLog;
+        private System.Windows.Forms.Button btnOpenIIS;
     }
 }
