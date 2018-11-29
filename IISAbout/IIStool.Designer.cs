@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("网站列表", 2, 2);
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("网站列表", 2, 2);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(IIStool));
             this.label1 = new System.Windows.Forms.Label();
             this.txtLogFile = new System.Windows.Forms.TextBox();
@@ -50,6 +50,7 @@
             this.btnRestartAll = new System.Windows.Forms.Button();
             this.btnStopAll = new System.Windows.Forms.Button();
             this.btnCopyAll = new System.Windows.Forms.Button();
+            this.btnDisableAllLog = new System.Windows.Forms.Button();
             this.btnSetGCTime = new System.Windows.Forms.Button();
             this.btnModifyPool = new System.Windows.Forms.Button();
             this.btnEnableAllPreload = new System.Windows.Forms.Button();
@@ -71,8 +72,10 @@
             this.btnStopIIS = new System.Windows.Forms.Button();
             this.btnCopyIIS = new System.Windows.Forms.Button();
             this.btnRefreshIIS = new System.Windows.Forms.Button();
+            this.btnOpenLog = new System.Windows.Forms.Button();
             this.btnUpdate = new System.Windows.Forms.Button();
             this.btnNewSite = new System.Windows.Forms.Button();
+            this.btnOpenIIS = new System.Windows.Forms.Button();
             this.btnListSite = new System.Windows.Forms.Button();
             this.txtIISIP = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -89,9 +92,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.contextMenuStripIIS = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.btnOpenLog = new System.Windows.Forms.Button();
-            this.btnDisableAllLog = new System.Windows.Forms.Button();
-            this.btnOpenIIS = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -277,7 +277,7 @@
             // btnOpen
             // 
             this.btnOpen.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnOpen.Location = new System.Drawing.Point(663, 93);
+            this.btnOpen.Location = new System.Drawing.Point(663, 117);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(69, 23);
             this.btnOpen.TabIndex = 26;
@@ -334,6 +334,16 @@
             this.btnCopyAll.UseVisualStyleBackColor = true;
             this.btnCopyAll.Click += new System.EventHandler(this.btnCopyAll_Click);
             // 
+            // btnDisableAllLog
+            // 
+            this.btnDisableAllLog.Location = new System.Drawing.Point(192, 67);
+            this.btnDisableAllLog.Name = "btnDisableAllLog";
+            this.btnDisableAllLog.Size = new System.Drawing.Size(87, 43);
+            this.btnDisableAllLog.TabIndex = 23;
+            this.btnDisableAllLog.Text = "站点日志\r\n【批量禁用】";
+            this.btnDisableAllLog.UseVisualStyleBackColor = true;
+            this.btnDisableAllLog.Click += new System.EventHandler(this.btnDisableAllLog_Click);
+            // 
             // btnSetGCTime
             // 
             this.btnSetGCTime.Location = new System.Drawing.Point(99, 67);
@@ -381,7 +391,7 @@
             this.lstPreView.Items.AddRange(new object[] {
             "禁用",
             "启用"});
-            this.lstPreView.Location = new System.Drawing.Point(319, 176);
+            this.lstPreView.Location = new System.Drawing.Point(319, 200);
             this.lstPreView.Name = "lstPreView";
             this.lstPreView.Size = new System.Drawing.Size(75, 20);
             this.lstPreView.TabIndex = 12;
@@ -389,7 +399,7 @@
             // labLogDir
             // 
             this.labLogDir.AutoSize = true;
-            this.labLogDir.Location = new System.Drawing.Point(317, 257);
+            this.labLogDir.Location = new System.Drawing.Point(317, 281);
             this.labLogDir.Name = "labLogDir";
             this.labLogDir.Size = new System.Drawing.Size(11, 12);
             this.labLogDir.TabIndex = 0;
@@ -400,9 +410,9 @@
             // 
             this.btnReset.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.btnReset.ForeColor = System.Drawing.Color.Red;
-            this.btnReset.Location = new System.Drawing.Point(605, 9);
+            this.btnReset.Location = new System.Drawing.Point(507, 7);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(129, 23);
+            this.btnReset.Size = new System.Drawing.Size(177, 23);
             this.btnReset.TabIndex = 25;
             this.btnReset.Text = "IISReset 重启IIS";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -412,7 +422,7 @@
             // 
             this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTimeout.Location = new System.Drawing.Point(319, 149);
+            this.txtTimeout.Location = new System.Drawing.Point(319, 173);
             this.txtTimeout.Name = "txtTimeout";
             this.txtTimeout.Size = new System.Drawing.Size(75, 21);
             this.txtTimeout.TabIndex = 11;
@@ -421,7 +431,7 @@
             // 
             this.txtSitePoolName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSitePoolName.Location = new System.Drawing.Point(318, 204);
+            this.txtSitePoolName.Location = new System.Drawing.Point(318, 228);
             this.txtSitePoolName.Name = "txtSitePoolName";
             this.txtSitePoolName.Size = new System.Drawing.Size(413, 21);
             this.txtSitePoolName.TabIndex = 13;
@@ -430,7 +440,7 @@
             // 
             this.txtGcTime.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGcTime.Location = new System.Drawing.Point(318, 231);
+            this.txtGcTime.Location = new System.Drawing.Point(318, 255);
             this.txtGcTime.Name = "txtGcTime";
             this.txtGcTime.Size = new System.Drawing.Size(413, 21);
             this.txtGcTime.TabIndex = 14;
@@ -439,7 +449,7 @@
             // 
             this.txtSiteBind.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSiteBind.Location = new System.Drawing.Point(319, 122);
+            this.txtSiteBind.Location = new System.Drawing.Point(319, 146);
             this.txtSiteBind.Name = "txtSiteBind";
             this.txtSiteBind.Size = new System.Drawing.Size(413, 21);
             this.txtSiteBind.TabIndex = 10;
@@ -448,7 +458,7 @@
             // 
             this.txtSiteDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSiteDir.Location = new System.Drawing.Point(319, 95);
+            this.txtSiteDir.Location = new System.Drawing.Point(319, 119);
             this.txtSiteDir.Name = "txtSiteDir";
             this.txtSiteDir.Size = new System.Drawing.Size(338, 21);
             this.txtSiteDir.TabIndex = 9;
@@ -458,7 +468,7 @@
             this.labSiteId.AutoSize = true;
             this.labSiteId.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.labSiteId.ForeColor = System.Drawing.Color.Red;
-            this.labSiteId.Location = new System.Drawing.Point(317, 45);
+            this.labSiteId.Location = new System.Drawing.Point(317, 69);
             this.labSiteId.Name = "labSiteId";
             this.labSiteId.Size = new System.Drawing.Size(0, 12);
             this.labSiteId.TabIndex = 0;
@@ -467,7 +477,7 @@
             // 
             this.labSiteStatus.AutoSize = true;
             this.labSiteStatus.ForeColor = System.Drawing.Color.Red;
-            this.labSiteStatus.Location = new System.Drawing.Point(317, 279);
+            this.labSiteStatus.Location = new System.Drawing.Point(317, 303);
             this.labSiteStatus.Name = "labSiteStatus";
             this.labSiteStatus.Size = new System.Drawing.Size(11, 12);
             this.labSiteStatus.TabIndex = 0;
@@ -477,7 +487,7 @@
             // 
             this.txtSiteName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSiteName.Location = new System.Drawing.Point(319, 68);
+            this.txtSiteName.Location = new System.Drawing.Point(319, 92);
             this.txtSiteName.Name = "txtSiteName";
             this.txtSiteName.Size = new System.Drawing.Size(413, 21);
             this.txtSiteName.TabIndex = 8;
@@ -491,12 +501,12 @@
             this.treeIISSite.ImageList = this.imageList1;
             this.treeIISSite.Location = new System.Drawing.Point(9, 42);
             this.treeIISSite.Name = "treeIISSite";
-            treeNode2.ImageIndex = 2;
-            treeNode2.Name = "iisRootNode";
-            treeNode2.SelectedImageIndex = 2;
-            treeNode2.Text = "网站列表";
+            treeNode1.ImageIndex = 2;
+            treeNode1.Name = "iisRootNode";
+            treeNode1.SelectedImageIndex = 2;
+            treeNode1.Text = "网站列表";
             this.treeIISSite.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.treeIISSite.SelectedImageIndex = 0;
             this.treeIISSite.Size = new System.Drawing.Size(210, 473);
             this.treeIISSite.TabIndex = 3;
@@ -513,7 +523,7 @@
             // 
             // btnRestartIIS
             // 
-            this.btnRestartIIS.Location = new System.Drawing.Point(620, 40);
+            this.btnRestartIIS.Location = new System.Drawing.Point(620, 64);
             this.btnRestartIIS.Name = "btnRestartIIS";
             this.btnRestartIIS.Size = new System.Drawing.Size(112, 23);
             this.btnRestartIIS.TabIndex = 7;
@@ -523,7 +533,7 @@
             // 
             // btnStopIIS
             // 
-            this.btnStopIIS.Location = new System.Drawing.Point(490, 40);
+            this.btnStopIIS.Location = new System.Drawing.Point(490, 64);
             this.btnStopIIS.Name = "btnStopIIS";
             this.btnStopIIS.Size = new System.Drawing.Size(121, 23);
             this.btnStopIIS.TabIndex = 6;
@@ -533,7 +543,7 @@
             // 
             // btnCopyIIS
             // 
-            this.btnCopyIIS.Location = new System.Drawing.Point(417, 40);
+            this.btnCopyIIS.Location = new System.Drawing.Point(417, 64);
             this.btnCopyIIS.Name = "btnCopyIIS";
             this.btnCopyIIS.Size = new System.Drawing.Size(64, 23);
             this.btnCopyIIS.TabIndex = 5;
@@ -543,7 +553,7 @@
             // 
             // btnRefreshIIS
             // 
-            this.btnRefreshIIS.Location = new System.Drawing.Point(344, 40);
+            this.btnRefreshIIS.Location = new System.Drawing.Point(344, 64);
             this.btnRefreshIIS.Name = "btnRefreshIIS";
             this.btnRefreshIIS.Size = new System.Drawing.Size(64, 23);
             this.btnRefreshIIS.TabIndex = 4;
@@ -551,9 +561,20 @@
             this.btnRefreshIIS.UseVisualStyleBackColor = true;
             this.btnRefreshIIS.Click += new System.EventHandler(this.btnRefreshIIS_Click);
             // 
+            // btnOpenLog
+            // 
+            this.btnOpenLog.Location = new System.Drawing.Point(465, 350);
+            this.btnOpenLog.Name = "btnOpenLog";
+            this.btnOpenLog.Size = new System.Drawing.Size(87, 23);
+            this.btnOpenLog.TabIndex = 16;
+            this.btnOpenLog.Text = "日志";
+            this.btnOpenLog.UseVisualStyleBackColor = true;
+            this.btnOpenLog.Visible = false;
+            this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
+            // 
             // btnUpdate
             // 
-            this.btnUpdate.Location = new System.Drawing.Point(349, 326);
+            this.btnUpdate.Location = new System.Drawing.Point(349, 350);
             this.btnUpdate.Name = "btnUpdate";
             this.btnUpdate.Size = new System.Drawing.Size(87, 23);
             this.btnUpdate.TabIndex = 16;
@@ -563,13 +584,23 @@
             // 
             // btnNewSite
             // 
-            this.btnNewSite.Location = new System.Drawing.Point(239, 326);
+            this.btnNewSite.Location = new System.Drawing.Point(239, 350);
             this.btnNewSite.Name = "btnNewSite";
             this.btnNewSite.Size = new System.Drawing.Size(87, 23);
             this.btnNewSite.TabIndex = 15;
             this.btnNewSite.Text = "创建站点";
             this.btnNewSite.UseVisualStyleBackColor = true;
             this.btnNewSite.Click += new System.EventHandler(this.btnNewSite_Click);
+            // 
+            // btnOpenIIS
+            // 
+            this.btnOpenIIS.Location = new System.Drawing.Point(344, 9);
+            this.btnOpenIIS.Name = "btnOpenIIS";
+            this.btnOpenIIS.Size = new System.Drawing.Size(124, 23);
+            this.btnOpenIIS.TabIndex = 2;
+            this.btnOpenIIS.Text = "打开IIS控制台";
+            this.btnOpenIIS.UseVisualStyleBackColor = true;
+            this.btnOpenIIS.Click += new System.EventHandler(this.btnOpenIIS_Click);
             // 
             // btnListSite
             // 
@@ -602,7 +633,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(255, 279);
+            this.label10.Location = new System.Drawing.Point(255, 303);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(65, 12);
             this.label10.TabIndex = 0;
@@ -611,7 +642,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(255, 257);
+            this.label11.Location = new System.Drawing.Point(255, 281);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(65, 12);
             this.label11.TabIndex = 0;
@@ -620,7 +651,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(237, 152);
+            this.label13.Location = new System.Drawing.Point(237, 176);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(83, 12);
             this.label13.TabIndex = 0;
@@ -629,7 +660,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(234, 179);
+            this.label12.Location = new System.Drawing.Point(234, 203);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(83, 12);
             this.label12.TabIndex = 0;
@@ -638,7 +669,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(230, 234);
+            this.label14.Location = new System.Drawing.Point(230, 258);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(89, 12);
             this.label14.TabIndex = 0;
@@ -647,7 +678,7 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(242, 207);
+            this.label9.Location = new System.Drawing.Point(242, 231);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(77, 12);
             this.label9.TabIndex = 0;
@@ -658,7 +689,7 @@
             this.label15.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label15.AutoSize = true;
             this.label15.ForeColor = System.Drawing.Color.Red;
-            this.label15.Location = new System.Drawing.Point(488, 149);
+            this.label15.Location = new System.Drawing.Point(488, 173);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(233, 48);
             this.label15.TabIndex = 0;
@@ -668,7 +699,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(279, 125);
+            this.label8.Location = new System.Drawing.Point(279, 149);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(41, 12);
             this.label8.TabIndex = 0;
@@ -677,7 +708,7 @@
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(279, 98);
+            this.label7.Location = new System.Drawing.Point(279, 122);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(41, 12);
             this.label7.TabIndex = 0;
@@ -686,7 +717,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(267, 71);
+            this.label6.Location = new System.Drawing.Point(267, 95);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(53, 12);
             this.label6.TabIndex = 0;
@@ -695,7 +726,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(267, 45);
+            this.label5.Location = new System.Drawing.Point(267, 69);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 0;
@@ -728,37 +759,6 @@
             this.contextMenuStripIIS.Name = "contextMenuStripIIS";
             this.contextMenuStripIIS.Size = new System.Drawing.Size(61, 4);
             this.contextMenuStripIIS.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.contextMenuStripIIS_ItemClicked);
-            // 
-            // btnOpenLog
-            // 
-            this.btnOpenLog.Location = new System.Drawing.Point(465, 326);
-            this.btnOpenLog.Name = "btnOpenLog";
-            this.btnOpenLog.Size = new System.Drawing.Size(87, 23);
-            this.btnOpenLog.TabIndex = 16;
-            this.btnOpenLog.Text = "日志";
-            this.btnOpenLog.UseVisualStyleBackColor = true;
-            this.btnOpenLog.Visible = false;
-            this.btnOpenLog.Click += new System.EventHandler(this.btnOpenLog_Click);
-            // 
-            // btnDisableAllLog
-            // 
-            this.btnDisableAllLog.Location = new System.Drawing.Point(192, 67);
-            this.btnDisableAllLog.Name = "btnDisableAllLog";
-            this.btnDisableAllLog.Size = new System.Drawing.Size(87, 43);
-            this.btnDisableAllLog.TabIndex = 23;
-            this.btnDisableAllLog.Text = "站点日志\r\n【批量禁用】";
-            this.btnDisableAllLog.UseVisualStyleBackColor = true;
-            this.btnDisableAllLog.Click += new System.EventHandler(this.btnDisableAllLog_Click);
-            // 
-            // btnOpenIIS
-            // 
-            this.btnOpenIIS.Location = new System.Drawing.Point(382, 9);
-            this.btnOpenIIS.Name = "btnOpenIIS";
-            this.btnOpenIIS.Size = new System.Drawing.Size(124, 23);
-            this.btnOpenIIS.TabIndex = 2;
-            this.btnOpenIIS.Text = "打开IIS控制台";
-            this.btnOpenIIS.UseVisualStyleBackColor = true;
-            this.btnOpenIIS.Click += new System.EventHandler(this.btnOpenIIS_Click);
             // 
             // IIStool
             // 

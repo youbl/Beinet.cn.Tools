@@ -61,7 +61,8 @@ namespace Beinet.cn.Tools.IISAbout
             _arrSites = sites.ToDictionary(item => item.Name);
             foreach (var site in sites)
             {
-                var node = new TreeNode(site.Name);
+                var txt = $"{site.Id.ToString()}:{site.Name}";
+                var node = new TreeNode(txt);
                 node.ImageIndex = site.State == 1 ? 0 : 1;
                 node.SelectedImageIndex = node.ImageIndex;
                 root.Nodes.Add(node);
@@ -80,7 +81,7 @@ namespace Beinet.cn.Tools.IISAbout
             switch (node.Level)
             {
                 case 1:
-                    ShowSite(node.Text);
+                    ShowSite(GetSiteName(node.Text));
                     break;
             }
         }
@@ -106,7 +107,7 @@ namespace Beinet.cn.Tools.IISAbout
         {
             if (_arrMenuActions.TryGetValue(e.ClickedItem.Text, out var action))
             {
-                action(treeIISSite.SelectedNode.Text);
+                action(GetSiteName(treeIISSite.SelectedNode.Text));
             }
         }
 
@@ -452,6 +453,18 @@ namespace Beinet.cn.Tools.IISAbout
 
 
         #region 非事件方法集
+
+        string GetSiteName(string nodeText)
+        {
+            if (string.IsNullOrEmpty(nodeText))
+            {
+                return "";
+            }
+            var idx = nodeText.IndexOf(':');
+            if (idx >= 0)
+                return nodeText.Substring(idx + 1);
+            return nodeText;
+        }
 
         Site FindSite(string siteName)
         {
