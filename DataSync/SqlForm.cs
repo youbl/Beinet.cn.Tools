@@ -2,6 +2,10 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
+using System.Diagnostics;
+using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -435,6 +439,170 @@ order by tb.name, idx.name, idxcol.index_column_id";
         {
             txtConstr.Text = ConfigurationManager.AppSettings["DefalutConn"];
         }
+
+        private void lnkExportSql_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            DoExport(true);
+        }
+
+        private void lnkExportCsv_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            DoExport(false);
+        }
+        private void DoExport(bool isSql)
+        {
+            if (!TestConnection())
+            {
+                return;
+            }
+            // 只执行选中的sql
+            var sql = txtSql.SelectedText;
+            if (string.IsNullOrEmpty(sql))
+            {
+                sql = txtSql.Text;
+            }
+            sql = sql.Trim();
+            string tbName;
+            {
+                var tbNameMatch = Regex.Match(sql, @"(?i)^select\s.*?\sfrom\s+([^\s]+)");
+                if (!tbNameMatch.Success
+                    || Regex.IsMatch(sql, @"(?i)\b(insert|update|delete)\s"))
+                {
+                    MessageBox.Show("只能导出SELECT语句");
+                    return;
+                }
+                tbName = tbNameMatch.Result("$1");
+            }
+            
+            labStatus.Text = "";
+            var begintime = DateTime.Now;
+            try
+            {
+                var num = 0;
+                var ext = isSql ? "sql" : "csv";
+                var file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory,
+                    $"{tbName}-{begintime.ToString("yyyyMMddHHmmss")}.{ext}");
+                using (var reader = SqlHelper.ExecuteReader(txtConstr.Text, sql))
+                {
+                    using (var writer = new StreamWriter(file, false, Encoding.UTF8))
+                    {
+                        if (isSql)
+                            ExportSql(reader, writer);
+                        else
+                            ExportCsv(reader, writer);
+                    }
+                }
+                var usetime = (DateTime.Now - begintime).TotalMilliseconds;
+                labStatus.Text = "耗时:" + usetime.ToString("N0") + "毫秒";
+                labStatus.Text += "; " + num.ToString("N0") + "行";
+                // MessageBox.Show("导出完成：" + file);
+                Process.Start("explorer.exe", @" /select," + file);
+            }
+            catch (Exception exp)
+            {
+                var usetime = (DateTime.Now - begintime).TotalMilliseconds;
+                labStatus.Text = "耗时:" + usetime.ToString("N0") + "毫秒";
+                MessageBox.Show(exp.Message);
+            }
+        }
+
+
+        void ExportSql(DbDataReader reader, StreamWriter writer)
+        {
+            var colNames = SqlHelper.GetColNames(reader);
+            var sb = new StringBuilder();
+            foreach (var colName in colNames)
+            {
+                if (sb.Length > 0) sb.Append(",");
+                sb.AppendFormat("`{0}`", colName);
+            }
+            sb.Insert(0, "INSERT INTO `aa` (");
+            sb.Append(")\r\nVALUES");
+            writer.WriteLine(sb.ToString());
+
+            var num = 0;
+            while (reader.Read())
+            {
+                if (num > 0)
+                    writer.WriteLine(",");
+                num++;
+                writer.Write("(");
+                int tmpIdx = 0;
+                for (var i=0;i<reader.FieldCount;i++)
+                {
+                    if (tmpIdx > 0)
+                        writer.Write(",");
+                    tmpIdx++;
+                    var val = reader[i];
+                    if (val == null || val == DBNull.Value)
+                    {
+                        writer.Write("NULL");
+                        continue;
+                    }
+
+                    if (val is DateTime time)
+                    {
+                        writer.Write("'{0}'", time.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                    }
+                    else if (val is bool bol)
+                    {
+                        writer.Write(bol ? 1 : 0);
+                    }
+                    else
+                    {
+                        writer.Write("'{0}'", val.ToString().Replace("'", "''"));
+                    }
+                }
+                writer.Write(")");
+            }
+        }
+
+        void ExportCsv(DbDataReader reader, StreamWriter writer)
+        {
+            var colNames = SqlHelper.GetColNames(reader);
+            var num = 0;
+            foreach (var colName in colNames)
+            {
+                if (num > 0) 
+                    writer.Write(",");
+                num++;
+                writer.Write("\"{0}\"", colName);
+            }
+
+            while (reader.Read())
+            {
+                writer.WriteLine("\r\n");
+                num++;
+                int tmpIdx = 0;
+                for (var i = 0; i < reader.FieldCount; i++)
+                {
+                    if (tmpIdx > 0)
+                        writer.Write(",");
+                    tmpIdx++;
+
+                    var val = reader[i];
+                    if (val == null || val == DBNull.Value)
+                    {
+                        // writer.Write("NULL");
+                        continue;
+                    }
+
+                    if (val is DateTime time)
+                    {
+                        writer.Write("\"{0}\"", time.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                    }
+                    else if (val is bool bol)
+                    {
+                        writer.Write(bol ? 1 : 0);
+                    }
+                    else
+                    {
+                        writer.Write("\"{0}\"", val);
+                    }
+                }
+            }
+        }
+
 
         /*
         protected override void OnFormClosing(FormClosingEventArgs e)

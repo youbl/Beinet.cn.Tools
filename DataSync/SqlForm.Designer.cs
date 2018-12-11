@@ -34,6 +34,8 @@
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.btnTest = new System.Windows.Forms.Button();
             this.txtConstr = new System.Windows.Forms.TextBox();
+            this.lnkExportCsv = new System.Windows.Forms.LinkLabel();
+            this.lnkExportSql = new System.Windows.Forms.LinkLabel();
             this.txtSql = new System.Windows.Forms.TextBox();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
@@ -123,6 +125,8 @@
             // 
             // splitContainer4.Panel2
             // 
+            this.splitContainer4.Panel2.Controls.Add(this.lnkExportCsv);
+            this.splitContainer4.Panel2.Controls.Add(this.lnkExportSql);
             this.splitContainer4.Panel2.Controls.Add(this.txtSql);
             this.splitContainer4.Size = new System.Drawing.Size(500, 171);
             this.splitContainer4.SplitterDistance = 25;
@@ -149,14 +153,40 @@
             this.txtConstr.Size = new System.Drawing.Size(437, 21);
             this.txtConstr.TabIndex = 1;
             // 
+            // lnkExportCsv
+            // 
+            this.lnkExportCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lnkExportCsv.AutoSize = true;
+            this.lnkExportCsv.Location = new System.Drawing.Point(151, 128);
+            this.lnkExportCsv.Name = "lnkExportCsv";
+            this.lnkExportCsv.Size = new System.Drawing.Size(71, 12);
+            this.lnkExportCsv.TabIndex = 5;
+            this.lnkExportCsv.TabStop = true;
+            this.lnkExportCsv.Text = "导出CSV文件";
+            this.lnkExportCsv.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkExportCsv_LinkClicked);
+            // 
+            // lnkExportSql
+            // 
+            this.lnkExportSql.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lnkExportSql.AutoSize = true;
+            this.lnkExportSql.Location = new System.Drawing.Point(5, 128);
+            this.lnkExportSql.Name = "lnkExportSql";
+            this.lnkExportSql.Size = new System.Drawing.Size(137, 12);
+            this.lnkExportSql.TabIndex = 4;
+            this.lnkExportSql.TabStop = true;
+            this.lnkExportSql.Text = "导出 MySql-INSERT 语句";
+            this.lnkExportSql.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.lnkExportSql_LinkClicked);
+            // 
             // txtSql
             // 
-            this.txtSql.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtSql.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.txtSql.ImeMode = System.Windows.Forms.ImeMode.Alpha;
             this.txtSql.Location = new System.Drawing.Point(0, 0);
             this.txtSql.Multiline = true;
             this.txtSql.Name = "txtSql";
-            this.txtSql.Size = new System.Drawing.Size(500, 145);
+            this.txtSql.Size = new System.Drawing.Size(500, 124);
             this.txtSql.TabIndex = 3;
             this.txtSql.Text = "SELECT * FROM sys.objects WHERE type=\'u\'";
             // 
@@ -250,5 +280,7 @@
         private System.Windows.Forms.SplitContainer splitContainer4;
         private System.Windows.Forms.TreeView tvDB;
         private System.Windows.Forms.Button btnTest;
+        private System.Windows.Forms.LinkLabel lnkExportCsv;
+        private System.Windows.Forms.LinkLabel lnkExportSql;
     }
 }

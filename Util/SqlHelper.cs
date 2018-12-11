@@ -4,14 +4,60 @@ using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Text;
+using System.Threading;
+using System.Windows.Forms;
 
+// ReSharper disable once CheckNamespace
 namespace Beinet.cn.Tools
 {
     public static class SqlHelper
     {
+        private static SqlConnection CreateConn(string connstr)
+        {
+            // 在连接串里设置Connection Timeout=5不生效，仅调试状态有效，很奇怪
+            //if (connstr.IndexOf("Connection Timeout", StringComparison.OrdinalIgnoreCase) < 0)
+            //{
+            //    connstr += ";Connection Timeout=5";// + timeout.ToString();
+            //}
+            //MessageBox.Show(connstr);
+
+            // 以线程阻塞方式打开连接，并等待5秒，避免无效IP导致要等待30秒
+            Exception exp = null;
+            var ret = new SqlConnection(connstr);
+            var th = new Thread(() =>
+            {
+                try
+                {
+                    ret.Open();
+                }
+                catch (Exception ex)
+                {
+                    exp = ex;
+                    ret = null;
+                }
+            });
+            th.Start();
+            th.Join(5000);
+            if (th.IsAlive)
+            {
+                ThreadPool.UnsafeQueueUserWorkItem(state =>
+                {
+                    try
+                    {
+                        th.Abort();
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }, th);
+                throw exp ?? new Exception("连接超过5秒未成功"); 
+            }
+            return ret;
+        }
         public static DataSet ExecuteDataSet(string connstr, string sql, int timeout = 10, params SqlParameter[] parameters)
         {
-            using (var conn = new SqlConnection(connstr))
+            using (var conn = CreateConn(connstr))
             using (var command = conn.CreateCommand())
             using (var da = new SqlDataAdapter(command))
             {
@@ -27,8 +73,7 @@ namespace Beinet.cn.Tools
 
         public static SqlDataReader ExecuteReader(string connstr, string sql, int timeout = 10, params SqlParameter[] parameters)
         {
-            SqlCommand command;
-            return ExecuteReader(connstr, sql, out command, timeout, parameters);
+            return ExecuteReader(connstr, sql, out _, timeout, parameters);
         }
 
         // 增加这个方法的用处：是为了便于提早关闭DataReader，参考SqlDataReader.Close方法的说明：
@@ -39,38 +84,41 @@ namespace Beinet.cn.Tools
          */
         public static SqlDataReader ExecuteReader(string connstr, string sql, out SqlCommand command, int timeout = 10, params SqlParameter[] parameters)
         {
-            var conn = new SqlConnection(connstr);
+            var conn = CreateConn(connstr);
             command = conn.CreateCommand();
             command.CommandText = sql;
             command.CommandTimeout = timeout;
             if (parameters != null)
                 command.Parameters.AddRange(parameters);
-            conn.Open();
+            if (conn.State != ConnectionState.Open)
+                conn.Open();
             return command.ExecuteReader(CommandBehavior.CloseConnection);
         }
 
         public static object ExecuteScalar(string connstr, string sql, params SqlParameter[] parameters)
         {
-            using (var conn = new SqlConnection(connstr))
+            using (var conn = CreateConn(connstr))
             using (var command = conn.CreateCommand())
             {
                 command.CommandText = sql;
                 if (parameters != null)
                     command.Parameters.AddRange(parameters);
-                conn.Open();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
                 return command.ExecuteScalar();
             }
         }
 
         public static int ExecuteNonQuery(string connstr, string sql, params SqlParameter[] parameters)
         {
-            using (var conn = new SqlConnection(connstr))
+            using (var conn = CreateConn(connstr))
             using (var command = conn.CreateCommand())
             {
                 command.CommandText = sql;
                 if (parameters != null)
                     command.Parameters.AddRange(parameters);
-                conn.Open();
+                if (conn.State != ConnectionState.Open)
+                    conn.Open();
                 return command.ExecuteNonQuery();
             }
         }
