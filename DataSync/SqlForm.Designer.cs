@@ -152,12 +152,13 @@
             this.txtConstr.Name = "txtConstr";
             this.txtConstr.Size = new System.Drawing.Size(437, 21);
             this.txtConstr.TabIndex = 1;
+            this.txtConstr.Text = "server=127.0.0.1;database=master;uid=sa;pwd=123";
             // 
             // lnkExportCsv
             // 
             this.lnkExportCsv.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkExportCsv.AutoSize = true;
-            this.lnkExportCsv.Location = new System.Drawing.Point(151, 128);
+            this.lnkExportCsv.Location = new System.Drawing.Point(151, 131);
             this.lnkExportCsv.Name = "lnkExportCsv";
             this.lnkExportCsv.Size = new System.Drawing.Size(71, 12);
             this.lnkExportCsv.TabIndex = 5;
@@ -169,7 +170,7 @@
             // 
             this.lnkExportSql.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.lnkExportSql.AutoSize = true;
-            this.lnkExportSql.Location = new System.Drawing.Point(5, 128);
+            this.lnkExportSql.Location = new System.Drawing.Point(5, 131);
             this.lnkExportSql.Name = "lnkExportSql";
             this.lnkExportSql.Size = new System.Drawing.Size(137, 12);
             this.lnkExportSql.TabIndex = 4;
@@ -186,7 +187,7 @@
             this.txtSql.Location = new System.Drawing.Point(0, 0);
             this.txtSql.Multiline = true;
             this.txtSql.Name = "txtSql";
-            this.txtSql.Size = new System.Drawing.Size(500, 124);
+            this.txtSql.Size = new System.Drawing.Size(500, 127);
             this.txtSql.TabIndex = 3;
             this.txtSql.Text = "SELECT * FROM sys.objects WHERE type=\'u\'";
             // 

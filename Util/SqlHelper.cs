@@ -51,10 +51,14 @@ namespace Beinet.cn.Tools
                         // ignored
                     }
                 }, th);
-                throw exp ?? new Exception("连接超过5秒未成功"); 
+                throw exp ?? new Exception("连接超过5秒未成功");
             }
+
+            if (exp != null)
+                throw exp;
             return ret;
         }
+
         public static DataSet ExecuteDataSet(string connstr, string sql, int timeout = 10, params SqlParameter[] parameters)
         {
             using (var conn = CreateConn(connstr))
