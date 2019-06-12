@@ -1,17 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using Beinet.cn.Tools.QQWry;
-using ThoughtWorks.QRCode.Codec;
-using ThoughtWorks.QRCode.Codec.Data;
 
 namespace Beinet.cn.Tools.Others
 {
@@ -42,7 +36,7 @@ namespace Beinet.cn.Tools.Others
         }
 
 
-        private bool Init(Button btn)
+        private bool Init()
         {
             if (labStatus.Text.StartsWith(RUNTXT, StringComparison.Ordinal))
             {
@@ -102,7 +96,7 @@ namespace Beinet.cn.Tools.Others
 
         private void btnSearch_Click(object sender, EventArgs e)
         {
-            if (!Init(sender as Button))
+            if (!Init())
             {
                 return;
             }
@@ -113,8 +107,7 @@ namespace Beinet.cn.Tools.Others
                 {
                     if (_stop)
                         break;
-                    Interlocked.Increment(ref _threads);
-                    ThreadPool.UnsafeQueueUserWorkItem(GetAndShow, ip);
+                    GetAndShow(ip);
                 }
 
                 EndCheck();
@@ -138,14 +131,24 @@ namespace Beinet.cn.Tools.Others
                 IPAddress ip = (IPAddress)state;
                 if (chkNormalPort.Checked)
                 {
-                    DoPortScan(ip, true, seconds);
+                    var arrPort = new HashSet<int>();
+                    foreach (var item in txtCustomPort.Text.Split(',', ' '))
+                    {
+                        if(item.Length > 0 && int.TryParse(item, out var port))
+                            arrPort.Add(port);
+                    }
+                    if (arrPort.Count <= 0)
+                    {
+                        MessageBox.Show("请正确输入要扫描的端口");
+                        return;
+                    }
+                    DoPortScan(ip, arrPort.ToArray(), seconds);
                 }
                 else if (chkPortAll.Checked)
                 {
-                    DoPortScan(ip, false, seconds);
+                    DoPortScan(ip, null, seconds);
                 }
             }
-            Interlocked.Decrement(ref _threads);
         }
 
         static void AddIpRange(IPAddress beginIp, IPAddress endIp, List<IPAddress> ips)
@@ -212,40 +215,34 @@ namespace Beinet.cn.Tools.Others
             }
         }
 
-        private void DoPortScan(IPAddress ip, bool normal, int seconds)
+        private void DoPortScan(IPAddress ip, IEnumerable<int> arrPort, int seconds)
         {
-            if (_stop) return;
-            if (normal)
+            void StartOnePort(int port)
             {
-                int[] arrPort = new[] { 80, 8080, 3128, 8081, 9080, 1080, 21, 23, 443, 69, 22, 25, 110, 7001, 9090, 3389, 1521, 1158, 2100, 1433, 3306 };
+                Interlocked.Increment(ref _threads);
+                ThreadPool.UnsafeQueueUserWorkItem(state =>
+                {
+                    PerPortCheck(ip, port, seconds);
+                }, null);
+                while (_threads > 300)
+                {
+                    Thread.Sleep(5000);
+                }
+            }
+            if (_stop) return;
+            if (arrPort != null)
+            {
+                //int[] arrPort = new[] { 80, 8080, 3128, 8081, 9080, 1080, 21, 23, 443, 69, 22, 25, 110, 7001, 9090, 3389, 1521, 1158, 2100, 1433, 3306 };
                 foreach (var port in arrPort)
                 {
-                    Interlocked.Increment(ref _threads);
-                    var port1 = port;
-                    ThreadPool.UnsafeQueueUserWorkItem(state =>
-                    {
-                        PerPortCheck(ip, port1, seconds);
-                    }, null);
-                    while (_threads > 300)
-                    {
-                        Thread.Sleep(5000);
-                    }
+                    StartOnePort(port);
                 }
             }
             else
             {
                 for (var port = 1; port < 65535; port++)
                 {
-                    Interlocked.Increment(ref _threads);
-                    var port1 = port;
-                    ThreadPool.UnsafeQueueUserWorkItem(state =>
-                    {
-                        PerPortCheck(ip, port1, seconds);
-                    }, null);
-                    while (_threads > 300)
-                    {
-                        Thread.Sleep(5000);
-                    }
+                    StartOnePort(port);
                 }
             }
         }

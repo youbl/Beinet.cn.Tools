@@ -29,8 +29,10 @@
         private void InitializeComponent()
         {
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.txtTimeout = new System.Windows.Forms.TextBox();
             this.labTh = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -44,8 +46,7 @@
             this.labStatus = new System.Windows.Forms.Label();
             this.btnSearch = new System.Windows.Forms.Button();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.txtTimeout = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.txtCustomPort = new System.Windows.Forms.TextBox();
             this.tabPage1.SuspendLayout();
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
@@ -55,6 +56,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.txtCustomPort);
             this.tabPage1.Controls.Add(this.txtTimeout);
             this.tabPage1.Controls.Add(this.labTh);
             this.tabPage1.Controls.Add(this.label2);
@@ -75,6 +77,16 @@
             this.tabPage1.Text = "端口扫描工具";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // txtTimeout
+            // 
+            this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtTimeout.Location = new System.Drawing.Point(542, 35);
+            this.txtTimeout.Name = "txtTimeout";
+            this.txtTimeout.Size = new System.Drawing.Size(44, 21);
+            this.txtTimeout.TabIndex = 2;
+            this.txtTimeout.Text = "4";
+            this.txtTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // labTh
             // 
             this.labTh.AutoSize = true;
@@ -92,6 +104,16 @@
             this.label2.Size = new System.Drawing.Size(377, 12);
             this.label2.TabIndex = 0;
             this.label2.Text = "多个IP以半角逗号分隔，且支持 - 的IP段，如：10.2.0.1-10.2.0.100";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(456, 38);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(89, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "超时等待秒数：";
             // 
             // label8
             // 
@@ -143,7 +165,7 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(582, 332);
+            this.tabPage4.Size = new System.Drawing.Size(582, 306);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "失败记录";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -155,18 +177,18 @@
             this.txtErr.Multiline = true;
             this.txtErr.Name = "txtErr";
             this.txtErr.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtErr.Size = new System.Drawing.Size(576, 326);
+            this.txtErr.Size = new System.Drawing.Size(576, 300);
             this.txtErr.TabIndex = 0;
             this.txtErr.TabStop = false;
             // 
             // chkPortAll
             // 
             this.chkPortAll.AutoSize = true;
-            this.chkPortAll.Location = new System.Drawing.Point(220, 66);
+            this.chkPortAll.Location = new System.Drawing.Point(86, 66);
             this.chkPortAll.Name = "chkPortAll";
-            this.chkPortAll.Size = new System.Drawing.Size(144, 16);
+            this.chkPortAll.Size = new System.Drawing.Size(120, 16);
             this.chkPortAll.TabIndex = 6;
-            this.chkPortAll.Text = "扫描全部端口:1~65535";
+            this.chkPortAll.Text = "全部端口:1~65535";
             this.chkPortAll.UseVisualStyleBackColor = true;
             this.chkPortAll.CheckedChanged += new System.EventHandler(this.chkPortAll_CheckedChanged);
             // 
@@ -175,11 +197,11 @@
             this.chkNormalPort.AutoSize = true;
             this.chkNormalPort.Checked = true;
             this.chkNormalPort.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkNormalPort.Location = new System.Drawing.Point(118, 66);
+            this.chkNormalPort.Location = new System.Drawing.Point(214, 66);
             this.chkNormalPort.Name = "chkNormalPort";
-            this.chkNormalPort.Size = new System.Drawing.Size(96, 16);
+            this.chkNormalPort.Size = new System.Drawing.Size(84, 16);
             this.chkNormalPort.TabIndex = 5;
-            this.chkNormalPort.Text = "扫描常用端口";
+            this.chkNormalPort.Text = "指定端口：";
             this.chkNormalPort.UseVisualStyleBackColor = true;
             this.chkNormalPort.CheckedChanged += new System.EventHandler(this.chkPortAll_CheckedChanged);
             // 
@@ -214,9 +236,9 @@
             // 
             // btnSearch
             // 
-            this.btnSearch.Location = new System.Drawing.Point(10, 62);
+            this.btnSearch.Location = new System.Drawing.Point(6, 62);
             this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(97, 23);
+            this.btnSearch.Size = new System.Drawing.Size(72, 23);
             this.btnSearch.TabIndex = 3;
             this.btnSearch.Text = "开始扫描";
             this.btnSearch.UseVisualStyleBackColor = true;
@@ -232,25 +254,16 @@
             this.tabControl1.Size = new System.Drawing.Size(609, 468);
             this.tabControl1.TabIndex = 1;
             // 
-            // txtTimeout
+            // txtCustomPort
             // 
-            this.txtTimeout.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtTimeout.Location = new System.Drawing.Point(542, 35);
-            this.txtTimeout.Name = "txtTimeout";
-            this.txtTimeout.Size = new System.Drawing.Size(44, 21);
-            this.txtTimeout.TabIndex = 2;
-            this.txtTimeout.Text = "4";
-            this.txtTimeout.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(456, 38);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(89, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "超时等待秒数：";
+            this.txtCustomPort.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtCustomPort.Location = new System.Drawing.Point(288, 64);
+            this.txtCustomPort.Name = "txtCustomPort";
+            this.txtCustomPort.Size = new System.Drawing.Size(305, 21);
+            this.txtCustomPort.TabIndex = 13;
+            this.txtCustomPort.Text = "80,8080,3128,8081,9080,1080,21,23,443,69,22,25,110,7001,9090,3389,1521,1158,2100," +
+    "1433,3306";
             // 
             // ScanPort
             // 
@@ -291,5 +304,6 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtTimeout;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox txtCustomPort;
     }
 }
