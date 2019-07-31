@@ -616,7 +616,6 @@
             // 
             this.txtIISIP.Location = new System.Drawing.Point(67, 9);
             this.txtIISIP.Name = "txtIISIP";
-            this.txtIISIP.ReadOnly = true;
             this.txtIISIP.Size = new System.Drawing.Size(100, 21);
             this.txtIISIP.TabIndex = 1;
             this.txtIISIP.Text = "127.0.0.1";

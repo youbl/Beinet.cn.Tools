@@ -38,8 +38,9 @@
             this.chkViewDiff = new System.Windows.Forms.CheckBox();
             this.chkSameFile = new System.Windows.Forms.CheckBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnSelFile = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
@@ -150,8 +151,6 @@
             // 
             this.chkSameFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.chkSameFile.AutoSize = true;
-            this.chkSameFile.Checked = true;
-            this.chkSameFile.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkSameFile.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.chkSameFile.ForeColor = System.Drawing.Color.Red;
             this.chkSameFile.Location = new System.Drawing.Point(4, 432);
@@ -178,6 +177,17 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "网站";
             // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(220, 59);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(77, 12);
+            this.linkLabel1.TabIndex = 12;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "比对配置参考";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
             // label1
             // 
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
@@ -190,16 +200,16 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "此按钮需网站支持MD5返回接口";
             // 
-            // linkLabel1
+            // btnSelFile
             // 
-            this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(220, 59);
-            this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(77, 12);
-            this.linkLabel1.TabIndex = 12;
-            this.linkLabel1.TabStop = true;
-            this.linkLabel1.Text = "比对配置参考";
-            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            this.btnSelFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.btnSelFile.Location = new System.Drawing.Point(87, 379);
+            this.btnSelFile.Name = "btnSelFile";
+            this.btnSelFile.Size = new System.Drawing.Size(47, 51);
+            this.btnSelFile.TabIndex = 12;
+            this.btnSelFile.Text = "选择\r\n文件";
+            this.btnSelFile.UseVisualStyleBackColor = true;
+            this.btnSelFile.Click += new System.EventHandler(this.BtnSelFile_Click);
             // 
             // FileHash
             // 
@@ -207,6 +217,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(772, 453);
+            this.Controls.Add(this.btnSelFile);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnCopy);
@@ -241,6 +252,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.Button btnSelFile;
     }
 }
 

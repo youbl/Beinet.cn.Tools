@@ -43,6 +43,22 @@ namespace Beinet.cn.Tools.FileHash
             DoCountMd5(ofd.SelectedPath);
         }
 
+
+        private void BtnSelFile_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            if (string.IsNullOrEmpty(ofd.InitialDirectory))
+            {
+                ofd.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+            }
+
+            ofd.Multiselect = true;
+            if (ofd.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            DoCountMd5(ofd.FileNames);
+        }
+
         private void btnClear_Click(object sender, EventArgs e)
         {
             dataGridView1.Columns.Clear();
@@ -698,5 +714,6 @@ namespace Beinet.cn.Tools.FileHash
         {
             new FileHashConfig().ShowDialog(this);
         }
+
     }
 }

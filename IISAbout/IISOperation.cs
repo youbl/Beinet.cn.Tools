@@ -67,7 +67,16 @@ namespace Beinet.cn.Tools.IISAbout
         /// <returns></returns>
         public List<Site> ListSite()
         {
+            //            using (var root = new System.DirectoryServices.DirectoryEntry("IIS://"+ ServerIp + "/W3SVC", "administrator", "mike123"))
+            //            {
+            //
+            //            }
+
+
+            // 参考代码： https://github.com/microsoft/IIS.Administration 来连接远程IP
             var ret = new List<Site>();
+
+            //   Message=从计算机 10.2.3.209 中在 COM 类工厂内检索 CLSID 为 {2B72133B-3F5B-4602-8952-803546CE3344} 的远程组件失败，原因是出现以下错误: 80070005 10.2.3.209。
             using (var sm = ServerManager.OpenRemote(ServerIp))
             {
                 Parallel.ForEach(sm.Sites, options, iissite =>
