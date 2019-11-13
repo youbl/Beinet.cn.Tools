@@ -938,7 +938,23 @@ namespace Beinet.cn.Tools.RegexTool
             }
         }
 
+        private string _defaultPath;
+        private void LnkMatchFile_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            if (!string.IsNullOrEmpty(_defaultPath))
+                ofd.InitialDirectory = _defaultPath;
+            else
+                ofd.InitialDirectory = System.AppDomain.CurrentDomain.BaseDirectory;
+            // ofd.Filter = "Xml files (*.xml)|*.xml|All files (*.*)|*.*";
 
+            var dialogRet = ofd.ShowDialog(this);
+            if (dialogRet != DialogResult.OK)
+                return;
 
+            string configPath = ofd.FileName;//Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "sync.xml");
+            _defaultPath = Path.GetDirectoryName(configPath);
+            txtOld.Text = File.ReadAllText(configPath);
+        }
     }
 }

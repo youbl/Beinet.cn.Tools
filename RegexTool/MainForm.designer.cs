@@ -68,6 +68,7 @@
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.lnkMatchFile = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
             this.splitMain.Panel1.SuspendLayout();
             this.splitMain.Panel2.SuspendLayout();
@@ -117,6 +118,7 @@
             // 
             // split1.Panel1
             // 
+            this.split1.Panel1.Controls.Add(this.lnkMatchFile);
             this.split1.Panel1.Controls.Add(this.label1);
             this.split1.Panel1.Controls.Add(this.btnGroupBy0);
             this.split1.Panel1.Controls.Add(this.btnGroupBy3);
@@ -213,7 +215,7 @@
             // btnExeOne
             // 
             this.btnExeOne.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnExeOne.Location = new System.Drawing.Point(12, 111);
+            this.btnExeOne.Location = new System.Drawing.Point(7, 111);
             this.btnExeOne.Name = "btnExeOne";
             this.btnExeOne.Size = new System.Drawing.Size(80, 23);
             this.btnExeOne.TabIndex = 9;
@@ -224,7 +226,7 @@
             // btnExecute
             // 
             this.btnExecute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnExecute.Location = new System.Drawing.Point(113, 111);
+            this.btnExecute.Location = new System.Drawing.Point(93, 111);
             this.btnExecute.Name = "btnExecute";
             this.btnExecute.Size = new System.Drawing.Size(80, 23);
             this.btnExecute.TabIndex = 10;
@@ -555,6 +557,18 @@
             this.toolTip1.ReshowDelay = 20;
             this.toolTip1.ShowAlways = true;
             // 
+            // lnkMatchFile
+            // 
+            this.lnkMatchFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lnkMatchFile.AutoSize = true;
+            this.lnkMatchFile.Location = new System.Drawing.Point(181, 117);
+            this.lnkMatchFile.Name = "lnkMatchFile";
+            this.lnkMatchFile.Size = new System.Drawing.Size(95, 12);
+            this.lnkMatchFile.TabIndex = 16;
+            this.lnkMatchFile.TabStop = true;
+            this.lnkMatchFile.Text = "匹配指定文件...";
+            this.lnkMatchFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkMatchFile_LinkClicked);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -629,6 +643,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem menuRegSave;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel lnkMatchFile;
     }
 }
 
