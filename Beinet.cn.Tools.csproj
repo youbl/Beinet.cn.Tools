@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Beinet.cn.Tools</RootNamespace>
     <AssemblyName>Beinet.cn.Tools</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -34,6 +35,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>b.ico</ApplicationIcon>
@@ -41,10 +43,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Debug\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
     <PlatformTarget>x64</PlatformTarget>
     <OutputPath>bin\x64\Release\</OutputPath>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
@@ -53,6 +57,9 @@
     <Reference Include="Microsoft.Web.Administration, Version=7.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Windows\assembly\GAC_MSIL\Microsoft.Web.Administration\7.0.0.0__31bf3856ad364e35\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -76,6 +83,19 @@
     </Compile>
     <Compile Include="FileHash\FileHashConfig.designer.cs">
       <DependentUpon>FileHashConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gitlab\GitlabForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Gitlab\GitlabForm.Designer.cs">
+      <DependentUpon>GitlabForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Gitlab\GitlabHelper.cs" />
+    <Compile Include="IISAbout\IISLists.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="IISAbout\IISLists.Designer.cs">
+      <DependentUpon>IISLists.cs</DependentUpon>
     </Compile>
     <Compile Include="IISAbout\IISOperation.cs" />
     <Compile Include="Others\CryptTool.cs">
@@ -487,6 +507,12 @@
     <EmbeddedResource Include="FileHash\FileHashConfig.resx">
       <DependentUpon>FileHashConfig.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Gitlab\GitlabForm.resx">
+      <DependentUpon>GitlabForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="IISAbout\IISLists.resx">
+      <DependentUpon>IISLists.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Others\CryptTool.resx">
       <DependentUpon>CryptTool.cs</DependentUpon>
     </EmbeddedResource>
@@ -581,6 +607,7 @@
     <None Include="app.manifest">
       <SubType>Designer</SubType>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

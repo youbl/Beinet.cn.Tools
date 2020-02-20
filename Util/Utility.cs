@@ -14,13 +14,36 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Drawing;
-using System.Runtime.Serialization.Json;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json;
+using Formatting = System.Xml.Formatting;
 
 namespace Beinet.cn.Tools
 {
     public static class Utility
     {
+        static Utility()
+        {
+            //调大默认连接池
+            ServicePointManager.DefaultConnectionLimit = 1024;
+            //连接池中的TCP连接不使用Nagle算法
+            ServicePointManager.UseNagleAlgorithm = false;
+
+            // 如果证书有问题，导致异常： 远程主机强迫关闭了一个现有的连接，要加这一句，或调整一下别的安全协议
+            ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12;
+
+            //https证书验证回掉
+            ServicePointManager.ServerCertificateValidationCallback = CheckValidationResult;
+        }
+        static bool CheckValidationResult(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors errors)
+        {
+            // Always accept
+            //Console.WriteLine("accept" + certificate.GetName());
+            return true; //总是接受
+        }
+
         private static readonly string _path = AppDomain.CurrentDomain.BaseDirectory;
         /// <summary>
         /// exe的启动目录
@@ -702,9 +725,11 @@ namespace Beinet.cn.Tools
         /// <param name="showHeader"></param>
         /// <param name="proxy"></param>
         /// <param name="allowRedirect"></param>
+        /// <param name="headers">要添加的header</param>
         /// <returns></returns>
         public static string GetPage(string url, string param = null, string proxy = null, bool isPost = false,
-            bool isJson = false, Encoding encoding = null, bool showHeader = false, bool allowRedirect = false)
+            bool isJson = false, Encoding encoding = null, bool showHeader = false, bool allowRedirect = false,
+            Dictionary<string, string> headers = null)
         {
             if (encoding == null)
                 encoding = Encoding.UTF8;
@@ -720,18 +745,35 @@ namespace Beinet.cn.Tools
             {
                 url = url + "&" + param;
             }
+
             var needSetHost = !string.IsNullOrEmpty(proxy);
             if (needSetHost)
             {
                 // 不再使用proxy方案，改用替换url里的host为ip，并设置header里的host实现
                 SwitchHost(ref url, ref proxy);
             }
-            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
+
+            string contentType = null;
+
+            HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
             request.Referer = url;
             request.AllowAutoRedirect = allowRedirect;
             request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.2; SV1;)";
             request.Headers.Add("Accept-Encoding", "gzip, deflate");
-            request.Timeout = 10000;
+            if (headers != null)
+            {
+                foreach (var pair in headers)
+                {
+                    if (pair.Key == null || pair.Value == null)
+                        continue;
+                    if (pair.Key.Equals("ContentType", StringComparison.OrdinalIgnoreCase) ||
+                        pair.Key.Equals("Content-Type", StringComparison.OrdinalIgnoreCase))
+                        contentType = pair.Value;
+                    else
+                        request.Headers[pair.Key] = pair.Value; // 不用add，避免跟前面的key重复
+                }
+            }
+            request.Timeout = 30000;
             if (isJson)
             {
                 request.Accept = "application/json";
@@ -764,12 +806,12 @@ namespace Beinet.cn.Tools
             if (!isPost)
             {
                 request.Method = "GET";
-                request.ContentType = "text/html";
+                request.ContentType = contentType ?? "text/html";
             }
             else
             {
                 request.Method = "POST";
-                request.ContentType = "application/x-www-form-urlencoded";
+                request.ContentType = contentType ?? "application/x-www-form-urlencoded";
                 if (!string.IsNullOrEmpty(param))
                 {
                     byte[] bytes = encoding.GetBytes(param);
@@ -782,10 +824,10 @@ namespace Beinet.cn.Tools
                     }
                 }
                 else
-                    request.ContentLength = 0;// POST时，必须设置ContentLength属性
+                    request.ContentLength = 0; // POST时，必须设置ContentLength属性
             }
 
-            HttpWebResponse response = (HttpWebResponse)request.GetResponse();
+            HttpWebResponse response = (HttpWebResponse) request.GetResponse();
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 Stream stream2;
@@ -802,18 +844,23 @@ namespace Beinet.cn.Tools
                     {
                         stream2 = new DeflateStream(stream2, CompressionMode.Decompress);
                     }
+
                     using (StreamReader reader = new StreamReader(stream2, encoding))
                     {
                         string str = reader.ReadToEnd();
                         if (showHeader)
                         {
-                            str = string.Concat(new object[] { "请求头信息：\r\n", request.Headers, "\r\n\r\n响应头信息：\r\n", response.Headers, "\r\n", str });
+                            str = string.Concat(new object[]
+                                {"请求头信息：\r\n", request.Headers, "\r\n\r\n响应头信息：\r\n", response.Headers, "\r\n", str});
                         }
+
                         return str;
                     }
                 }
             }
-            string errMsg = string.Format("Response.StatusCode:{0}, {1}", response.StatusCode, response.StatusDescription);
+
+            string errMsg = string.Format("Response.StatusCode:{0}, {1}", response.StatusCode,
+                response.StatusDescription);
             throw new Exception(errMsg);
         }
 
@@ -1049,7 +1096,9 @@ namespace Beinet.cn.Tools
         /// <returns></returns>
         public static string ToJson<T>(T source)
         {
-            DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(T));
+            return JsonConvert.SerializeObject(source);
+            /* // 微软原生，效率低
+            System.Runtime.Serialization.Json.DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(T));
             using (MemoryStream ms = new MemoryStream())
             {
                 jsonSerializer.WriteObject(ms, source);
@@ -1058,6 +1107,7 @@ namespace Beinet.cn.Tools
 
                 return sb.ToString();
             }
+            */
         }
 
         /// <summary>
@@ -1068,12 +1118,15 @@ namespace Beinet.cn.Tools
         /// <returns></returns>
         public static T FromJson<T>(string source)
         {
-            DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(T));
+            return JsonConvert.DeserializeObject<T>(source);
+            /*// 微软原生，效率低
+            System.Runtime.Serialization.Json.DataContractJsonSerializer jsonSerializer = new DataContractJsonSerializer(typeof(T));
             using (MemoryStream ms = new MemoryStream(Encoding.UTF8.GetBytes(source)))
             {
                 T obj = (T)jsonSerializer.ReadObject(ms);
                 return obj;
             }
+            */
         }
 
 

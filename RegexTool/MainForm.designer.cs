@@ -33,6 +33,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.splitMain = new System.Windows.Forms.SplitContainer();
             this.split1 = new System.Windows.Forms.SplitContainer();
+            this.lnkMatchFile = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
             this.btnGroupBy0 = new System.Windows.Forms.Button();
             this.btnGroupBy3 = new System.Windows.Forms.Button();
@@ -68,7 +69,6 @@
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.txtStatus = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.lnkMatchFile = new System.Windows.Forms.LinkLabel();
             ((System.ComponentModel.ISupportInitialize)(this.splitMain)).BeginInit();
             this.splitMain.Panel1.SuspendLayout();
             this.splitMain.Panel2.SuspendLayout();
@@ -144,6 +144,18 @@
             this.split1.SplitterWidth = 1;
             this.split1.TabIndex = 0;
             this.split1.TabStop = false;
+            // 
+            // lnkMatchFile
+            // 
+            this.lnkMatchFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.lnkMatchFile.AutoSize = true;
+            this.lnkMatchFile.Location = new System.Drawing.Point(181, 117);
+            this.lnkMatchFile.Name = "lnkMatchFile";
+            this.lnkMatchFile.Size = new System.Drawing.Size(95, 12);
+            this.lnkMatchFile.TabIndex = 16;
+            this.lnkMatchFile.TabStop = true;
+            this.lnkMatchFile.Text = "匹配指定文件...";
+            this.lnkMatchFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkMatchFile_LinkClicked);
             // 
             // label1
             // 
@@ -556,18 +568,6 @@
             this.toolTip1.InitialDelay = 100;
             this.toolTip1.ReshowDelay = 20;
             this.toolTip1.ShowAlways = true;
-            // 
-            // lnkMatchFile
-            // 
-            this.lnkMatchFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.lnkMatchFile.AutoSize = true;
-            this.lnkMatchFile.Location = new System.Drawing.Point(181, 117);
-            this.lnkMatchFile.Name = "lnkMatchFile";
-            this.lnkMatchFile.Size = new System.Drawing.Size(95, 12);
-            this.lnkMatchFile.TabIndex = 16;
-            this.lnkMatchFile.TabStop = true;
-            this.lnkMatchFile.Text = "匹配指定文件...";
-            this.lnkMatchFile.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.LnkMatchFile_LinkClicked);
             // 
             // MainForm
             // 

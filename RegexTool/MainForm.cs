@@ -11,7 +11,7 @@ namespace Beinet.cn.Tools.RegexTool
 {
     public partial class MainForm : Form
     {
-        private static string _version = "1.0 by youbl";
+        private static string _version = "1.1 by youbl";
         private static readonly string _regFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "reg.txt");
         private const char SAVEREGSPLIT = 'ǒ';
         /// <summary>

@@ -43,6 +43,7 @@ namespace Beinet.cn.Tools
             AddTabPage("tabIpTools", typeof(Others.OtherTools), "IP相关");
             AddTabPage("tabImgTool", typeof(ImgTools.ImgTool), "图片工具");
             AddTabPage("tabIIS", typeof(IISAbout.IIStool), "IIS");
+            AddTabPage("Gitlab", typeof(Gitlab.GitlabForm));
             // AddTabPage("tabContest", typeof(ConTest), "连接测试");
             #endregion
 
