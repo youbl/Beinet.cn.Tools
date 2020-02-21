@@ -24,9 +24,14 @@ namespace Beinet.cn.Tools.Gitlab
 
         private void btnShowGitlab_Click(object sender, EventArgs e)
         {
+            btnShowGitlab.Enabled = false;
+            btnShowGitlab.Text = "加载中..";
+
             lvProjects.Items.Clear();
             ThreadPool.UnsafeQueueUserWorkItem(state =>
             {
+                var begin = DateTime.Now;
+                var isErr = false;
                 try
                 {
                     var helper = new GitlabHelper(txtGitlabUrl.Text.Trim(), txtPrivateToken.Text.Trim());
@@ -35,7 +40,18 @@ namespace Beinet.cn.Tools.Gitlab
                 catch (Exception exp)
                 {
                     MessageBox.Show(exp.Message);
+                    isErr = true;
                 }
+
+                Utility.InvokeControl(btnShowGitlab, () =>
+                {
+                    btnShowGitlab.Enabled = true;
+                    btnShowGitlab.Text = "显示所有项目";
+                    if (!isErr)
+                        btnGitClone.Enabled = true;
+
+                    labProjectNum.Text = labProjectNum.Text + " 耗时:" + (DateTime.Now - begin).TotalSeconds.ToString("N2") + "秒";
+                });
             }, null);
         }
 
@@ -198,37 +214,61 @@ namespace Beinet.cn.Tools.Gitlab
                 return;
             }
 
+            // 创建Git根目录
             if (!Directory.Exists(gitDir))
             {
                 var dialogResult = MessageBox.Show("目录不存在，是否要创建？", "新建目录", MessageBoxButtons.OKCancel);
                 if (dialogResult != DialogResult.OK)
                     return;
-                try
-                {
-                    Directory.CreateDirectory(gitDir);
-                }
-                catch (Exception exp)
-                {
-                    MessageBox.Show("创建目录失败: " + exp.Message);
+
+                if (!CreateDir(gitDir))
                     return;
-                }
             }
 
-            var batFile = Path.Combine(Utility.Dir, "gitClone.bat");
-            using (var sw = new StreamWriter(batFile, false, Encoding.Default))
+            var ignoreExistsProj = chkIgnoreExistsProj.Checked;
+
+            var batCloneFile = Path.Combine(Utility.Dir, "gitClone.bat");
+            var batUpdateFile = Path.Combine(gitDir, "gitUpdate.bat");
+            using (var swClone = new StreamWriter(batCloneFile, false, Encoding.Default))
+            using (var swUpdate = new StreamWriter(batUpdateFile, true, Encoding.Default))
             {
                 foreach (ListViewItem listViewItem in lvProjects.Items)
                 {
-                    var itemDir = Path.Combine(gitDir, listViewItem.SubItems[1].Text + "_" + listViewItem.SubItems[0].Text);
-                    if (!CreateDir(itemDir))
+                    var itemUrl = listViewItem.SubItems[2].Text;
+
+                    var itemDir = "git" + itemUrl.Replace(txtGitlabUrl.Text, "").Replace(".git", "");
+                    itemDir = itemDir.Replace("/", "_");
+                    itemDir = Path.Combine(gitDir,
+                        itemDir); // listViewItem.SubItems[1].Text + "_" + listViewItem.SubItems[0].Text);
+
+                    var isProjExists = Directory.Exists(itemDir);
+                    if (isProjExists)
+                    {
+                        if (!ignoreExistsProj)
+                        {
+                            MessageBox.Show("子目录已存在，请重新指定: " + itemDir);
+                            return;
+                        }
+                    }
+                    else if (!CreateDir(itemDir))
+                    {
                         return;
-                    sw.WriteLine("git.exe clone \"{0}\" \"{1}\"", listViewItem.SubItems[2].Text, itemDir);
+                    }
+
+                    if (!isProjExists)
+                    {
+                        swClone.WriteLine("git.exe clone \"{0}\" \"{1}\"", itemUrl, itemDir);
+                        swUpdate.WriteLine("cd \"{0}\" && git.exe pull", itemDir);
+                    }
                 }
-                sw.WriteLine("pause");
+
+                swClone.WriteLine("@echo 克隆完成，请定期执行更新脚本：" + batUpdateFile);
+                swClone.WriteLine("pause");
+                swUpdate.WriteLine("pause");
             }
 
             //            var cmd = File.ReadAllLines(batFile);
-            TestCmd(batFile);
+            TestCmd(batCloneFile);
         }
 
         void TestCmd(string batFile)
@@ -244,17 +284,8 @@ namespace Beinet.cn.Tools.Gitlab
             }
         }
 
-        private bool CreateDir(string dir)
+        static bool CreateDir(string dir)
         {
-            if (Directory.Exists(dir))
-            {
-                //                var dialogResult = MessageBox.Show("目录已存在，是否要清空重建？", "新建目录", MessageBoxButtons.OKCancel);
-                //                if (dialogResult != DialogResult.OK)
-                //                    return false;
-                MessageBox.Show("子目录已存在，请重新指定: " + dir);
-                return false;
-            }
-
             try
             {
                 Directory.CreateDirectory(dir);

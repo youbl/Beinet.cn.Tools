@@ -61,7 +61,7 @@ namespace Beinet.cn.Tools.LvsManager
 
             LoadList();
             // 如果有nginx的接口，可以开启这个方法获取
-            LoopAndSetNginxState();
+            // LoopAndSetNginxState();
         }
 
         // 加载服务器列表
@@ -453,7 +453,7 @@ namespace Beinet.cn.Tools.LvsManager
         {
             ThreadPool.UnsafeQueueUserWorkItem(state =>
             {
-                var ngurl = "http://www.chidaoni.com/check_status?format=json";
+                var ngurl = "http://nginx.xxx.com/check_status";
                 var ipmap = InOutIpMap;
                 while (true)
                 {

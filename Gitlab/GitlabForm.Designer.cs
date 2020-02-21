@@ -34,18 +34,19 @@
             this.btnShowGitlab = new System.Windows.Forms.Button();
             this.txtGitlabUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.btnSelectGitDir = new System.Windows.Forms.Button();
+            this.txtGitDir = new System.Windows.Forms.TextBox();
+            this.labProjectNum = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.btnGitClone = new System.Windows.Forms.Button();
             this.lvProjects = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.label3 = new System.Windows.Forms.Label();
-            this.labProjectNum = new System.Windows.Forms.Label();
-            this.btnGitClone = new System.Windows.Forms.Button();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtGitDir = new System.Windows.Forms.TextBox();
-            this.btnSelectGitDir = new System.Windows.Forms.Button();
+            this.chkIgnoreExistsProj = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -67,9 +68,14 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.chkIgnoreExistsProj);
+            this.splitContainer1.Panel1.Controls.Add(this.btnSelectGitDir);
             this.splitContainer1.Panel1.Controls.Add(this.txtPrivateToken);
+            this.splitContainer1.Panel1.Controls.Add(this.btnGitClone);
+            this.splitContainer1.Panel1.Controls.Add(this.txtGitDir);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.btnShowGitlab);
+            this.splitContainer1.Panel1.Controls.Add(this.label4);
             this.splitContainer1.Panel1.Controls.Add(this.txtGitlabUrl);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1MinSize = 1;
@@ -79,7 +85,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2MinSize = 1;
             this.splitContainer1.Size = new System.Drawing.Size(946, 520);
-            this.splitContainer1.SplitterDistance = 43;
+            this.splitContainer1.SplitterDistance = 62;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
             // 
@@ -132,6 +138,90 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "gitlab地址：";
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(1);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.labProjectNum);
+            this.splitContainer2.Panel1.Controls.Add(this.label3);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.lvProjects);
+            this.splitContainer2.Size = new System.Drawing.Size(946, 457);
+            this.splitContainer2.SplitterDistance = 29;
+            this.splitContainer2.SplitterWidth = 1;
+            this.splitContainer2.TabIndex = 1;
+            // 
+            // btnSelectGitDir
+            // 
+            this.btnSelectGitDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSelectGitDir.Location = new System.Drawing.Point(594, 33);
+            this.btnSelectGitDir.Name = "btnSelectGitDir";
+            this.btnSelectGitDir.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectGitDir.TabIndex = 5;
+            this.btnSelectGitDir.Text = "选择目录..";
+            this.btnSelectGitDir.UseVisualStyleBackColor = true;
+            this.btnSelectGitDir.Click += new System.EventHandler(this.btnSelectGitDir_Click);
+            // 
+            // txtGitDir
+            // 
+            this.txtGitDir.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGitDir.Location = new System.Drawing.Point(85, 34);
+            this.txtGitDir.Name = "txtGitDir";
+            this.txtGitDir.Size = new System.Drawing.Size(508, 21);
+            this.txtGitDir.TabIndex = 4;
+            this.txtGitDir.Text = "D:\\";
+            // 
+            // labProjectNum
+            // 
+            this.labProjectNum.AutoSize = true;
+            this.labProjectNum.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labProjectNum.ForeColor = System.Drawing.Color.Red;
+            this.labProjectNum.Location = new System.Drawing.Point(68, 10);
+            this.labProjectNum.Name = "labProjectNum";
+            this.labProjectNum.Size = new System.Drawing.Size(12, 12);
+            this.labProjectNum.TabIndex = 1;
+            this.labProjectNum.Text = "0";
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(24, 37);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 12);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "本地目录：";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 10);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "项目个数：";
+            // 
+            // btnGitClone
+            // 
+            this.btnGitClone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGitClone.Enabled = false;
+            this.btnGitClone.Location = new System.Drawing.Point(841, 33);
+            this.btnGitClone.Name = "btnGitClone";
+            this.btnGitClone.Size = new System.Drawing.Size(93, 23);
+            this.btnGitClone.TabIndex = 2;
+            this.btnGitClone.Text = "克隆全部项目";
+            this.btnGitClone.UseVisualStyleBackColor = true;
+            this.btnGitClone.Click += new System.EventHandler(this.btnGitClone_Click);
+            // 
             // lvProjects
             // 
             this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -143,7 +233,7 @@
             this.lvProjects.HideSelection = false;
             this.lvProjects.Location = new System.Drawing.Point(0, 0);
             this.lvProjects.Name = "lvProjects";
-            this.lvProjects.Size = new System.Drawing.Size(946, 446);
+            this.lvProjects.Size = new System.Drawing.Size(946, 427);
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
             this.lvProjects.View = System.Windows.Forms.View.Details;
@@ -170,92 +260,16 @@
             this.columnHeader4.Text = "描述";
             this.columnHeader4.Width = 600;
             // 
-            // splitContainer2
+            // chkIgnoreExistsProj
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(1);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.btnSelectGitDir);
-            this.splitContainer2.Panel1.Controls.Add(this.txtGitDir);
-            this.splitContainer2.Panel1.Controls.Add(this.labProjectNum);
-            this.splitContainer2.Panel1.Controls.Add(this.label4);
-            this.splitContainer2.Panel1.Controls.Add(this.label3);
-            this.splitContainer2.Panel1.Controls.Add(this.btnGitClone);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.lvProjects);
-            this.splitContainer2.Size = new System.Drawing.Size(946, 476);
-            this.splitContainer2.SplitterDistance = 29;
-            this.splitContainer2.SplitterWidth = 1;
-            this.splitContainer2.TabIndex = 1;
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 10);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(65, 12);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "项目个数：";
-            // 
-            // labProjectNum
-            // 
-            this.labProjectNum.AutoSize = true;
-            this.labProjectNum.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.labProjectNum.ForeColor = System.Drawing.Color.Red;
-            this.labProjectNum.Location = new System.Drawing.Point(68, 10);
-            this.labProjectNum.Name = "labProjectNum";
-            this.labProjectNum.Size = new System.Drawing.Size(12, 12);
-            this.labProjectNum.TabIndex = 1;
-            this.labProjectNum.Text = "0";
-            // 
-            // btnGitClone
-            // 
-            this.btnGitClone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnGitClone.Location = new System.Drawing.Point(841, 5);
-            this.btnGitClone.Name = "btnGitClone";
-            this.btnGitClone.Size = new System.Drawing.Size(93, 23);
-            this.btnGitClone.TabIndex = 2;
-            this.btnGitClone.Text = "克隆到本地";
-            this.btnGitClone.UseVisualStyleBackColor = true;
-            this.btnGitClone.Click += new System.EventHandler(this.btnGitClone_Click);
-            // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(375, 10);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(65, 12);
-            this.label4.TabIndex = 3;
-            this.label4.Text = "本地目录：";
-            // 
-            // txtGitDir
-            // 
-            this.txtGitDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtGitDir.Location = new System.Drawing.Point(437, 7);
-            this.txtGitDir.Name = "txtGitDir";
-            this.txtGitDir.Size = new System.Drawing.Size(313, 21);
-            this.txtGitDir.TabIndex = 4;
-            this.txtGitDir.Text = "D:\\";
-            // 
-            // btnSelectGitDir
-            // 
-            this.btnSelectGitDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSelectGitDir.Location = new System.Drawing.Point(756, 5);
-            this.btnSelectGitDir.Name = "btnSelectGitDir";
-            this.btnSelectGitDir.Size = new System.Drawing.Size(75, 23);
-            this.btnSelectGitDir.TabIndex = 5;
-            this.btnSelectGitDir.Text = "选择目录..";
-            this.btnSelectGitDir.UseVisualStyleBackColor = true;
-            this.btnSelectGitDir.Click += new System.EventHandler(this.btnSelectGitDir_Click);
+            this.chkIgnoreExistsProj.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.chkIgnoreExistsProj.AutoSize = true;
+            this.chkIgnoreExistsProj.Location = new System.Drawing.Point(724, 37);
+            this.chkIgnoreExistsProj.Name = "chkIgnoreExistsProj";
+            this.chkIgnoreExistsProj.Size = new System.Drawing.Size(108, 16);
+            this.chkIgnoreExistsProj.TabIndex = 6;
+            this.chkIgnoreExistsProj.Text = "忽略已存在项目";
+            this.chkIgnoreExistsProj.UseVisualStyleBackColor = true;
             // 
             // GitlabForm
             // 
@@ -299,5 +313,6 @@
         private System.Windows.Forms.TextBox txtGitDir;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnGitClone;
+        private System.Windows.Forms.CheckBox chkIgnoreExistsProj;
     }
 }
