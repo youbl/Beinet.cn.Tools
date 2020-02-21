@@ -39,10 +39,21 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.label3 = new System.Windows.Forms.Label();
+            this.labProjectNum = new System.Windows.Forms.Label();
+            this.btnGitClone = new System.Windows.Forms.Button();
+            this.label4 = new System.Windows.Forms.Label();
+            this.txtGitDir = new System.Windows.Forms.TextBox();
+            this.btnSelectGitDir = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -65,9 +76,9 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.lvProjects);
+            this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
             this.splitContainer1.Panel2MinSize = 1;
-            this.splitContainer1.Size = new System.Drawing.Size(800, 450);
+            this.splitContainer1.Size = new System.Drawing.Size(946, 520);
             this.splitContainer1.SplitterDistance = 43;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
@@ -75,7 +86,7 @@
             // txtPrivateToken
             // 
             this.txtPrivateToken.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPrivateToken.Location = new System.Drawing.Point(545, 8);
+            this.txtPrivateToken.Location = new System.Drawing.Point(691, 8);
             this.txtPrivateToken.Name = "txtPrivateToken";
             this.txtPrivateToken.Size = new System.Drawing.Size(141, 21);
             this.txtPrivateToken.TabIndex = 4;
@@ -85,7 +96,7 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(453, 11);
+            this.label2.Location = new System.Drawing.Point(599, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(95, 12);
             this.label2.TabIndex = 3;
@@ -94,7 +105,7 @@
             // btnShowGitlab
             // 
             this.btnShowGitlab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnShowGitlab.Location = new System.Drawing.Point(695, 6);
+            this.btnShowGitlab.Location = new System.Drawing.Point(841, 6);
             this.btnShowGitlab.Name = "btnShowGitlab";
             this.btnShowGitlab.Size = new System.Drawing.Size(93, 23);
             this.btnShowGitlab.TabIndex = 2;
@@ -108,7 +119,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtGitlabUrl.Location = new System.Drawing.Point(85, 8);
             this.txtGitlabUrl.Name = "txtGitlabUrl";
-            this.txtGitlabUrl.Size = new System.Drawing.Size(362, 21);
+            this.txtGitlabUrl.Size = new System.Drawing.Size(508, 21);
             this.txtGitlabUrl.TabIndex = 1;
             this.txtGitlabUrl.Text = "https://172.18.0.78";
             // 
@@ -132,36 +143,125 @@
             this.lvProjects.HideSelection = false;
             this.lvProjects.Location = new System.Drawing.Point(0, 0);
             this.lvProjects.Name = "lvProjects";
-            this.lvProjects.Size = new System.Drawing.Size(800, 406);
+            this.lvProjects.Size = new System.Drawing.Size(946, 446);
             this.lvProjects.TabIndex = 0;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
             this.lvProjects.View = System.Windows.Forms.View.Details;
+            this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
             this.lvProjects.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvProjects_MouseDoubleClick);
             // 
             // columnHeader1
             // 
             this.columnHeader1.Text = "Id";
+            this.columnHeader1.Width = 65;
             // 
             // columnHeader2
             // 
             this.columnHeader2.Text = "Name";
-            this.columnHeader2.Width = 120;
+            this.columnHeader2.Width = 160;
             // 
             // columnHeader3
             // 
             this.columnHeader3.Text = "Git Url";
-            this.columnHeader3.Width = 260;
+            this.columnHeader3.Width = 350;
             // 
             // columnHeader4
             // 
             this.columnHeader4.Text = "描述";
             this.columnHeader4.Width = 600;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(1);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.btnSelectGitDir);
+            this.splitContainer2.Panel1.Controls.Add(this.txtGitDir);
+            this.splitContainer2.Panel1.Controls.Add(this.labProjectNum);
+            this.splitContainer2.Panel1.Controls.Add(this.label4);
+            this.splitContainer2.Panel1.Controls.Add(this.label3);
+            this.splitContainer2.Panel1.Controls.Add(this.btnGitClone);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.lvProjects);
+            this.splitContainer2.Size = new System.Drawing.Size(946, 476);
+            this.splitContainer2.SplitterDistance = 29;
+            this.splitContainer2.SplitterWidth = 1;
+            this.splitContainer2.TabIndex = 1;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 10);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(65, 12);
+            this.label3.TabIndex = 0;
+            this.label3.Text = "项目个数：";
+            // 
+            // labProjectNum
+            // 
+            this.labProjectNum.AutoSize = true;
+            this.labProjectNum.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.labProjectNum.ForeColor = System.Drawing.Color.Red;
+            this.labProjectNum.Location = new System.Drawing.Point(68, 10);
+            this.labProjectNum.Name = "labProjectNum";
+            this.labProjectNum.Size = new System.Drawing.Size(12, 12);
+            this.labProjectNum.TabIndex = 1;
+            this.labProjectNum.Text = "0";
+            // 
+            // btnGitClone
+            // 
+            this.btnGitClone.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnGitClone.Location = new System.Drawing.Point(841, 5);
+            this.btnGitClone.Name = "btnGitClone";
+            this.btnGitClone.Size = new System.Drawing.Size(93, 23);
+            this.btnGitClone.TabIndex = 2;
+            this.btnGitClone.Text = "克隆到本地";
+            this.btnGitClone.UseVisualStyleBackColor = true;
+            this.btnGitClone.Click += new System.EventHandler(this.btnGitClone_Click);
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(375, 10);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(65, 12);
+            this.label4.TabIndex = 3;
+            this.label4.Text = "本地目录：";
+            // 
+            // txtGitDir
+            // 
+            this.txtGitDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtGitDir.Location = new System.Drawing.Point(437, 7);
+            this.txtGitDir.Name = "txtGitDir";
+            this.txtGitDir.Size = new System.Drawing.Size(313, 21);
+            this.txtGitDir.TabIndex = 4;
+            this.txtGitDir.Text = "D:\\";
+            // 
+            // btnSelectGitDir
+            // 
+            this.btnSelectGitDir.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSelectGitDir.Location = new System.Drawing.Point(756, 5);
+            this.btnSelectGitDir.Name = "btnSelectGitDir";
+            this.btnSelectGitDir.Size = new System.Drawing.Size(75, 23);
+            this.btnSelectGitDir.TabIndex = 5;
+            this.btnSelectGitDir.Text = "选择目录..";
+            this.btnSelectGitDir.UseVisualStyleBackColor = true;
+            this.btnSelectGitDir.Click += new System.EventHandler(this.btnSelectGitDir_Click);
+            // 
             // GitlabForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(946, 520);
             this.Controls.Add(this.splitContainer1);
             this.Name = "GitlabForm";
             this.Text = "GitlabForm";
@@ -170,6 +270,11 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel1.PerformLayout();
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -187,5 +292,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
         private System.Windows.Forms.ColumnHeader columnHeader4;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.Label labProjectNum;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button btnSelectGitDir;
+        private System.Windows.Forms.TextBox txtGitDir;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button btnGitClone;
     }
 }

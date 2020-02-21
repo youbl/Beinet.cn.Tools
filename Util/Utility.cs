@@ -24,6 +24,8 @@ namespace Beinet.cn.Tools
 {
     public static class Utility
     {
+        public static string Dir { get; } = AppDomain.CurrentDomain.BaseDirectory;
+
         static Utility()
         {
             //调大默认连接池
