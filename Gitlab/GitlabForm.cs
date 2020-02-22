@@ -142,7 +142,7 @@ namespace Beinet.cn.Tools.Gitlab
             var down = "🡻"; // 🡹🡻🡱🡳🠉🠟🠇🠋🠝🡅🡇
 
             var lv = lvProjects; //(ListView)sender;
-            var colIdx = e == null ? 1 : e.Column;
+            var colIdx = e?.Column ?? 1;
 
             var sorter = lv.ListViewItemSorter as ListViewItemComparer;
             if (sorter == null)
@@ -150,7 +150,7 @@ namespace Beinet.cn.Tools.Gitlab
                 sorter = new ListViewItemComparer(colIdx);
                 lv.ListViewItemSorter = new ListViewItemComparer(colIdx);
             }
-            else
+            else if (e != null)
             {
                 lv.Columns[sorter.Column].Text = lv.Columns[sorter.Column].Text.Replace(up, "").Replace(down, "");
 
@@ -166,7 +166,8 @@ namespace Beinet.cn.Tools.Gitlab
             }
 
             lv.Sort();
-            lv.Columns[colIdx].Text = lv.Columns[colIdx].Text + (sorter.IsAsc ? up : down);
+            if (e != null)
+                lv.Columns[colIdx].Text = lv.Columns[colIdx].Text + (sorter.IsAsc ? up : down);
         }
 
         class ListViewItemComparer : IComparer
@@ -336,7 +337,7 @@ namespace Beinet.cn.Tools.Gitlab
 
         private void btnListSearch_Click(object sender, EventArgs e)
         {
-            if (lvProjects.Items.Count <= 0)
+            if (!btnListSearch.Enabled || lvProjects.Items.Count <= 0)
             {
                 return;
             }
