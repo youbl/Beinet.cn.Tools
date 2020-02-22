@@ -47,6 +47,9 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtKeyword = new System.Windows.Forms.TextBox();
+            this.btnListSearch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -88,6 +91,7 @@
             this.splitContainer1.SplitterDistance = 62;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
+            this.splitContainer1.TabStop = false;
             // 
             // chkIgnoreExistsProj
             // 
@@ -117,7 +121,7 @@
             this.txtPrivateToken.Location = new System.Drawing.Point(691, 8);
             this.txtPrivateToken.Name = "txtPrivateToken";
             this.txtPrivateToken.Size = new System.Drawing.Size(141, 21);
-            this.txtPrivateToken.TabIndex = 4;
+            this.txtPrivateToken.TabIndex = 2;
             // 
             // btnGitClone
             // 
@@ -126,7 +130,7 @@
             this.btnGitClone.Location = new System.Drawing.Point(841, 33);
             this.btnGitClone.Name = "btnGitClone";
             this.btnGitClone.Size = new System.Drawing.Size(93, 23);
-            this.btnGitClone.TabIndex = 2;
+            this.btnGitClone.TabIndex = 7;
             this.btnGitClone.Text = "克隆全部项目";
             this.btnGitClone.UseVisualStyleBackColor = true;
             this.btnGitClone.Click += new System.EventHandler(this.btnGitClone_Click);
@@ -148,7 +152,7 @@
             this.label2.Location = new System.Drawing.Point(599, 11);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(95, 12);
-            this.label2.TabIndex = 3;
+            this.label2.TabIndex = 0;
             this.label2.Text = "Private Token：";
             // 
             // btnShowGitlab
@@ -157,7 +161,7 @@
             this.btnShowGitlab.Location = new System.Drawing.Point(841, 6);
             this.btnShowGitlab.Name = "btnShowGitlab";
             this.btnShowGitlab.Size = new System.Drawing.Size(93, 23);
-            this.btnShowGitlab.TabIndex = 2;
+            this.btnShowGitlab.TabIndex = 3;
             this.btnShowGitlab.Text = "显示所有项目";
             this.btnShowGitlab.UseVisualStyleBackColor = true;
             this.btnShowGitlab.Click += new System.EventHandler(this.btnShowGitlab_Click);
@@ -168,7 +172,7 @@
             this.label4.Location = new System.Drawing.Point(24, 37);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 12);
-            this.label4.TabIndex = 3;
+            this.label4.TabIndex = 0;
             this.label4.Text = "本地目录：";
             // 
             // txtGitlabUrl
@@ -200,8 +204,11 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.txtKeyword);
             this.splitContainer2.Panel1.Controls.Add(this.labProjectNum);
+            this.splitContainer2.Panel1.Controls.Add(this.btnListSearch);
             this.splitContainer2.Panel1.Controls.Add(this.label3);
+            this.splitContainer2.Panel1.Controls.Add(this.label5);
             // 
             // splitContainer2.Panel2
             // 
@@ -210,6 +217,7 @@
             this.splitContainer2.SplitterDistance = 29;
             this.splitContainer2.SplitterWidth = 1;
             this.splitContainer2.TabIndex = 1;
+            this.splitContainer2.TabStop = false;
             // 
             // labProjectNum
             // 
@@ -219,7 +227,7 @@
             this.labProjectNum.Location = new System.Drawing.Point(68, 10);
             this.labProjectNum.Name = "labProjectNum";
             this.labProjectNum.Size = new System.Drawing.Size(12, 12);
-            this.labProjectNum.TabIndex = 1;
+            this.labProjectNum.TabIndex = 0;
             this.labProjectNum.Text = "0";
             // 
             // label3
@@ -244,6 +252,7 @@
             this.lvProjects.Name = "lvProjects";
             this.lvProjects.Size = new System.Drawing.Size(946, 427);
             this.lvProjects.TabIndex = 0;
+            this.lvProjects.TabStop = false;
             this.lvProjects.UseCompatibleStateImageBehavior = false;
             this.lvProjects.View = System.Windows.Forms.View.Details;
             this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
@@ -268,6 +277,37 @@
             // 
             this.columnHeader4.Text = "描述";
             this.columnHeader4.Width = 600;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(608, 11);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(65, 12);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "列表检索：";
+            // 
+            // txtKeyword
+            // 
+            this.txtKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtKeyword.Location = new System.Drawing.Point(669, 7);
+            this.txtKeyword.Name = "txtKeyword";
+            this.txtKeyword.Size = new System.Drawing.Size(188, 21);
+            this.txtKeyword.TabIndex = 8;
+            this.txtKeyword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyword_KeyDown);
+            // 
+            // btnListSearch
+            // 
+            this.btnListSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnListSearch.Enabled = false;
+            this.btnListSearch.Location = new System.Drawing.Point(858, 6);
+            this.btnListSearch.Name = "btnListSearch";
+            this.btnListSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnListSearch.TabIndex = 9;
+            this.btnListSearch.Text = "执行检索";
+            this.btnListSearch.UseVisualStyleBackColor = true;
+            this.btnListSearch.Click += new System.EventHandler(this.btnListSearch_Click);
             // 
             // GitlabForm
             // 
@@ -312,5 +352,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button btnGitClone;
         private System.Windows.Forms.CheckBox chkIgnoreExistsProj;
+        private System.Windows.Forms.TextBox txtKeyword;
+        private System.Windows.Forms.Button btnListSearch;
+        private System.Windows.Forms.Label label5;
     }
 }

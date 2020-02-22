@@ -16,6 +16,8 @@ namespace Beinet.cn.Tools.Gitlab
 {
     public partial class GitlabForm : Form
     {
+        private List<GitlabHelper.GitProject> allProjects = new List<GitlabHelper.GitProject>();
+
         public GitlabForm()
         {
             InitializeComponent();
@@ -40,11 +42,13 @@ namespace Beinet.cn.Tools.Gitlab
                 MessageBox.Show("Gitlab地址必须以http开头");
                 return;
             }
+
             if (url[url.Length - 1] != '/')
             {
                 url = url + '/';
                 txtGitlabUrl.Text = url;
             }
+
             var token = txtPrivateToken.Text.Trim();
             if (token.Length == 0)
             {
@@ -54,6 +58,7 @@ namespace Beinet.cn.Tools.Gitlab
 
             btnShowGitlab.Enabled = false;
             btnShowGitlab.Text = "加载中..";
+            allProjects.Clear();
 
             lvProjects.Items.Clear();
             ThreadPool.UnsafeQueueUserWorkItem(state =>
@@ -76,9 +81,13 @@ namespace Beinet.cn.Tools.Gitlab
                     btnShowGitlab.Enabled = true;
                     btnShowGitlab.Text = "显示所有项目";
                     if (!isErr)
+                    {
+                        btnListSearch.Enabled = true;
                         btnGitClone.Enabled = true;
+                    }
 
-                    labProjectNum.Text = labProjectNum.Text + " 耗时:" + (DateTime.Now - begin).TotalSeconds.ToString("N2") + "秒";
+                    labProjectNum.Text = labProjectNum.Text + " 耗时:" +
+                                         (DateTime.Now - begin).TotalSeconds.ToString("N2") + "秒";
                 });
             }, null);
         }
@@ -95,26 +104,10 @@ namespace Beinet.cn.Tools.Gitlab
 
                 if (result != null && result.Count > 0)
                 {
-                    var rows = new ListViewItem[result.Count];
-                    var rowIdx = 0;
-                    foreach (var gitProject in result.OrderBy(item => item.Name))
-                    {
-                        var lvItem = new ListViewItem(new string[]
-                        {
-                            gitProject.Id.ToString(),
-                            gitProject.Name,
-                            gitProject.Url,
-                            gitProject.Desc
-                        });
-                        rows[rowIdx] = (lvItem);
-                        rowIdx++;
-                    }
+                    // 添加到统一的列表，便于检索
+                    allProjects.AddRange(result);
 
-                    Utility.InvokeControl(lv, () =>
-                    {
-                        lv.Items.AddRange(rows.ToArray());
-                        labProjectNum.Text = lv.Items.Count.ToString();
-                    });
+                    AppendProjects(result, lv);
                 }
             } while (result != null && result.Count >= pageSize);
         }
@@ -122,7 +115,7 @@ namespace Beinet.cn.Tools.Gitlab
         private void lvProjects_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // 双击复制
-            var lv = (ListView)sender;
+            var lv = (ListView) sender;
             var row = lv.GetItemAt(e.X, e.Y);
             var cell = row.GetSubItemAt(e.X, e.Y);
             if (cell == null || string.IsNullOrEmpty(cell.Text))
@@ -148,30 +141,32 @@ namespace Beinet.cn.Tools.Gitlab
             var up = "🡹";
             var down = "🡻"; // 🡹🡻🡱🡳🠉🠟🠇🠋🠝🡅🡇
 
-            var lv = (ListView)sender;
+            var lv = lvProjects; //(ListView)sender;
+            var colIdx = e == null ? 1 : e.Column;
+
             var sorter = lv.ListViewItemSorter as ListViewItemComparer;
             if (sorter == null)
             {
-                sorter = new ListViewItemComparer(e.Column);
-                lv.ListViewItemSorter = new ListViewItemComparer(e.Column);
+                sorter = new ListViewItemComparer(colIdx);
+                lv.ListViewItemSorter = new ListViewItemComparer(colIdx);
             }
             else
             {
                 lv.Columns[sorter.Column].Text = lv.Columns[sorter.Column].Text.Replace(up, "").Replace(down, "");
 
-                if (sorter.Column == e.Column)
+                if (sorter.Column == colIdx)
                 {
                     sorter.IsAsc = !sorter.IsAsc;
                 }
                 else
                 {
-                    sorter.Column = e.Column;
+                    sorter.Column = colIdx;
                     sorter.IsAsc = true;
                 }
             }
 
             lv.Sort();
-            lv.Columns[e.Column].Text = lv.Columns[e.Column].Text + (sorter.IsAsc ? up : down);
+            lv.Columns[colIdx].Text = lv.Columns[colIdx].Text + (sorter.IsAsc ? up : down);
         }
 
         class ListViewItemComparer : IComparer
@@ -195,8 +190,8 @@ namespace Beinet.cn.Tools.Gitlab
             {
                 if (x == null || y == null)
                     return 0;
-                var xTxt = ((ListViewItem)x).SubItems[Column].Text;
-                var yTxt = ((ListViewItem)y).SubItems[Column].Text;
+                var xTxt = ((ListViewItem) x).SubItems[Column].Text;
+                var yTxt = ((ListViewItem) y).SubItems[Column].Text;
 
                 int ret;
                 if (Column == 0)
@@ -215,7 +210,9 @@ namespace Beinet.cn.Tools.Gitlab
         private void btnSelectGitDir_Click(object sender, EventArgs e)
         {
             var dialog = new FolderBrowserDialog();
-            dialog.RootFolder = Environment.SpecialFolder.MyComputer;// (string.IsNullOrEmpty(txtGitDir.Text) ? "C:\\" : txtGitDir.Text);
+            dialog.RootFolder =
+                Environment.SpecialFolder
+                    .MyComputer; // (string.IsNullOrEmpty(txtGitDir.Text) ? "C:\\" : txtGitDir.Text);
             if (dialog.ShowDialog() != DialogResult.OK)
                 return;
 
@@ -335,6 +332,65 @@ namespace Beinet.cn.Tools.Gitlab
                 MessageBox.Show("创建目录失败: " + dir + "：" + exp.Message);
                 return false;
             }
+        }
+
+        private void btnListSearch_Click(object sender, EventArgs e)
+        {
+            if (lvProjects.Items.Count <= 0)
+            {
+                return;
+            }
+
+            var keyword = txtKeyword.Text.Trim();
+            List<GitlabHelper.GitProject> showProjs;
+            if (keyword.Length <= 0)
+                showProjs = allProjects;
+            else
+            {
+                showProjs = new List<GitlabHelper.GitProject>();
+                foreach (var item in allProjects)
+                {
+                    if (keyword == item.Id.ToString() ||
+                        item.Name.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        item.Desc.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0 ||
+                        item.Url.IndexOf(keyword, StringComparison.OrdinalIgnoreCase) >= 0)
+                        showProjs.Add(item);
+                }
+            }
+
+            lvProjects.Items.Clear();
+            AppendProjects(showProjs, lvProjects);
+            lvProjects_ColumnClick(null, null);
+        }
+
+        private void AppendProjects(List<GitlabHelper.GitProject> showProjs, ListView lv)
+        {
+            var rows = new ListViewItem[showProjs.Count];
+            var rowIdx = 0;
+            foreach (var gitProject in showProjs)
+            {
+                var lvItem = new ListViewItem(new string[]
+                {
+                    gitProject.Id.ToString(),
+                    gitProject.Name,
+                    gitProject.Url,
+                    gitProject.Desc
+                });
+                rows[rowIdx] = (lvItem);
+                rowIdx++;
+            }
+
+            Utility.InvokeControl(lv, () =>
+            {
+                lv.Items.AddRange(rows.ToArray());
+                labProjectNum.Text = lv.Items.Count.ToString();
+            });
+        }
+
+        private void txtKeyword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+                btnListSearch_Click(null, null);
         }
     }
 }
