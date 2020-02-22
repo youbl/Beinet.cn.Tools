@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
@@ -20,10 +21,37 @@ namespace Beinet.cn.Tools.Gitlab
             InitializeComponent();
 
             lvProjects.FullRowSelect = true;
+            txtGitlabUrl.Text = ConfigurationManager.AppSettings["GitlabUrl"] ?? "";
+            txtPrivateToken.Text = ConfigurationManager.AppSettings["GitlabPrivateToken"] ?? "";
         }
 
         private void btnShowGitlab_Click(object sender, EventArgs e)
         {
+            var url = txtGitlabUrl.Text.Trim();
+            if (url.Length == 0)
+            {
+                MessageBox.Show("请输入Gitlab地址");
+                return;
+            }
+
+            if (url.IndexOf("http://", StringComparison.OrdinalIgnoreCase) != 0 &&
+                url.IndexOf("https://", StringComparison.OrdinalIgnoreCase) != 0)
+            {
+                MessageBox.Show("Gitlab地址必须以http开头");
+                return;
+            }
+            if (url[url.Length - 1] != '/')
+            {
+                url = url + '/';
+                txtGitlabUrl.Text = url;
+            }
+            var token = txtPrivateToken.Text.Trim();
+            if (token.Length == 0)
+            {
+                MessageBox.Show("请输入Gitlab的访问令牌");
+                return;
+            }
+
             btnShowGitlab.Enabled = false;
             btnShowGitlab.Text = "加载中..";
 
@@ -34,7 +62,7 @@ namespace Beinet.cn.Tools.Gitlab
                 var isErr = false;
                 try
                 {
-                    var helper = new GitlabHelper(txtGitlabUrl.Text.Trim(), txtPrivateToken.Text.Trim());
+                    var helper = new GitlabHelper(url, token);
                     BindListView(lvProjects, helper);
                 }
                 catch (Exception exp)
@@ -194,7 +222,7 @@ namespace Beinet.cn.Tools.Gitlab
             txtGitDir.Text = dialog.SelectedPath;
         }
 
-       
+
         private void btnGitClone_Click(object sender, EventArgs e)
         {
             if (lvProjects.Items.Count <= 0)
@@ -227,6 +255,7 @@ namespace Beinet.cn.Tools.Gitlab
 
             var ignoreExistsProj = chkIgnoreExistsProj.Checked;
 
+            var newProjNum = 0;
             var batCloneFile = Path.Combine(Utility.Dir, "gitClone.bat");
             var batUpdateFile = Path.Combine(gitDir, "gitUpdate.bat");
             using (var swClone = new StreamWriter(batCloneFile, false, Encoding.Default))
@@ -236,8 +265,8 @@ namespace Beinet.cn.Tools.Gitlab
                 {
                     var itemUrl = listViewItem.SubItems[2].Text;
 
-                    var itemDir = "git" + itemUrl.Replace(txtGitlabUrl.Text, "").Replace(".git", "");
-                    itemDir = itemDir.Replace("/", "_");
+                    var itemDir = itemUrl.Replace(txtGitlabUrl.Text, "").Replace(".git", "");
+                    itemDir = itemDir.Replace("/", "@");
                     itemDir = Path.Combine(gitDir,
                         itemDir); // listViewItem.SubItems[1].Text + "_" + listViewItem.SubItems[0].Text);
 
@@ -257,18 +286,28 @@ namespace Beinet.cn.Tools.Gitlab
 
                     if (!isProjExists)
                     {
+                        newProjNum++;
                         swClone.WriteLine("git.exe clone \"{0}\" \"{1}\"", itemUrl, itemDir);
                         swUpdate.WriteLine("cd \"{0}\" && git.exe pull", itemDir);
                     }
                 }
 
-                swClone.WriteLine("@echo 克隆完成，请定期执行更新脚本：" + batUpdateFile);
-                swClone.WriteLine("pause");
-                swUpdate.WriteLine("pause");
+                if (newProjNum > 0)
+                {
+                    swClone.WriteLine("@echo. ");
+                    swClone.WriteLine("@echo -----------------------------------------------");
+                    swClone.WriteLine("@echo 克隆完成，请定期执行更新脚本：" + batUpdateFile);
+                    swClone.WriteLine("@echo -----------------------------------------------");
+                    swClone.WriteLine("pause");
+                    // swUpdate.WriteLine("pause");
+                }
             }
 
             //            var cmd = File.ReadAllLines(batFile);
-            TestCmd(batCloneFile);
+            if (newProjNum > 0)
+                TestCmd(batCloneFile);
+            else
+                MessageBox.Show("未找到新项目，克隆操作未执行");
         }
 
         void TestCmd(string batFile)
