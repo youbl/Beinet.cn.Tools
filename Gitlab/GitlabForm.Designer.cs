@@ -40,16 +40,18 @@
             this.txtGitlabUrl = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.btnBuildHtml = new System.Windows.Forms.Button();
+            this.txtKeyword = new System.Windows.Forms.TextBox();
             this.labProjectNum = new System.Windows.Forms.Label();
+            this.btnListSearch = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.lvProjects = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label5 = new System.Windows.Forms.Label();
-            this.txtKeyword = new System.Windows.Forms.TextBox();
-            this.btnListSearch = new System.Windows.Forms.Button();
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -204,6 +206,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.btnBuildHtml);
             this.splitContainer2.Panel1.Controls.Add(this.txtKeyword);
             this.splitContainer2.Panel1.Controls.Add(this.labProjectNum);
             this.splitContainer2.Panel1.Controls.Add(this.btnListSearch);
@@ -219,6 +222,26 @@
             this.splitContainer2.TabIndex = 1;
             this.splitContainer2.TabStop = false;
             // 
+            // btnBuildHtml
+            // 
+            this.btnBuildHtml.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnBuildHtml.Location = new System.Drawing.Point(841, 5);
+            this.btnBuildHtml.Name = "btnBuildHtml";
+            this.btnBuildHtml.Size = new System.Drawing.Size(93, 23);
+            this.btnBuildHtml.TabIndex = 10;
+            this.btnBuildHtml.Text = "生成html导航";
+            this.btnBuildHtml.UseVisualStyleBackColor = true;
+            this.btnBuildHtml.Click += new System.EventHandler(this.btnBuildHtml_Click);
+            // 
+            // txtKeyword
+            // 
+            this.txtKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtKeyword.Location = new System.Drawing.Point(405, 7);
+            this.txtKeyword.Name = "txtKeyword";
+            this.txtKeyword.Size = new System.Drawing.Size(188, 21);
+            this.txtKeyword.TabIndex = 8;
+            this.txtKeyword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyword_KeyDown);
+            // 
             // labProjectNum
             // 
             this.labProjectNum.AutoSize = true;
@@ -230,6 +253,18 @@
             this.labProjectNum.TabIndex = 0;
             this.labProjectNum.Text = "0";
             // 
+            // btnListSearch
+            // 
+            this.btnListSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnListSearch.Enabled = false;
+            this.btnListSearch.Location = new System.Drawing.Point(594, 6);
+            this.btnListSearch.Name = "btnListSearch";
+            this.btnListSearch.Size = new System.Drawing.Size(75, 23);
+            this.btnListSearch.TabIndex = 9;
+            this.btnListSearch.Text = "执行检索";
+            this.btnListSearch.UseVisualStyleBackColor = true;
+            this.btnListSearch.Click += new System.EventHandler(this.btnListSearch_Click);
+            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -239,13 +274,24 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "项目个数：";
             // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(344, 11);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(65, 12);
+            this.label5.TabIndex = 0;
+            this.label5.Text = "列表检索：";
+            // 
             // lvProjects
             // 
             this.lvProjects.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3,
-            this.columnHeader4});
+            this.columnHeader4,
+            this.columnHeader5});
             this.lvProjects.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvProjects.HideSelection = false;
             this.lvProjects.Location = new System.Drawing.Point(0, 0);
@@ -256,7 +302,9 @@
             this.lvProjects.UseCompatibleStateImageBehavior = false;
             this.lvProjects.View = System.Windows.Forms.View.Details;
             this.lvProjects.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.lvProjects_ColumnClick);
+            this.lvProjects.Click += new System.EventHandler(this.lvProjects_Click);
             this.lvProjects.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.lvProjects_MouseDoubleClick);
+            this.lvProjects.MouseMove += new System.Windows.Forms.MouseEventHandler(this.lvProjects_MouseMove);
             // 
             // columnHeader1
             // 
@@ -278,36 +326,9 @@
             this.columnHeader4.Text = "描述";
             this.columnHeader4.Width = 600;
             // 
-            // label5
+            // columnHeader5
             // 
-            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(608, 11);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(65, 12);
-            this.label5.TabIndex = 0;
-            this.label5.Text = "列表检索：";
-            // 
-            // txtKeyword
-            // 
-            this.txtKeyword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtKeyword.Location = new System.Drawing.Point(669, 7);
-            this.txtKeyword.Name = "txtKeyword";
-            this.txtKeyword.Size = new System.Drawing.Size(188, 21);
-            this.txtKeyword.TabIndex = 8;
-            this.txtKeyword.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtKeyword_KeyDown);
-            // 
-            // btnListSearch
-            // 
-            this.btnListSearch.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnListSearch.Enabled = false;
-            this.btnListSearch.Location = new System.Drawing.Point(858, 6);
-            this.btnListSearch.Name = "btnListSearch";
-            this.btnListSearch.Size = new System.Drawing.Size(75, 23);
-            this.btnListSearch.TabIndex = 9;
-            this.btnListSearch.Text = "执行检索";
-            this.btnListSearch.UseVisualStyleBackColor = true;
-            this.btnListSearch.Click += new System.EventHandler(this.btnListSearch_Click);
+            this.columnHeader5.Text = "操作";
             // 
             // GitlabForm
             // 
@@ -355,5 +376,7 @@
         private System.Windows.Forms.TextBox txtKeyword;
         private System.Windows.Forms.Button btnListSearch;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ColumnHeader columnHeader5;
+        private System.Windows.Forms.Button btnBuildHtml;
     }
 }

@@ -23,8 +23,17 @@ namespace Beinet.cn.Tools.Gitlab
             InitializeComponent();
 
             lvProjects.FullRowSelect = true;
+            lvProjects.HoverSelection = true;
+            lvProjects.MultiSelect = false;
+
+            // 通过Image控件设置ListView的行高
+            var imgList = new ImageList();
+            imgList.ImageSize = new Size(1, 20);
+            lvProjects.SmallImageList = imgList;
+
             txtGitlabUrl.Text = ConfigurationManager.AppSettings["GitlabUrl"] ?? "";
             txtPrivateToken.Text = ConfigurationManager.AppSettings["GitlabPrivateToken"] ?? "";
+            txtGitDir.Text = ConfigurationManager.AppSettings["GitlabSaveDir"] ?? "D:\\";
         }
 
         private void btnShowGitlab_Click(object sender, EventArgs e)
@@ -60,7 +69,7 @@ namespace Beinet.cn.Tools.Gitlab
             btnShowGitlab.Text = "加载中..";
             allProjects.Clear();
 
-            lvProjects.Items.Clear();
+            ClearListViewItems(lvProjects);
             ThreadPool.UnsafeQueueUserWorkItem(state =>
             {
                 var begin = DateTime.Now;
@@ -115,9 +124,9 @@ namespace Beinet.cn.Tools.Gitlab
         private void lvProjects_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             // 双击复制
-            var lv = (ListView) sender;
+            var lv = (ListView)sender;
             var row = lv.GetItemAt(e.X, e.Y);
-            var cell = row.GetSubItemAt(e.X, e.Y);
+            var cell = row?.GetSubItemAt(e.X, e.Y);
             if (cell == null || string.IsNullOrEmpty(cell.Text))
                 return;
 
@@ -191,8 +200,8 @@ namespace Beinet.cn.Tools.Gitlab
             {
                 if (x == null || y == null)
                     return 0;
-                var xTxt = ((ListViewItem) x).SubItems[Column].Text;
-                var yTxt = ((ListViewItem) y).SubItems[Column].Text;
+                var xTxt = ((ListViewItem)x).SubItems[Column].Text;
+                var yTxt = ((ListViewItem)y).SubItems[Column].Text;
 
                 int ret;
                 if (Column == 0)
@@ -228,10 +237,6 @@ namespace Beinet.cn.Tools.Gitlab
                 MessageBox.Show("请先点击：显示所有项目");
                 return;
             }
-
-//            // 调试语句
-//            while (lvProjects.Items.Count > 15)
-//                lvProjects.Items.RemoveAt(1);
 
             var gitDir = txtGitDir.Text.Trim();
             if (gitDir.Length == 0)
@@ -359,13 +364,16 @@ namespace Beinet.cn.Tools.Gitlab
                 }
             }
 
-            lvProjects.Items.Clear();
+            ClearListViewItems(lvProjects);
             AppendProjects(showProjs, lvProjects);
             lvProjects_ColumnClick(null, null);
         }
 
         private void AppendProjects(List<GitlabHelper.GitProject> showProjs, ListView lv)
         {
+            if (showProjs.Count <= 0)
+                return;
+
             var rows = new ListViewItem[showProjs.Count];
             var rowIdx = 0;
             foreach (var gitProject in showProjs)
@@ -375,7 +383,8 @@ namespace Beinet.cn.Tools.Gitlab
                     gitProject.Id.ToString(),
                     gitProject.Name,
                     gitProject.Url,
-                    gitProject.Desc
+                    gitProject.Desc,
+                    "打开链接"
                 });
                 rows[rowIdx] = (lvItem);
                 rowIdx++;
@@ -385,13 +394,123 @@ namespace Beinet.cn.Tools.Gitlab
             {
                 lv.Items.AddRange(rows.ToArray());
                 labProjectNum.Text = lv.Items.Count.ToString();
+
+                //                foreach (ListViewItem item in lv.Items)
+                //                {
+                //                    AddButton(item);
+                //                }
             });
+        }
+
+        //        private void AddButton(ListViewItem item)
+        //        {
+        //            const string flag = "OK";
+        //            if (item.SubItems[4].Text == flag)
+        //                return;
+        //
+        //            var btn = new LinkLabel();
+        //            btn.Text = "打开链接";
+        //            btn.LinkClicked += LinkLabel_Clicked;
+        //            btn.Height = 18;
+        //            // btn.Height = 10;
+        //            item.ListView.Controls.Add(btn);
+        //            // 这样添加的按钮不能跟随左右滚动，要重绘，暂时不考虑
+        //            btn.Location = new Point(item.SubItems[4].Bounds.Left + 2, item.SubItems[4].Bounds.Top + 4);
+        //            item.SubItems[4].Text = flag; // 用于避免重新添加按钮
+        //        }
+
+        private void ClearListViewItems(ListView lv)
+        {
+            lv.Items.Clear();
+            //            for (var i = lv.Controls.Count - 1; i >= 0; i--)
+            //            {
+            //                if (lv.Controls[i] is LinkLabel)
+            //                    lv.Controls.RemoveAt(i);
+            //            }
         }
 
         private void txtKeyword_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter)
                 btnListSearch_Click(null, null);
+        }
+
+
+        private void btnBuildHtml_Click(object sender, EventArgs e)
+        {
+            if (lvProjects.Items.Count <= 0)
+            {
+                MessageBox.Show("项目列表为空,无法生成");
+                return;
+            }
+
+            var html = new StringBuilder(lvProjects.Items.Count * 100);
+            html.Append(@"<!DOCTYPE html>
+<html>
+<head>
+    <meta charset=""UTF-8"">
+    <title>所有Git项目</title>
+</head>
+<body>
+    <table border='1' cellpadding='0' cellspacing='0'>
+        <tr>
+            <th>Git ID</th>
+            <th>Project Name</th>
+            <th>Link Address</th>
+            <th>Description</th>
+        </tr>
+");
+            foreach (ListViewItem item in lvProjects.Items)
+            {
+                html.AppendFormat(@"<tr>
+    <td>{0}</td>
+    <td>{1}</td>
+    <td><a href='{2}' target='_blank'>{2}</a></td>
+    <td>{3}</td>
+</tr>",
+                    item.SubItems[0].Text,
+                    item.SubItems[1].Text,
+                    item.SubItems[2].Text,
+                    item.SubItems[3].Text);
+            }
+
+            html.Append(@"
+    </table>
+</body>
+</html>");
+
+            var htmlFile = Path.Combine(Utility.Dir, "AllGit.html");
+            using (var sw = new StreamWriter(htmlFile, false, Encoding.UTF8))
+            {
+                sw.Write(html.ToString());
+            }
+
+            // 打开资源管理器，并选中文件
+            Process.Start("explorer.exe", "/select," + htmlFile);
+            //Process.Start(Utility.Dir, htmlFile);
+        }
+
+        private void lvProjects_MouseMove(object sender, MouseEventArgs e)
+        {
+            //            var item = lvProjects.GetItemAt(e.X, e.Y);
+            //            if (item == null)
+            //                return;
+            //            lvProjects.SelectedItems.Clear();
+            //            item.Selected = true;
+        }
+
+        private void lvProjects_Click(object sender, EventArgs e)
+        {
+            var lv = (ListView)sender;
+            Point mousePos = lv.PointToClient(MousePosition);
+
+            // 双击复制
+            var row = lv.GetItemAt(mousePos.X, mousePos.Y);
+            var cell = row?.GetSubItemAt(mousePos.X, mousePos.Y);
+            if (cell == null || cell != row.SubItems[4] || string.IsNullOrEmpty(cell.Text))
+                return;
+
+            Process.Start(row.SubItems[2].Text);
         }
     }
 }
