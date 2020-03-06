@@ -44,6 +44,7 @@
             this.btnSelectFiles = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -51,6 +52,10 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -61,17 +66,17 @@
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(800, 450);
+            this.tabControl1.Size = new System.Drawing.Size(800, 524);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.TabStop = false;
             // 
             // tabPage1
             // 
-            this.tabPage1.Controls.Add(this.splitContainer1);
+            this.tabPage1.Controls.Add(this.splitContainer2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 424);
+            this.tabPage1.Size = new System.Drawing.Size(792, 498);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "本地文件MD5";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -80,7 +85,7 @@
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(1);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -93,7 +98,6 @@
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.chkAllSubDir);
             this.splitContainer1.Panel1.Controls.Add(this.chkShowSame);
-            this.splitContainer1.Panel1.Controls.Add(this.labStatus);
             this.splitContainer1.Panel1.Controls.Add(this.label1);
             this.splitContainer1.Panel1.Controls.Add(this.chkSha1);
             this.splitContainer1.Panel1.Controls.Add(this.btnSelectFiles);
@@ -101,7 +105,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgvFiles);
-            this.splitContainer1.Size = new System.Drawing.Size(786, 418);
+            this.splitContainer1.Size = new System.Drawing.Size(786, 463);
             this.splitContainer1.SplitterDistance = 118;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
@@ -112,7 +116,7 @@
             this.chkToFile.AutoSize = true;
             this.chkToFile.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.chkToFile.ForeColor = System.Drawing.Color.DarkRed;
-            this.chkToFile.Location = new System.Drawing.Point(6, 180);
+            this.chkToFile.Location = new System.Drawing.Point(6, 119);
             this.chkToFile.Name = "chkToFile";
             this.chkToFile.Size = new System.Drawing.Size(102, 16);
             this.chkToFile.TabIndex = 8;
@@ -130,7 +134,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(9, 389);
+            this.button1.Location = new System.Drawing.Point(9, 306);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(89, 23);
             this.button1.TabIndex = 7;
@@ -140,7 +144,7 @@
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(9, 360);
+            this.btnClear.Location = new System.Drawing.Point(9, 277);
             this.btnClear.Name = "btnClear";
             this.btnClear.Size = new System.Drawing.Size(89, 23);
             this.btnClear.TabIndex = 7;
@@ -172,7 +176,7 @@
             // chkShowSame
             // 
             this.chkShowSame.AutoSize = true;
-            this.chkShowSame.Location = new System.Drawing.Point(6, 256);
+            this.chkShowSame.Location = new System.Drawing.Point(6, 195);
             this.chkShowSame.Name = "chkShowSame";
             this.chkShowSame.Size = new System.Drawing.Size(108, 16);
             this.chkShowSame.TabIndex = 3;
@@ -184,16 +188,17 @@
             // 
             this.labStatus.AutoSize = true;
             this.labStatus.ForeColor = System.Drawing.Color.Red;
-            this.labStatus.Location = new System.Drawing.Point(7, 325);
+            this.labStatus.Location = new System.Drawing.Point(7, 7);
             this.labStatus.Name = "labStatus";
-            this.labStatus.Size = new System.Drawing.Size(0, 12);
+            this.labStatus.Size = new System.Drawing.Size(41, 12);
             this.labStatus.TabIndex = 2;
+            this.labStatus.Text = "状态条";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(7, 234);
+            this.label1.Location = new System.Drawing.Point(7, 173);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 12);
             this.label1.TabIndex = 2;
@@ -211,7 +216,7 @@
             // 
             // btnSelectFiles
             // 
-            this.btnSelectFiles.Location = new System.Drawing.Point(6, 202);
+            this.btnSelectFiles.Location = new System.Drawing.Point(6, 141);
             this.btnSelectFiles.Name = "btnSelectFiles";
             this.btnSelectFiles.Size = new System.Drawing.Size(92, 23);
             this.btnSelectFiles.TabIndex = 0;
@@ -230,7 +235,7 @@
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowTemplate.Height = 23;
-            this.dgvFiles.Size = new System.Drawing.Size(667, 418);
+            this.dgvFiles.Size = new System.Drawing.Size(667, 463);
             this.dgvFiles.TabIndex = 8;
             this.dgvFiles.TabStop = false;
             // 
@@ -244,12 +249,34 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(1);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.splitContainer1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.labStatus);
+            this.splitContainer2.Size = new System.Drawing.Size(786, 492);
+            this.splitContainer2.SplitterDistance = 463;
+            this.splitContainer2.SplitterWidth = 1;
+            this.splitContainer2.TabIndex = 0;
+            this.splitContainer2.TabStop = false;
+            // 
             // FileHashForm
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 524);
             this.Controls.Add(this.tabControl1);
             this.Name = "FileHashForm";
             this.Text = "FileHashForm";
@@ -263,6 +290,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -285,5 +317,6 @@
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox chkToFile;
+        private System.Windows.Forms.SplitContainer splitContainer2;
     }
 }

@@ -30,6 +30,7 @@ namespace Beinet.cn.Tools.FileHash
                 return;
 
             var countDir = dialog.SelectedPath;
+            labStatus.Text = countDir;
 
             if (chkToFile.Checked)
             {
@@ -78,6 +79,7 @@ namespace Beinet.cn.Tools.FileHash
             }
 
             var files = GetFiles(fileOrDirs);
+            labStatus.Text = files[0] + "...";
             DoCount(files);
         }
 
@@ -133,9 +135,10 @@ namespace Beinet.cn.Tools.FileHash
                     Thread.Sleep(1000);
                 }
 
-                var msg =
-                    $"完成耗时:{(thread.EndTime - thread.StartTime).TotalSeconds.ToString("N0")}秒\r\n共{thread.ProcessCount.ToString("N0")}个文件";
-                Utility.InvokeControl(labStatus, () => labStatus.Text = msg);
+                var now = DateTime.Now.ToString("HH:mm:ss");
+                var costTime = (thread.EndTime - thread.StartTime).TotalSeconds.ToString("N0");
+                var msg = $"-{now} 完成耗时:{costTime}秒，共{thread.ProcessCount.ToString("N0")}个文件";
+                Utility.InvokeControl(labStatus, () => labStatus.Text += msg);
 
                 Utility.BindToDataGrid(dgvFiles, md5Datas);
 
