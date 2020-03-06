@@ -30,6 +30,21 @@ namespace Beinet.cn.Tools.FileHash
                 return;
 
             var countDir = dialog.SelectedPath;
+
+            if (chkToFile.Checked)
+            {
+                var sfd = new SaveFileDialog();
+                var result = sfd.ShowDialog(this);
+                if (result != DialogResult.OK)
+                {
+                    return;
+                }
+
+                HashUtil.HashAndSaveToFile(countDir, chkSha1.Checked, chkAllSubDir.Checked, sfd.FileName);
+                Process.Start("explorer.exe", "/select," + sfd.FileName);
+                return;
+            }
+
             var option = chkAllSubDir.Checked ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
             var files = Directory.GetFiles(countDir, "*", option);
             DoCount(files);

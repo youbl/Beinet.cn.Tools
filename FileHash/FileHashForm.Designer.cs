@@ -31,18 +31,19 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.chkToFile = new System.Windows.Forms.CheckBox();
             this.txtThreadNum = new System.Windows.Forms.TextBox();
+            this.button1 = new System.Windows.Forms.Button();
+            this.btnClear = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.chkAllSubDir = new System.Windows.Forms.CheckBox();
             this.chkShowSame = new System.Windows.Forms.CheckBox();
+            this.labStatus = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.chkSha1 = new System.Windows.Forms.CheckBox();
             this.btnSelectFiles = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.labStatus = new System.Windows.Forms.Label();
-            this.btnClear = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -85,9 +86,10 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.chkToFile);
+            this.splitContainer1.Panel1.Controls.Add(this.txtThreadNum);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
             this.splitContainer1.Panel1.Controls.Add(this.btnClear);
-            this.splitContainer1.Panel1.Controls.Add(this.txtThreadNum);
             this.splitContainer1.Panel1.Controls.Add(this.label2);
             this.splitContainer1.Panel1.Controls.Add(this.chkAllSubDir);
             this.splitContainer1.Panel1.Controls.Add(this.chkShowSame);
@@ -105,14 +107,46 @@
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
             // 
+            // chkToFile
+            // 
+            this.chkToFile.AutoSize = true;
+            this.chkToFile.Font = new System.Drawing.Font("宋体", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.chkToFile.ForeColor = System.Drawing.Color.DarkRed;
+            this.chkToFile.Location = new System.Drawing.Point(6, 180);
+            this.chkToFile.Name = "chkToFile";
+            this.chkToFile.Size = new System.Drawing.Size(102, 16);
+            this.chkToFile.TabIndex = 8;
+            this.chkToFile.Text = "结果存入文件";
+            this.chkToFile.UseVisualStyleBackColor = true;
+            // 
             // txtThreadNum
             // 
-            this.txtThreadNum.Location = new System.Drawing.Point(57, 73);
+            this.txtThreadNum.Location = new System.Drawing.Point(49, 73);
             this.txtThreadNum.Name = "txtThreadNum";
-            this.txtThreadNum.Size = new System.Drawing.Size(41, 21);
+            this.txtThreadNum.Size = new System.Drawing.Size(59, 21);
             this.txtThreadNum.TabIndex = 6;
             this.txtThreadNum.Text = "5";
             this.txtThreadNum.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(9, 389);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(89, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "列表导出...";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // btnClear
+            // 
+            this.btnClear.Location = new System.Drawing.Point(9, 360);
+            this.btnClear.Name = "btnClear";
+            this.btnClear.Size = new System.Drawing.Size(89, 23);
+            this.btnClear.TabIndex = 7;
+            this.btnClear.Text = "清空列表";
+            this.btnClear.UseVisualStyleBackColor = true;
+            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
             // 
             // label2
             // 
@@ -138,7 +172,7 @@
             // chkShowSame
             // 
             this.chkShowSame.AutoSize = true;
-            this.chkShowSame.Location = new System.Drawing.Point(6, 164);
+            this.chkShowSame.Location = new System.Drawing.Point(6, 256);
             this.chkShowSame.Name = "chkShowSame";
             this.chkShowSame.Size = new System.Drawing.Size(108, 16);
             this.chkShowSame.TabIndex = 3;
@@ -146,11 +180,20 @@
             this.chkShowSame.UseVisualStyleBackColor = true;
             this.chkShowSame.CheckedChanged += new System.EventHandler(this.chkShowSame_CheckedChanged);
             // 
+            // labStatus
+            // 
+            this.labStatus.AutoSize = true;
+            this.labStatus.ForeColor = System.Drawing.Color.Red;
+            this.labStatus.Location = new System.Drawing.Point(7, 325);
+            this.labStatus.Name = "labStatus";
+            this.labStatus.Size = new System.Drawing.Size(0, 12);
+            this.labStatus.TabIndex = 2;
+            // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.ForeColor = System.Drawing.Color.Red;
-            this.label1.Location = new System.Drawing.Point(7, 142);
+            this.label1.Location = new System.Drawing.Point(7, 234);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(101, 12);
             this.label1.TabIndex = 2;
@@ -168,7 +211,7 @@
             // 
             // btnSelectFiles
             // 
-            this.btnSelectFiles.Location = new System.Drawing.Point(6, 110);
+            this.btnSelectFiles.Location = new System.Drawing.Point(6, 202);
             this.btnSelectFiles.Name = "btnSelectFiles";
             this.btnSelectFiles.Size = new System.Drawing.Size(92, 23);
             this.btnSelectFiles.TabIndex = 0;
@@ -200,35 +243,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // labStatus
-            // 
-            this.labStatus.AutoSize = true;
-            this.labStatus.ForeColor = System.Drawing.Color.Red;
-            this.labStatus.Location = new System.Drawing.Point(7, 325);
-            this.labStatus.Name = "labStatus";
-            this.labStatus.Size = new System.Drawing.Size(0, 12);
-            this.labStatus.TabIndex = 2;
-            // 
-            // btnClear
-            // 
-            this.btnClear.Location = new System.Drawing.Point(9, 360);
-            this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(89, 23);
-            this.btnClear.TabIndex = 7;
-            this.btnClear.Text = "清空列表";
-            this.btnClear.UseVisualStyleBackColor = true;
-            this.btnClear.Click += new System.EventHandler(this.btnClear_Click);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(9, 389);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(89, 23);
-            this.button1.TabIndex = 7;
-            this.button1.Text = "列表导出...";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // FileHashForm
             // 
@@ -270,5 +284,6 @@
         private System.Windows.Forms.Label labStatus;
         private System.Windows.Forms.Button btnClear;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.CheckBox chkToFile;
     }
 }

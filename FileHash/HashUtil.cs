@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using Beinet.cn.Tools.Util;
 
@@ -20,7 +21,7 @@ namespace Beinet.cn.Tools.FileHash
             var ret = new string[3];
 
             SHA1CryptoServiceProvider getSha1 = null;
-            if(countSha1)
+            if (countSha1)
                 getSha1 = new SHA1CryptoServiceProvider();
 
             using (getSha1)
@@ -51,7 +52,7 @@ namespace Beinet.cn.Tools.FileHash
         public static Dictionary<string, string[]> CountDirMD5(string dir, bool countSha1, bool containSubDir)
         {
             var ret = new Dictionary<string, string[]>();
-            
+
             var files = Directory.GetFiles(dir, "*", SearchOption.TopDirectoryOnly);
             foreach (var file in files)
             {
@@ -72,5 +73,107 @@ namespace Beinet.cn.Tools.FileHash
         }
 
 
+        private static int _fileCnt = 0;
+        public static void HashAndSaveToFile(string dir, bool countSha1, bool containSubDir, string saveFile)//, int threadNum
+        {
+            // var arrHandler = new HashFileClass[threadNum];
+            // for (var i = 0; i < threadNum; i++)
+            // {
+            //     arrHandler[i] = new HashFileClass(i, countSha1);
+            // }
+
+            _fileCnt = 0;
+            using (var sw = new StreamWriter(saveFile, true, Encoding.UTF8))
+            {
+                string errFile = null;
+                try
+                {
+                    var files = Directory.GetFiles(dir, "*", SearchOption.TopDirectoryOnly);
+                    foreach (var file in files)
+                    {
+                        errFile = file;
+                        var result = CountMD5(file, countSha1);
+                        sw.Write("{0},{1},{2},{3}\r\n", file, result[0], result[1], result[2]);
+                        _fileCnt++;
+                        if(_fileCnt % 1000 == 0)
+                            sw.Flush();
+                    }
+                }
+                catch(Exception exp)
+                {
+                    Error(dir + ":" + errFile + ":" + exp);
+                }
+            }
+
+            try
+            {
+                var subdirs = Directory.GetDirectories(dir, "*", SearchOption.TopDirectoryOnly);
+                foreach (var subdir in subdirs)
+                {
+                    HashAndSaveToFile(subdir, countSha1, containSubDir, saveFile);
+                }
+            }
+            catch (Exception exp)
+            {
+                Error(dir + ":::" + exp);
+            }
+        }
+
+        static void Error(string exp)
+        {
+            var errFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "err.txt");
+            using (var sw = new StreamWriter(errFile, true, Encoding.UTF8))
+            {
+                sw.WriteLine("{0} {1}", DateTime.Now, exp);
+            }
+        }
+
+        // class HashFileClass
+        // {
+        //     SemaphoreSlim _semaphore = new SemaphoreSlim(1, 1);
+        //     private bool _countSha1;
+        //     private StringBuilder _sb = new StringBuilder();
+        //
+        //
+        //     private string _file;
+        //
+        //     private int _count;
+        //     public int Count { get => _count; }
+        //
+        //     public HashFileClass(int idx, bool countSha1)
+        //     {
+        //         _countSha1 = countSha1;
+        //
+        //         _file = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, $"{idx}.csv");
+        //     }
+        //     public void Process(string file)
+        //     {
+        //         _semaphore.Wait();
+        //         try
+        //         {
+        //             var cnt = Interlocked.Increment(ref _count);
+        //             var result = CountMD5(file, _countSha1);
+        //             _sb.AppendFormat("{0},{1},{2},{3}\r\n", file, result[0], result[1], result[2]);
+        //
+        //             if(cnt % 100 == 0)
+        //                 Save();
+        //         }
+        //         finally
+        //         {
+        //             _semaphore.Release();
+        //         }
+        //     }
+        //
+        //     void Save()
+        //     {
+        //         string tmp = _sb.ToString();
+        //         _sb.Clear();
+        //
+        //         using (var sw = new StreamWriter(_file, true, Encoding.UTF8))
+        //         {
+        //             sw.WriteLine(tmp);
+        //         }
+        //     }
+        // }
     }
 }
