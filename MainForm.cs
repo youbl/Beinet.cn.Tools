@@ -32,7 +32,7 @@ namespace Beinet.cn.Tools
 
             #region 添加TabPage跟窗体类型的对应关系
             AddTabPage("tabGZip", typeof(GzipTest), "GZip");
-            AddTabPage("tabMd5File", typeof(FileHash.FileHash), "文件MD5");
+            AddTabPage("tabMd5File", typeof(FileHash.FileHashForm), "文件MD5");
             AddTabPage("tabSqlInject", typeof(SqlInjectForm.SqlInject), "查SQL拼接");
             AddTabPage("tabLvs", typeof(LvsManager.LVSControl), "上下线");
             AddTabPage("tabEncrypt", typeof(CryptTool), "加解密");

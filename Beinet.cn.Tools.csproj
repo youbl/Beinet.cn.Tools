@@ -451,6 +451,7 @@
       <DependentUpon>IIStool.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
+    <Compile Include="Util\MultiThread.cs" />
     <Compile Include="Util\PromptWin.cs">
       <SubType>Form</SubType>
     </Compile>
