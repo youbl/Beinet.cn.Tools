@@ -167,16 +167,10 @@ namespace Beinet.cn.Tools.FileHash
                 }
                 if (File.Exists(file))
                 {
-                    string md5, sha1;
-                    using (MD5CryptoServiceProvider get_md5 = new MD5CryptoServiceProvider())
-                    using (SHA1CryptoServiceProvider get_sha1 = new SHA1CryptoServiceProvider())
-                    using (FileStream get_file = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        get_file.Seek(0, SeekOrigin.Begin);
-                        md5 = BitConverter.ToString(get_md5.ComputeHash(get_file)).Replace("-", "");
-                        get_file.Seek(0, SeekOrigin.Begin);
-                        sha1 = BitConverter.ToString(get_sha1.ComputeHash(get_file)).Replace("-", "");
-                    }
+                    var arr = HashUtil.CountMD5(file, true);
+                    string md5 = arr[0];
+                    var sha1 = arr[1];
+
                     string file1 = file.Replace(root, "");
                     if (chkSameFile.Checked)
                     {

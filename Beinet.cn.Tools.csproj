@@ -84,6 +84,13 @@
     <Compile Include="FileHash\FileHashConfig.designer.cs">
       <DependentUpon>FileHashConfig.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileHash\FileHashForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FileHash\FileHashForm.Designer.cs">
+      <DependentUpon>FileHashForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FileHash\HashUtil.cs" />
     <Compile Include="Gitlab\GitlabForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -506,6 +513,9 @@
     </Compile>
     <EmbeddedResource Include="FileHash\FileHashConfig.resx">
       <DependentUpon>FileHashConfig.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileHash\FileHashForm.resx">
+      <DependentUpon>FileHashForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Gitlab\GitlabForm.resx">
       <DependentUpon>GitlabForm.cs</DependentUpon>
