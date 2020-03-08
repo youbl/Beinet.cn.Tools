@@ -30,6 +30,7 @@
         {
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.chkToFile = new System.Windows.Forms.CheckBox();
             this.txtThreadNum = new System.Windows.Forms.TextBox();
@@ -38,24 +39,24 @@
             this.label2 = new System.Windows.Forms.Label();
             this.chkAllSubDir = new System.Windows.Forms.CheckBox();
             this.chkShowSame = new System.Windows.Forms.CheckBox();
-            this.labStatus = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.chkSha1 = new System.Windows.Forms.CheckBox();
             this.btnSelectFiles = new System.Windows.Forms.Button();
             this.dgvFiles = new System.Windows.Forms.DataGridView();
+            this.labStatus = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.btnShowResult = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -81,6 +82,28 @@
             this.tabPage1.Text = "本地文件MD5";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Margin = new System.Windows.Forms.Padding(1);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.splitContainer1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.labStatus);
+            this.splitContainer2.Size = new System.Drawing.Size(786, 492);
+            this.splitContainer2.SplitterDistance = 466;
+            this.splitContainer2.SplitterWidth = 1;
+            this.splitContainer2.TabIndex = 0;
+            this.splitContainer2.TabStop = false;
+            // 
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -91,6 +114,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnShowResult);
             this.splitContainer1.Panel1.Controls.Add(this.chkToFile);
             this.splitContainer1.Panel1.Controls.Add(this.txtThreadNum);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
@@ -105,7 +129,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.dgvFiles);
-            this.splitContainer1.Size = new System.Drawing.Size(786, 463);
+            this.splitContainer1.Size = new System.Drawing.Size(786, 466);
             this.splitContainer1.SplitterDistance = 118;
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
@@ -184,16 +208,6 @@
             this.chkShowSame.UseVisualStyleBackColor = true;
             this.chkShowSame.CheckedChanged += new System.EventHandler(this.chkShowSame_CheckedChanged);
             // 
-            // labStatus
-            // 
-            this.labStatus.AutoSize = true;
-            this.labStatus.ForeColor = System.Drawing.Color.Red;
-            this.labStatus.Location = new System.Drawing.Point(7, 7);
-            this.labStatus.Name = "labStatus";
-            this.labStatus.Size = new System.Drawing.Size(41, 12);
-            this.labStatus.TabIndex = 2;
-            this.labStatus.Text = "状态条";
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -235,41 +249,39 @@
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowTemplate.Height = 23;
-            this.dgvFiles.Size = new System.Drawing.Size(667, 463);
+            this.dgvFiles.Size = new System.Drawing.Size(667, 466);
             this.dgvFiles.TabIndex = 8;
             this.dgvFiles.TabStop = false;
+            // 
+            // labStatus
+            // 
+            this.labStatus.AutoSize = true;
+            this.labStatus.ForeColor = System.Drawing.Color.Red;
+            this.labStatus.Location = new System.Drawing.Point(7, 7);
+            this.labStatus.Name = "labStatus";
+            this.labStatus.Size = new System.Drawing.Size(41, 12);
+            this.labStatus.TabIndex = 2;
+            this.labStatus.Text = "状态条";
             // 
             // tabPage2
             // 
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 424);
+            this.tabPage2.Size = new System.Drawing.Size(792, 498);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // splitContainer2
+            // btnShowResult
             // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
-            this.splitContainer2.Margin = new System.Windows.Forms.Padding(1);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.splitContainer1);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.labStatus);
-            this.splitContainer2.Size = new System.Drawing.Size(786, 492);
-            this.splitContainer2.SplitterDistance = 463;
-            this.splitContainer2.SplitterWidth = 1;
-            this.splitContainer2.TabIndex = 0;
-            this.splitContainer2.TabStop = false;
+            this.btnShowResult.Location = new System.Drawing.Point(7, 434);
+            this.btnShowResult.Name = "btnShowResult";
+            this.btnShowResult.Size = new System.Drawing.Size(104, 23);
+            this.btnShowResult.TabIndex = 9;
+            this.btnShowResult.Text = "加载保存的结果..";
+            this.btnShowResult.UseVisualStyleBackColor = true;
+            this.btnShowResult.Click += new System.EventHandler(this.BtnShowResult_Click);
             // 
             // FileHashForm
             // 
@@ -284,17 +296,17 @@
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.FileHashForm_DragEnter);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel1.PerformLayout();
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dgvFiles)).EndInit();
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            this.splitContainer2.Panel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -318,5 +330,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.CheckBox chkToFile;
         private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.Button btnShowResult;
     }
 }

@@ -14,6 +14,7 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Xml;
 using System.Drawing;
+using System.Linq;
 using System.Net.Security;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
@@ -121,12 +122,14 @@ namespace Beinet.cn.Tools
         }
 
 
-        public static void BindToDataGrid(DataGridView dgv, List<string[]> arrData, List<int> rowColor = null)
+        public static void BindToDataGrid(DataGridView dgv, IEnumerable<string[]> arrShowData, List<int> rowColor = null)
         {
-            if (arrData == null || arrData.Count <= 0)
+            if (arrShowData == null)
             {
                 return;
             }
+
+            var arrData = arrShowData.ToList();
             // 用于隔行变色
             Color[] rowBack = { Color.AliceBlue, Color.AntiqueWhite };
             int idx = 0;

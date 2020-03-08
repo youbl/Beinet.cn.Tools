@@ -197,6 +197,7 @@ namespace Beinet.cn.Tools.FileHash
             dgvFiles.Rows.Clear();
         }
 
+        // 导出列表
         private void button1_Click(object sender, EventArgs e)
         {
             if (dgvFiles.Rows.Count <= 0)
@@ -253,7 +254,8 @@ namespace Beinet.cn.Tools.FileHash
             }
 
             // 不重复的行号倒序排列，然后移除
-            var removeIdxs = collect.Where(item => item.Value.num == 1).Select(item=>item.Value.Rownum[0]).OrderByDescending(item => item);
+            var removeIdxs = collect.Where(item => item.Value.num == 1).Select(item => item.Value.Rownum[0])
+                .OrderByDescending(item => item);
             foreach (var rowIdx in removeIdxs)
             {
                 dgvFiles.Rows.RemoveAt(rowIdx);
@@ -269,10 +271,114 @@ namespace Beinet.cn.Tools.FileHash
             /// key相同数
             /// </summary>
             public int num { get; set; }
+
             /// <summary>
             /// 行号
             /// </summary>
             public List<int> Rownum { get; set; } = new List<int>();
+        }
+
+        private void BtnShowResult_Click(object sender, EventArgs e)
+        {
+            var ofd = new OpenFileDialog();
+            ofd.Multiselect = true;
+            var result = ofd.ShowDialog(this);
+            if (result != DialogResult.OK)
+            {
+                return;
+            }
+            AddCol();
+
+            ThreadPool.UnsafeQueueUserWorkItem(state =>
+            {
+                try
+                {
+                    // 相同的md5及行号列表
+                    var allMd5s = new List<string[]>();
+                    var collect = new Dictionary<string, SameFileHash>();
+                    string[] files = (string[]) state;
+                    var idx = 0;
+                    foreach (var file in files)
+                    {
+                        using (var sr = new StreamReader(file, Encoding.UTF8))
+                        {
+                            while (!sr.EndOfStream)
+                            {
+                                var line = sr.ReadLine();
+                                var arrLine = SplitLine(line);
+                                if (arrLine == null)
+                                    continue;
+
+                                allMd5s.Add(arrLine);
+
+                                var key = arrLine[1] + "|" + arrLine[3];
+                                if (!collect.TryGetValue(key, out var num))
+                                {
+                                    num = new SameFileHash();
+                                    collect.Add(key, num);
+                                }
+
+                                num.num++;
+                                num.Rownum.Add(idx);
+                                idx++;
+                            }
+                        }
+                    }
+
+                    // 不重复的行号倒序排列，然后移除
+                    var removeIdxs = collect.Where(item => item.Value.num == 1).Select(item => item.Value.Rownum[0])
+                        .OrderByDescending(item => item);
+                    foreach (var rowIdx in removeIdxs)
+                    {
+                        allMd5s.RemoveAt(rowIdx);
+                    }
+
+                    if (allMd5s.Count <= 0)
+                    {
+                        MessageBox.Show("未找到重复项");
+                        return;
+                    }
+
+                    // 按MD5进行排序
+                    var sortArr = allMd5s.OrderBy(item => item[1]).ThenBy(item => item[0]);
+                    Utility.BindToDataGrid(dgvFiles, sortArr);
+
+                    // MessageBox.Show("任务完成");
+                    labStatus.Text = $"找到{allMd5s.Count}条重复记录";
+                }
+                catch (Exception exp)
+                {
+                    MessageBox.Show(exp.ToString());
+                }
+
+            }, ofd.FileNames);
+        }
+
+        string[] SplitLine(string line)
+        {
+            if (line == null || (line = line.Trim()).Length <= 0)
+                return null;
+            var arrIdx = new List<int>();
+            var idx = 0;
+            do
+            {
+                idx = line.IndexOf(',', idx + 1);
+                if (idx <= 0)
+                    break;
+                arrIdx.Add(idx);
+            } while (true);
+
+            var len = arrIdx.Count;
+            if (len < 3)
+                return null;
+
+            var ret = new string[4];
+            ret[3] = line.Substring(arrIdx[len - 1] + 1);
+
+            ret[2] = line.Substring(arrIdx[len - 2] + 1, arrIdx[len - 1] - arrIdx[len - 2] - 1);
+            ret[1] = line.Substring(arrIdx[len - 3] + 1, arrIdx[len - 2] - arrIdx[len - 3] - 1);
+            ret[0] = line.Substring(0, arrIdx[len - 3]);
+            return ret;
         }
     }
 }

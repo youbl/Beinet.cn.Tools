@@ -124,7 +124,7 @@ namespace Beinet.cn.Tools.FileHash
             var errFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "err.txt");
             using (var sw = new StreamWriter(errFile, true, Encoding.UTF8))
             {
-                sw.WriteLine("{0} {1}", DateTime.Now, exp);
+                sw.WriteLine("{0} {1}\r\n", DateTime.Now, exp);
             }
         }
 
