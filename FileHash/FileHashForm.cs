@@ -119,7 +119,7 @@ namespace Beinet.cn.Tools.FileHash
 
                     if (showDatas != null)
                     {
-                        Utility.BindToDataGrid(dgvFiles, showDatas);
+                        BindGrid(showDatas);
                     }
                 }, threadNum);
 
@@ -140,7 +140,7 @@ namespace Beinet.cn.Tools.FileHash
                 var msg = $"-{now} 完成耗时:{costTime}秒，共{thread.ProcessCount.ToString("N0")}个文件";
                 Utility.InvokeControl(labStatus, () => labStatus.Text += msg);
 
-                Utility.BindToDataGrid(dgvFiles, md5Datas);
+                BindGrid(md5Datas);
 
             }, null);
         }
@@ -170,23 +170,54 @@ namespace Beinet.cn.Tools.FileHash
 
             DataGridViewColumn column;
             column = new DataGridViewTextBoxColumn();
+            column.HeaderText = "目录名";
+            column.Width = 400;
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
             column.HeaderText = "文件名";
-            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            column.Width = 100;
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             dgv.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.HeaderText = "本地MD5";
-            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             dgv.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.HeaderText = "本地SHA1";
-            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             dgv.Columns.Add(column);
 
             column = new DataGridViewTextBoxColumn();
             column.HeaderText = "文件大小";
-            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.DisplayedCells;
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewLinkColumn();
+            column.HeaderText = "";
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            column.Width = 60;
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewLinkColumn();
+            column.HeaderText = "";
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            column.Width = 60;
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewLinkColumn();
+            column.HeaderText = "";
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            column.Width = 60;
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewLinkColumn();
+            column.HeaderText = "";
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            column.Width = 70;
             dgv.Columns.Add(column);
 
             //dgv.AutoSize = true;
@@ -217,12 +248,12 @@ namespace Beinet.cn.Tools.FileHash
             {
                 foreach (DataGridViewRow row in dgvFiles.Rows)
                 {
-                    foreach (DataGridViewCell cell in row.Cells)
-                    {
-                        sw.Write(cell.Value + ",");
-                    }
-
-                    sw.WriteLine();
+                    sw.WriteLine("{0}\\{1},{2},{3},{4}",
+                        row.Cells[0].Value, 
+                        row.Cells[1].Value,
+                        row.Cells[2].Value,
+                        row.Cells[3].Value,
+                        row.Cells[4].Value);
                 }
             }
 
@@ -287,6 +318,7 @@ namespace Beinet.cn.Tools.FileHash
             {
                 return;
             }
+
             AddCol();
 
             ThreadPool.UnsafeQueueUserWorkItem(state =>
@@ -339,12 +371,13 @@ namespace Beinet.cn.Tools.FileHash
                         return;
                     }
 
-                    // 按MD5进行排序
-                    var sortArr = allMd5s.OrderBy(item => item[1]).ThenBy(item => item[0]);
-                    Utility.BindToDataGrid(dgvFiles, sortArr);
+                    // 按大小进行排序
+                    var sortArr = allMd5s.OrderByDescending(item => long.Parse(item[3])); //.ThenBy(item => item[0]);
+                    BindGrid(sortArr);
 
                     // MessageBox.Show("任务完成");
-                    labStatus.Text = $"找到{allMd5s.Count}条重复记录";
+                    Utility.InvokeControl(labStatus, () => labStatus.Text = $"找到{allMd5s.Count}条重复记录");
+
                 }
                 catch (Exception exp)
                 {
@@ -363,7 +396,7 @@ namespace Beinet.cn.Tools.FileHash
             do
             {
                 idx = line.IndexOf(',', idx + 1);
-                if (idx <= 0)
+                if (idx <= 0 || idx >= line.Length - 1)
                     break;
                 arrIdx.Add(idx);
             } while (true);
@@ -373,12 +406,100 @@ namespace Beinet.cn.Tools.FileHash
                 return null;
 
             var ret = new string[4];
-            ret[3] = line.Substring(arrIdx[len - 1] + 1);
+            ret[3] = line.Substring(arrIdx[len - 1] + 1).Trim(',');
 
             ret[2] = line.Substring(arrIdx[len - 2] + 1, arrIdx[len - 1] - arrIdx[len - 2] - 1);
             ret[1] = line.Substring(arrIdx[len - 3] + 1, arrIdx[len - 2] - arrIdx[len - 3] - 1);
             ret[0] = line.Substring(0, arrIdx[len - 3]);
             return ret;
+        }
+
+        void BindGrid(IEnumerable<string[]> arrData)
+        {
+            if (arrData == null)
+                return;
+            var arrBind = new List<string[]>();
+            foreach (var row in arrData)
+            {
+                var dir = Path.GetDirectoryName(row[0]);
+                var file = Path.GetFileName(row[0]);
+                var newrow = new string[]
+                {
+                    dir,
+                    file,
+                    row[1],
+                    row[2],
+                    row[3],
+                    "打开目录",
+                    "打开文件",
+                    "删除文件",
+                    "删除当前行"
+                };
+                arrBind.Add(newrow);
+            }
+
+            Utility.BindToDataGrid(dgvFiles, arrBind);
+        }
+
+        private void DgvFiles_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+                return;
+
+            var dir = Convert.ToString(dgvFiles.Rows[e.RowIndex].Cells[0].Value);
+            var file = dir + "\\" + Convert.ToString(dgvFiles.Rows[e.RowIndex].Cells[1].Value);
+            switch (e.ColumnIndex)
+            {
+                case 5:
+                    // 打开目录
+                    if (dir.Length > 0)
+                    {
+                        if (File.Exists(file))
+                            Process.Start("explorer.exe", "/select," + file);
+                        else if (Directory.Exists(dir))
+                            Process.Start("explorer.exe", "/select," + dir);
+                        else
+                            MessageBox.Show($"不存在:{file}");
+                    }
+
+                    break;
+                case 6:
+                    if (dir.Length > 0)
+                    {
+                        if (File.Exists(file))
+                            Process.Start(file);
+                        else
+                            MessageBox.Show($"不存在:{file}");
+                    }
+
+                    break;
+                case 7:
+                    if (dir.Length > 0)
+                    {
+                        if (File.Exists(file))
+                        {
+                            File.Delete(file);
+                            labStatus.Text = $"{file} 已删除";
+                        }
+                        else
+                            MessageBox.Show($"不存在:{file}");
+                    }
+
+                    break;
+                case 8:
+                    dgvFiles.Rows.RemoveAt(e.RowIndex);
+                    break;
+            }
+        }
+
+        private void DgvFiles_MouseHover(object sender, EventArgs e)
+        {
+            // Point mousePos = dgvFiles.PointToClient(MousePosition);
+            // var hit = dgvFiles.HitTest(mousePos.X, mousePos.Y);
+            // if (hit.Type == DataGridViewHitTestType.Cell)
+            // {
+            //     dgvFiles.Rows[hit.RowIndex].Selected = true;
+            // }
         }
     }
 }

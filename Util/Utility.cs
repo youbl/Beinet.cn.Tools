@@ -122,14 +122,12 @@ namespace Beinet.cn.Tools
         }
 
 
-        public static void BindToDataGrid(DataGridView dgv, IEnumerable<string[]> arrShowData, List<int> rowColor = null)
+        public static void BindToDataGrid(DataGridView dgv, List<string[]> arrData, List<int> rowColor = null)
         {
-            if (arrShowData == null)
+            if (arrData == null || arrData.Count <= 0)
             {
                 return;
             }
-
-            var arrData = arrShowData.ToList();
             // 用于隔行变色
             Color[] rowBack = { Color.AliceBlue, Color.AntiqueWhite };
             int idx = 0;

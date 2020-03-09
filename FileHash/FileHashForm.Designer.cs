@@ -32,6 +32,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.btnShowResult = new System.Windows.Forms.Button();
             this.chkToFile = new System.Windows.Forms.CheckBox();
             this.txtThreadNum = new System.Windows.Forms.TextBox();
             this.button1 = new System.Windows.Forms.Button();
@@ -45,7 +46,6 @@
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.labStatus = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.btnShowResult = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -134,6 +134,16 @@
             this.splitContainer1.SplitterWidth = 1;
             this.splitContainer1.TabIndex = 0;
             this.splitContainer1.TabStop = false;
+            // 
+            // btnShowResult
+            // 
+            this.btnShowResult.Location = new System.Drawing.Point(7, 434);
+            this.btnShowResult.Name = "btnShowResult";
+            this.btnShowResult.Size = new System.Drawing.Size(104, 23);
+            this.btnShowResult.TabIndex = 9;
+            this.btnShowResult.Text = "加载保存的结果..";
+            this.btnShowResult.UseVisualStyleBackColor = true;
+            this.btnShowResult.Click += new System.EventHandler(this.BtnShowResult_Click);
             // 
             // chkToFile
             // 
@@ -249,9 +259,12 @@
             this.dgvFiles.Name = "dgvFiles";
             this.dgvFiles.ReadOnly = true;
             this.dgvFiles.RowTemplate.Height = 23;
+            this.dgvFiles.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dgvFiles.Size = new System.Drawing.Size(667, 466);
             this.dgvFiles.TabIndex = 8;
             this.dgvFiles.TabStop = false;
+            this.dgvFiles.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.DgvFiles_CellContentClick);
+            this.dgvFiles.MouseHover += new System.EventHandler(this.DgvFiles_MouseHover);
             // 
             // labStatus
             // 
@@ -272,16 +285,6 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // btnShowResult
-            // 
-            this.btnShowResult.Location = new System.Drawing.Point(7, 434);
-            this.btnShowResult.Name = "btnShowResult";
-            this.btnShowResult.Size = new System.Drawing.Size(104, 23);
-            this.btnShowResult.TabIndex = 9;
-            this.btnShowResult.Text = "加载保存的结果..";
-            this.btnShowResult.UseVisualStyleBackColor = true;
-            this.btnShowResult.Click += new System.EventHandler(this.BtnShowResult_Click);
             // 
             // FileHashForm
             // 
