@@ -46,6 +46,7 @@
             this.dgvFiles = new System.Windows.Forms.DataGridView();
             this.labStatus = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.btnRemoveSame = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
@@ -114,6 +115,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.btnRemoveSame);
             this.splitContainer1.Panel1.Controls.Add(this.btnShowResult);
             this.splitContainer1.Panel1.Controls.Add(this.chkToFile);
             this.splitContainer1.Panel1.Controls.Add(this.txtThreadNum);
@@ -286,6 +288,16 @@
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // btnRemoveSame
+            // 
+            this.btnRemoveSame.Location = new System.Drawing.Point(7, 371);
+            this.btnRemoveSame.Name = "btnRemoveSame";
+            this.btnRemoveSame.Size = new System.Drawing.Size(104, 23);
+            this.btnRemoveSame.TabIndex = 9;
+            this.btnRemoveSame.Text = "删除重复文件..";
+            this.btnRemoveSame.UseVisualStyleBackColor = true;
+            this.btnRemoveSame.Click += new System.EventHandler(this.BtnRemoveSame_Click);
+            // 
             // FileHashForm
             // 
             this.AllowDrop = true;
@@ -334,5 +346,6 @@
         private System.Windows.Forms.CheckBox chkToFile;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.Button btnShowResult;
+        private System.Windows.Forms.Button btnRemoveSame;
     }
 }

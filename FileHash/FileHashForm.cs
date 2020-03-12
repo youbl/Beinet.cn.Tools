@@ -501,5 +501,48 @@ namespace Beinet.cn.Tools.FileHash
             //     dgvFiles.Rows[hit.RowIndex].Selected = true;
             // }
         }
+
+        private void BtnRemoveSame_Click(object sender, EventArgs e)
+        {
+            var dialog = new FolderBrowserDialog();
+            dialog.RootFolder = Environment.SpecialFolder.MyComputer;
+            if (dialog.ShowDialog() != DialogResult.OK)
+                return;
+
+            var countDir = dialog.SelectedPath;
+
+            MessageBox.Show($"此操作会删除目录{countDir}下的重复文件，只保留第一个");
+            var result = MessageBox.Show("你确认要继续吗？", "", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning,
+                MessageBoxDefaultButton.Button2);
+            if (result != DialogResult.OK)
+                return;
+
+            labStatus.Text = countDir;
+
+            var delCnt = 0;
+            var allCnt = 0;
+            var logfile = Path.Combine(Utility.Dir, "delfile.log");
+            using (var sw = new StreamWriter(logfile, true, Encoding.UTF8))
+            {
+                sw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} 开始");
+                var allFiles = Directory.GetFiles(countDir, "*", SearchOption.AllDirectories);
+                var allHash = new HashSet<string>();
+                sw.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} 取得文件数{allFiles.Length.ToString()}，开始遍历");
+                foreach (var file in allFiles)
+                {
+                    allCnt++;
+                    var hash = HashUtil.CountMD5(file, false);
+                    var key = hash[0] + "-" + hash[2]; // MD5+大小作为key
+                    if (!allHash.Add(key))
+                    {
+                        File.Delete(file);
+                        delCnt++;
+                        sw.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} 删除{file}，已删除{delCnt}/{allCnt}个");
+                    }
+                }
+                sw.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} 完成退出");
+            }
+            MessageBox.Show($"删除操作完成，已删除{delCnt}/{allCnt}个");
+        }
     }
 }
