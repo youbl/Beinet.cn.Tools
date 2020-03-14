@@ -523,6 +523,7 @@ namespace Beinet.cn.Tools.FileHash
             var totalSize = 0L; // 总文件字节大小
             var delCnt = 0;     // 删除文件数
             var delSize = 0L;   // 删除总字节大小
+            var logCnt = 0;
             var logfile = Path.Combine(Utility.Dir, "delfile.log");
             using (var sw = new StreamWriter(logfile, true, Encoding.UTF8))
             {
@@ -546,10 +547,19 @@ namespace Beinet.cn.Tools.FileHash
                             DateTime.Now.ToString("HH:mm:ss.fff"), file, oldFile, 
                             delCnt.ToString(), allCnt.ToString(), delSize.ToString(), totalSize.ToString());
                         sw.Flush();
+                        logCnt = 0;
                     }
                     else
                     {
                         allHash.Add(key, file);
+                        logCnt++;
+                        if (logCnt % 1000 == 0)
+                        {
+                            sw.WriteLine("{0}\r\n当前{1}\r\n删除数{2}/{3} 删除字节{4}/{5}",
+                                DateTime.Now.ToString("HH:mm:ss.fff"), file, 
+                                delCnt.ToString(), allCnt.ToString(), delSize.ToString(), totalSize.ToString());
+                            sw.Flush();
+                        }
                     }
                 }
                 sw.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} 完成退出");
