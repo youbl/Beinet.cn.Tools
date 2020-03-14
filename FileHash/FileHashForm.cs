@@ -519,30 +519,42 @@ namespace Beinet.cn.Tools.FileHash
 
             labStatus.Text = countDir;
 
-            var delCnt = 0;
-            var allCnt = 0;
+            var allCnt = 0;     // 总文件数
+            var totalSize = 0L; // 总文件字节大小
+            var delCnt = 0;     // 删除文件数
+            var delSize = 0L;   // 删除总字节大小
             var logfile = Path.Combine(Utility.Dir, "delfile.log");
             using (var sw = new StreamWriter(logfile, true, Encoding.UTF8))
             {
                 sw.WriteLine($"{DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff")} 开始");
                 var allFiles = Directory.GetFiles(countDir, "*", SearchOption.AllDirectories);
-                var allHash = new HashSet<string>();
+                var allHash = new Dictionary<string, string>();
                 sw.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} 取得文件数{allFiles.Length.ToString()}，开始遍历");
                 foreach (var file in allFiles)
                 {
                     allCnt++;
                     var hash = HashUtil.CountMD5(file, false);
                     var key = hash[0] + "-" + hash[2]; // MD5+大小作为key
-                    if (!allHash.Add(key))
+                    long.TryParse(hash[2], out var size);
+                    totalSize += size;
+                    if (allHash.TryGetValue(key, out var oldFile))
                     {
                         File.Delete(file);
                         delCnt++;
-                        sw.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} 删除{file}，已删除{delCnt}/{allCnt}个");
+                        delSize += size;
+                        sw.WriteLine("{0}\r\n删除{1}\r\n相同{2}\r\n删除数{3}/{4} 删除字节{5}/{6}", 
+                            DateTime.Now.ToString("HH:mm:ss.fff"), file, oldFile, 
+                            delCnt.ToString(), allCnt.ToString(), delSize.ToString(), totalSize.ToString());
+                        sw.Flush();
+                    }
+                    else
+                    {
+                        allHash.Add(key, file);
                     }
                 }
                 sw.WriteLine($"{DateTime.Now.ToString("HH:mm:ss.fff")} 完成退出");
             }
-            MessageBox.Show($"删除操作完成，已删除{delCnt}/{allCnt}个");
+            MessageBox.Show($"删除操作完成，已删除{delCnt}/{allCnt}个, 删除字节{delSize}/{totalSize}");
         }
     }
 }
