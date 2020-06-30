@@ -388,6 +388,36 @@ namespace Beinet.cn.Tools
 
         #endregion
 
+        #region HMAC256加密
+
+        /// <summary>
+        /// HMAC256加密
+        /// </summary>
+        /// <param name="SecretKey"></param>
+        /// <param name="StringToSign"></param>
+        /// <returns></returns>
+        public static string Hmac256AndEncodeUrl(string SecretKey, string StringToSign, Encoding encoding)
+        {
+            if (string.IsNullOrEmpty(SecretKey) || string.IsNullOrEmpty(StringToSign))
+            {
+                throw new ArgumentException("SecretKey or StringToSign can't be empty.");
+            }
+
+            byte[] result;
+            var byteKey = encoding.GetBytes(SecretKey);
+            var byteStr = encoding.GetBytes(StringToSign);
+            using (var hmac = new System.Security.Cryptography.HMACSHA256(byteKey))
+            {
+                result = hmac.ComputeHash(byteStr);
+            }
+
+            var ret = System.Convert.ToBase64String(result, System.Base64FormattingOptions.None);
+            return ret.Replace('+', '-').Replace('/', '_');
+        }
+
+
+        #endregion
+
         #region  DES 加解密
 
         public static string DES_Encrypt(string source, string key, Encoding encoding)

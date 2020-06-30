@@ -91,6 +91,7 @@
       <DependentUpon>FileHashForm.cs</DependentUpon>
     </Compile>
     <Compile Include="FileHash\HashUtil.cs" />
+    <Compile Include="FileHash\TxtFileEncoder.cs" />
     <Compile Include="Gitlab\GitlabForm.cs">
       <SubType>Form</SubType>
     </Compile>

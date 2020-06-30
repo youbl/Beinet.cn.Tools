@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Beinet.cn.Tools.Util;
 
@@ -104,12 +100,12 @@ namespace Beinet.cn.Tools.FileHash
                     var file = state.ToString();
                     var result = HashUtil.CountMD5(file, countSha1);
 
-                    var row = new string[] {file, result[0], result[1], result[2]};
+                    var row = new string[] {file, result[0], result[1], result[2], result[3] };
                     List<string[]> showDatas = null;
                     lock (md5Datas)
                     {
                         md5Datas.Add(row);
-                        // 每50个刷新一次列表
+                        // 每n个刷新一次列表
                         if (md5Datas.Count > 20)
                         {
                             showDatas = md5Datas;
@@ -193,6 +189,11 @@ namespace Beinet.cn.Tools.FileHash
 
             column = new DataGridViewTextBoxColumn();
             column.HeaderText = "文件大小";
+            column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            dgv.Columns.Add(column);
+
+            column = new DataGridViewTextBoxColumn();
+            column.HeaderText = "编码";
             column.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             dgv.Columns.Add(column);
 
@@ -430,6 +431,7 @@ namespace Beinet.cn.Tools.FileHash
                     row[1],
                     row[2],
                     row[3],
+                    row[4],
                     "打开目录",
                     "打开文件",
                     "删除文件",

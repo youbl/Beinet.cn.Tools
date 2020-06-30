@@ -40,7 +40,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("密码:{0} 明文:{1} 编码:{2}\r\n{4}:{3}\r\n\r\n",
+                _sb.AppendFormat("密码: {0} 明文: {1} 编码: {2}\r\n{4}: {3}\r\n\r\n",
                                  _pwd, _str, _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
                     Utility.DES_Encrypt(_str, _pwd, _encoding), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
@@ -57,7 +57,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("密码:{0} 密文:{1} 编码:{2}\r\n{4}:{3}\r\n\r\n",
+                _sb.AppendFormat("密码: {0} 密文: {1} 编码: {2}\r\n{4}: {3}\r\n\r\n",
                                  _pwd, _str, _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
                     Utility.DES_Decrypt(_str, _pwd, _encoding), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
@@ -74,7 +74,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("密码:{0} 明文:{1} 编码:{2}\r\n{4}:{3}\r\n\r\n",
+                _sb.AppendFormat("密码: {0} 明文: {1} 编码: {2}\r\n{4}: {3}\r\n\r\n",
                                  _pwd, _str, _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
                     Utility.TripleDES_Encrypt(_str, _encoding, _pwd), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
@@ -91,7 +91,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("密码:{0} 密文:{1} 编码:{2}\r\n{4}:{3}\r\n\r\n",
+                _sb.AppendFormat("密码: {0} 密文: {1} 编码: {2}\r\n{4}: {3}\r\n\r\n",
                                  _pwd, _str, _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
                     Utility.TripleDES_Decrypt(_str, _encoding, _pwd), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
@@ -108,7 +108,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("明文:{0} 编码:{1}\r\n{3}:{2}\r\n\r\n",
+                _sb.AppendFormat("明文: {0} 编码: {1}\r\n{3}: {2}\r\n\r\n",
                                  _str, _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
                     Utility.MD5_Encrypt(_str, null, _encoding), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
@@ -126,7 +126,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("明文:{0} 编码:{1}\r\n{3}:{2}\r\n\r\n",
+                _sb.AppendFormat("明文: {0} 编码: {1}\r\n{3}: {2}\r\n\r\n",
                                  _str, _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
                                  Utility.HttpBase64Encode(_str, _encoding), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
@@ -143,7 +143,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("密文:{0} 编码:{1}\r\n{3}:{2}\r\n\r\n",
+                _sb.AppendFormat("密文: {0} 编码: {1}\r\n{3}: {2}\r\n\r\n",
                     _str, _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
                     Utility.HttpBase64Decode(_str, _encoding), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
@@ -160,7 +160,7 @@ namespace Beinet.cn.Tools
             {
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("文本:{0}\r\n{2}:{1}\r\n\r\n",
+                _sb.AppendFormat("文本: {0}\r\n{2}: {1}\r\n\r\n",
                     _str, _str.GetHashCode().ToString(), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
             }
@@ -177,7 +177,7 @@ namespace Beinet.cn.Tools
                 var hash = _str.GetHashCode();//Utility.GetHashCode32(_str, false)
                 Init(sender);
                 _sb.Length = 0;
-                _sb.AppendFormat("文本:{0}\r\n{2}:{1}\r\n\r\n",
+                _sb.AppendFormat("文本: {0}\r\n{2}: {1}\r\n\r\n",
                     _str, hash.ToString(), ((Button)sender).Text);
                 txtRet.Text += _sb.ToString();
             }
@@ -192,7 +192,7 @@ namespace Beinet.cn.Tools
         {
             if (sender == btnDes1 || sender == btnUnDes1 ||
                 sender == btnUn3des1 || sender == btn3des1 ||
-                sender == btnMD5_1 ||
+                sender == btnMD5_1 || sender == btnHmac256 ||
                 sender == btnBase64_1 || sender == btnUnBase64_1 ||
                 sender == btnHash1 || sender == btnHash32_1)
             {
@@ -366,6 +366,27 @@ namespace Beinet.cn.Tools
                 }
             }
             return desNum;
+        }
+
+        private void btnHmac256_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Init(sender);
+                _sb.Length = 0;
+                _sb.AppendFormat("密码: {4} 明文: {0} 编码: {1}\r\n{3}: {2}\r\n\r\n",
+                    _str, 
+                    _encoding.Equals(Encoding.UTF8) ? "UTF8" : "GB2312",
+                    Utility.Hmac256AndEncodeUrl(_pwd, _str, _encoding),
+                    ((Button)sender).Text,
+                    _pwd);
+                txtRet.Text += _sb.ToString();
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.ToString());
+            }
+
         }
     }
 }

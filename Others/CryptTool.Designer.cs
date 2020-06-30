@@ -63,6 +63,8 @@
             this.btnHash2 = new System.Windows.Forms.Button();
             this.btnHash32_2 = new System.Windows.Forms.Button();
             this.labScanStatus = new System.Windows.Forms.Label();
+            this.btnHmac256 = new System.Windows.Forms.Button();
+            this.btnHmac256_2 = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.SuspendLayout();
@@ -143,21 +145,21 @@
             // 
             // btnMD5_1
             // 
-            this.btnMD5_1.Location = new System.Drawing.Point(400, 38);
+            this.btnMD5_1.Location = new System.Drawing.Point(656, 38);
             this.btnMD5_1.Name = "btnMD5_1";
-            this.btnMD5_1.Size = new System.Drawing.Size(65, 23);
+            this.btnMD5_1.Size = new System.Drawing.Size(38, 23);
             this.btnMD5_1.TabIndex = 7;
-            this.btnMD5_1.Text = "MD5加密";
+            this.btnMD5_1.Text = "MD5";
             this.btnMD5_1.UseVisualStyleBackColor = true;
             this.btnMD5_1.Click += new System.EventHandler(this.btnMD5_Click);
             // 
             // btnMD5_2
             // 
-            this.btnMD5_2.Location = new System.Drawing.Point(400, 101);
+            this.btnMD5_2.Location = new System.Drawing.Point(656, 101);
             this.btnMD5_2.Name = "btnMD5_2";
-            this.btnMD5_2.Size = new System.Drawing.Size(65, 23);
+            this.btnMD5_2.Size = new System.Drawing.Size(38, 23);
             this.btnMD5_2.TabIndex = 16;
-            this.btnMD5_2.Text = "MD5加密";
+            this.btnMD5_2.Text = "MD5";
             this.btnMD5_2.UseVisualStyleBackColor = true;
             this.btnMD5_2.Click += new System.EventHandler(this.btnMD5_Click);
             // 
@@ -324,7 +326,7 @@
             // 
             // btnBase64_1
             // 
-            this.btnBase64_1.Location = new System.Drawing.Point(467, 38);
+            this.btnBase64_1.Location = new System.Drawing.Point(400, 37);
             this.btnBase64_1.Name = "btnBase64_1";
             this.btnBase64_1.Size = new System.Drawing.Size(75, 23);
             this.btnBase64_1.TabIndex = 7;
@@ -334,7 +336,7 @@
             // 
             // btnUnBase64_1
             // 
-            this.btnUnBase64_1.Location = new System.Drawing.Point(544, 38);
+            this.btnUnBase64_1.Location = new System.Drawing.Point(477, 37);
             this.btnUnBase64_1.Name = "btnUnBase64_1";
             this.btnUnBase64_1.Size = new System.Drawing.Size(75, 23);
             this.btnUnBase64_1.TabIndex = 7;
@@ -344,7 +346,7 @@
             // 
             // btnBase64_2
             // 
-            this.btnBase64_2.Location = new System.Drawing.Point(467, 101);
+            this.btnBase64_2.Location = new System.Drawing.Point(400, 101);
             this.btnBase64_2.Name = "btnBase64_2";
             this.btnBase64_2.Size = new System.Drawing.Size(75, 23);
             this.btnBase64_2.TabIndex = 7;
@@ -354,7 +356,7 @@
             // 
             // btnUnBase64_2
             // 
-            this.btnUnBase64_2.Location = new System.Drawing.Point(544, 101);
+            this.btnUnBase64_2.Location = new System.Drawing.Point(477, 101);
             this.btnUnBase64_2.Name = "btnUnBase64_2";
             this.btnUnBase64_2.Size = new System.Drawing.Size(75, 23);
             this.btnUnBase64_2.TabIndex = 7;
@@ -364,7 +366,7 @@
             // 
             // btnHash1
             // 
-            this.btnHash1.Location = new System.Drawing.Point(621, 38);
+            this.btnHash1.Location = new System.Drawing.Point(554, 37);
             this.btnHash1.Name = "btnHash1";
             this.btnHash1.Size = new System.Drawing.Size(43, 23);
             this.btnHash1.TabIndex = 20;
@@ -374,7 +376,7 @@
             // 
             // btnHash32_1
             // 
-            this.btnHash32_1.Location = new System.Drawing.Point(669, 38);
+            this.btnHash32_1.Location = new System.Drawing.Point(602, 37);
             this.btnHash32_1.Name = "btnHash32_1";
             this.btnHash32_1.Size = new System.Drawing.Size(52, 23);
             this.btnHash32_1.TabIndex = 20;
@@ -384,7 +386,7 @@
             // 
             // btnHash2
             // 
-            this.btnHash2.Location = new System.Drawing.Point(621, 101);
+            this.btnHash2.Location = new System.Drawing.Point(554, 101);
             this.btnHash2.Name = "btnHash2";
             this.btnHash2.Size = new System.Drawing.Size(43, 23);
             this.btnHash2.TabIndex = 20;
@@ -394,7 +396,7 @@
             // 
             // btnHash32_2
             // 
-            this.btnHash32_2.Location = new System.Drawing.Point(669, 101);
+            this.btnHash32_2.Location = new System.Drawing.Point(602, 101);
             this.btnHash32_2.Name = "btnHash32_2";
             this.btnHash32_2.Size = new System.Drawing.Size(52, 23);
             this.btnHash32_2.TabIndex = 20;
@@ -412,12 +414,33 @@
             this.labScanStatus.TabIndex = 0;
             this.labScanStatus.Text = "没有文件拖入";
             // 
+            // btnHmac256
+            // 
+            this.btnHmac256.Location = new System.Drawing.Point(696, 38);
+            this.btnHmac256.Name = "btnHmac256";
+            this.btnHmac256.Size = new System.Drawing.Size(57, 23);
+            this.btnHmac256.TabIndex = 7;
+            this.btnHmac256.Text = "HMAC256";
+            this.btnHmac256.UseVisualStyleBackColor = true;
+            this.btnHmac256.Click += new System.EventHandler(this.btnHmac256_Click);
+            // 
+            // btnHmac256_2
+            // 
+            this.btnHmac256_2.Location = new System.Drawing.Point(696, 101);
+            this.btnHmac256_2.Name = "btnHmac256_2";
+            this.btnHmac256_2.Size = new System.Drawing.Size(57, 23);
+            this.btnHmac256_2.TabIndex = 21;
+            this.btnHmac256_2.Text = "HMAC256";
+            this.btnHmac256_2.UseVisualStyleBackColor = true;
+            this.btnHmac256_2.Click += new System.EventHandler(this.btnHmac256_Click);
+            // 
             // CryptTool
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(760, 512);
+            this.Controls.Add(this.btnHmac256_2);
             this.Controls.Add(this.labScanStatus);
             this.Controls.Add(this.btnHash32_2);
             this.Controls.Add(this.btnHash2);
@@ -440,6 +463,7 @@
             this.Controls.Add(this.btnUnBase64_1);
             this.Controls.Add(this.btnBase64_2);
             this.Controls.Add(this.btnBase64_1);
+            this.Controls.Add(this.btnHmac256);
             this.Controls.Add(this.btnMD5_1);
             this.Controls.Add(this.btnUn3des1);
             this.Controls.Add(this.btn3des1);
@@ -499,6 +523,7 @@
         private System.Windows.Forms.Button btnHash2;
         private System.Windows.Forms.Button btnHash32_2;
         private System.Windows.Forms.Label labScanStatus;
-
+        private System.Windows.Forms.Button btnHmac256;
+        private System.Windows.Forms.Button btnHmac256_2;
     }
 }

@@ -3,22 +3,20 @@ using System.Collections.Generic;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading;
-using Beinet.cn.Tools.Util;
 
 namespace Beinet.cn.Tools.FileHash
 {
     public static class HashUtil
     {
         /// <summary>
-        /// 计算指定文件的MD5和SHA1值，以及文件大小返回
+        /// 计算指定文件的MD5和SHA1值，以及文件大小、文件编码返回
         /// </summary>
         /// <param name="file">文件路径</param>
         /// <param name="countSha1">是否计算SHA1</param>
         /// <returns></returns>
         public static string[] CountMD5(string file, bool countSha1)
         {
-            var ret = new string[3];
+            var ret = new string[4];
 
             SHA1CryptoServiceProvider getSha1 = null;
             if (countSha1)
@@ -32,11 +30,15 @@ namespace Beinet.cn.Tools.FileHash
 
                 getFile.Seek(0, SeekOrigin.Begin);
                 ret[0] = BitConverter.ToString(getMd5.ComputeHash(getFile)).Replace("-", "");
+
                 if (getSha1 != null)
                 {
                     getFile.Seek(0, SeekOrigin.Begin);
                     ret[1] = BitConverter.ToString(getSha1.ComputeHash(getFile)).Replace("-", "");
                 }
+
+                getFile.Seek(0, SeekOrigin.Begin);
+                ret[3] = TxtFileEncoder.GetType(getFile).EncodingName;
             }
 
             return ret;
