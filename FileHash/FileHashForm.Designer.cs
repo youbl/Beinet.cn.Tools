@@ -74,7 +74,6 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.AllowDrop = true;
             this.tabPage1.Controls.Add(this.splitContainer2);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
@@ -86,7 +85,6 @@
             // 
             // splitContainer2
             // 
-            this.splitContainer2.AllowDrop = true;
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.splitContainer2.Location = new System.Drawing.Point(3, 3);
@@ -109,7 +107,6 @@
             // 
             // splitContainer1
             // 
-            this.splitContainer1.AllowDrop = true;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
@@ -118,7 +115,6 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.AllowDrop = true;
             this.splitContainer1.Panel1.Controls.Add(this.btnRemoveSame);
             this.splitContainer1.Panel1.Controls.Add(this.btnShowResult);
             this.splitContainer1.Panel1.Controls.Add(this.chkToFile);
@@ -266,7 +262,6 @@
             // 
             // dgvFiles
             // 
-            this.dgvFiles.AllowDrop = true;
             this.dgvFiles.AllowUserToAddRows = false;
             this.dgvFiles.AllowUserToDeleteRows = false;
             this.dgvFiles.AllowUserToOrderColumns = true;
@@ -295,7 +290,6 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.AllowDrop = true;
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
